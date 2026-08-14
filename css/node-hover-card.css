@@ -1,0 +1,151 @@
+/* SVG 节点 Hover 悬浮卡片 */
+
+.svg-hover-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.svg-hover-stage svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.22s ease;
+}
+
+/* 悬停时保持路线图清晰可见，不再整体压暗 */
+.svg-hover-stage.is-hovering svg {
+  opacity: 1;
+}
+
+/* 取消全屏白雾，避免把后面整张图糊掉 */
+.svg-hover-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.svg-hover-stage.is-hovering .svg-hover-veil {
+  opacity: 0;
+}
+
+.svg-node {
+  cursor: pointer;
+}
+
+.svg-node .svg-node-hit {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 1.5;
+  pointer-events: all;
+  transition:
+    fill 0.2s ease,
+    stroke 0.2s ease;
+}
+
+.svg-node:hover .svg-node-hit,
+.svg-node.is-active .svg-node-hit {
+  fill: rgba(75, 103, 175, 0.1);
+  stroke: rgba(75, 103, 175, 0.32);
+}
+
+.node-hover-card {
+  position: absolute;
+  z-index: 20;
+  width: min(360px, calc(100% - 24px));
+  padding: 16px 18px 18px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px) saturate(1.08);
+  -webkit-backdrop-filter: blur(8px) saturate(1.08);
+  border: 1px solid rgba(28, 37, 92, 0.1);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 10px rgba(28, 37, 92, 0.08),
+    0 16px 36px rgba(28, 37, 92, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px) scale(0.98);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+  pointer-events: none;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .node-hover-card {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+.node-hover-card.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.node-hover-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.node-hover-card__title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: #141b45;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.node-hover-card__badges {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: 58%;
+}
+
+.node-hover-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(75, 103, 175, 0.1);
+  color: #4b67af;
+  font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.node-hover-card__desc {
+  margin: 0;
+  font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: #3f4654;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+}
