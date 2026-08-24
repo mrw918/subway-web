@@ -54,6 +54,9 @@
     var hoverRouteId = null;
     var hoverNodeId = null;
     var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    var isMobileLayout = function () {
+      return window.matchMedia("(max-width: 768px)").matches;
+    };
     var isNarrow = function () {
       return window.matchMedia("(max-width: 480px)").matches;
     };
@@ -73,8 +76,18 @@
     function renderPanel(title, desc, types) {
       if (!panel) return;
       var typeList = types && types.length ? types : [];
+      var hasContent = !!(title || desc || typeList.length);
+      var closeBtn = isMobileLayout()
+        ? '<button type="button" class="info-panel__close" aria-label="关闭详情">×</button>'
+        : "";
+      panel.hidden = false;
       panel.innerHTML =
-        '<h3 class="info-panel__title">' + escapeHtml(title || "请选择路线或站点") + "</h3>" +
+        '<div class="info-panel__header">' +
+          '<h3 class="info-panel__title">' +
+            escapeHtml(title || (isMobileLayout() ? "点击站点查看详情" : "请选择路线或站点")) +
+          "</h3>" +
+          closeBtn +
+        "</div>" +
         (typeList.length
           ? '<div class="info-panel__types">' +
               typeList.map(function (t) {
@@ -83,12 +96,66 @@
             "</div>"
           : "") +
         '<p class="info-panel__desc">' +
-          escapeHtml(desc || "悬停或点击左侧查看详情。") +
+          escapeHtml(
+            desc ||
+              (isMobileLayout()
+                ? "选择上方路线图中的站点，查看标签与说明。"
+                : "悬停或点击左侧查看详情。")
+          ) +
         "</p>";
+      var closeEl = panel.querySelector(".info-panel__close");
+      if (closeEl) {
+        closeEl.addEventListener("click", function (event) {
+          event.stopPropagation();
+          clearFocusState();
+        });
+      }
+      panel.classList.toggle("is-empty", !hasContent);
     }
 
     function resetPanel() {
-      renderPanel("", "", [], "");
+      renderPanel("", "", []);
+    }
+
+    function resetSmartZoom(animate) {
+      svg.style.transition =
+        animate === false ? "none" : "transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)";
+      svg.style.transform = "";
+      svg.style.transformOrigin = "0 0";
+      stage.classList.remove("is-node-focused");
+    }
+
+    function smartZoomToNode(nodeEl) {
+      if (!isMobileLayout() || !nodeEl) return;
+      resetSmartZoom(false);
+      void svg.getBoundingClientRect();
+
+      var stageRect = stage.getBoundingClientRect();
+      var svgRect = svg.getBoundingClientRect();
+      var nodeRect = nodeEl.getBoundingClientRect();
+      var nx = nodeRect.left + nodeRect.width / 2 - svgRect.left;
+      var ny = nodeRect.top + nodeRect.height / 2 - svgRect.top;
+      var targetX = stageRect.left + stageRect.width / 2 - svgRect.left;
+      var targetY = stageRect.top + stageRect.height / 2 - svgRect.top;
+      var scale = 2.35;
+      var tx = targetX - nx * scale;
+      var ty = targetY - ny * scale;
+
+      svg.style.transformOrigin = "0 0";
+      svg.style.transition = "transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)";
+      svg.style.transform =
+        "translate(" + tx.toFixed(2) + "px, " + ty.toFixed(2) + "px) scale(" + scale + ")";
+      stage.classList.add("is-node-focused");
+    }
+
+    function clearFocusState() {
+      hoverRouteId = null;
+      hoverNodeId = null;
+      clearNodeHover();
+      hideTooltip();
+      restoreVisual();
+      resetSmartZoom(true);
+      if (panel) resetPanel();
     }
 
     function pathIdsForRoutes(routeIds) {
@@ -272,8 +339,8 @@
     }
 
     function showTooltip(title, desc, types, anchorEl) {
-      if (panel) {
-        renderPanel(title, desc, types, "");
+      if (panel && isMobileLayout()) {
+        renderPanel(title, desc, types);
         return;
       }
       tooltip.querySelector(".node-tooltip__title").textContent = title || "";
@@ -306,8 +373,9 @@
     function showNodeTooltip(nodeId, anchorEl) {
       var node = nodes[nodeId];
       if (!node) return;
-      if (panel) {
+      if (panel && isMobileLayout()) {
         renderPanel(node.name, node.desc, node.type || []);
+        smartZoomToNode(anchorEl);
         return;
       }
       showTooltip(node.name, node.desc, node.type || [], anchorEl);
@@ -317,8 +385,9 @@
       var stationIndex = nodeEl.getAttribute("data-station-index");
       var info = calibrationFallbackByStation[String(stationIndex)];
       if (!info || !info.desc) return false;
-      if (panel) {
+      if (panel && isMobileLayout()) {
         renderPanel(info.name, info.desc, info.type || []);
+        smartZoomToNode(anchorEl || nodeEl);
         return true;
       }
       showTooltip(info.name, info.desc, info.type || [], anchorEl);
@@ -374,8 +443,9 @@
 
     function bindNodeHover(nodeEl) {
       var hitEl = nodeEl.querySelector(".node-hit") || nodeEl;
+      var useClick = !canHover || isMobileLayout();
 
-      if (canHover) {
+      if (!useClick) {
         hitEl.addEventListener("mouseenter", function () {
           var nodeId = nodeEl.getAttribute("data-node-id");
           var hasNode = !!nodes[nodeId];
@@ -394,6 +464,7 @@
           hoverNodeId = null;
           hideTooltip();
           restoreVisual();
+          resetSmartZoom(true);
           if (hoverRouteId && routes[hoverRouteId]) {
             var trigger = svg.querySelector('[data-trigger-route="' + hoverRouteId + '"]');
             if (trigger) showRouteTooltip(hoverRouteId, trigger);
@@ -409,11 +480,7 @@
         var nodeId = nodeEl.getAttribute("data-node-id");
         if (!nodes[nodeId] && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
         if (hoverNodeId === nodeId) {
-          hoverNodeId = null;
-          nodeEl.classList.remove("is-hover");
-          hideTooltip();
-          restoreVisual();
-          if (panel) resetPanel();
+          clearFocusState();
           return;
         }
         var routeIds = nodes[nodeId] ? (nodes[nodeId].routeIds || []) : [];
@@ -432,22 +499,20 @@
       : "g.nodes .node:not(.node--empty)";
     svg.querySelectorAll(nodeSelector).forEach(bindNodeHover);
 
-    if (!canHover) {
-      svg.addEventListener("click", function (event) {
-        var target = event.target;
-        if (
-          target.closest &&
-          target.closest(".node, .node-hit, .legend-hit, .legend-target, [data-trigger-route]")
-        ) {
-          return;
-        }
-        hoverRouteId = null;
-        hoverNodeId = null;
-        clearNodeHover();
-        hideTooltip();
-        restoreVisual();
-        if (panel) resetPanel();
-      });
+    svg.addEventListener("click", function (event) {
+      if (canHover && !isMobileLayout()) return;
+      var target = event.target;
+      if (
+        target.closest &&
+        target.closest(".node, .node-hit, .legend-hit, .legend-target, [data-trigger-route]")
+      ) {
+        return;
+      }
+      clearFocusState();
+    });
+
+    if (panel && isMobileLayout()) {
+      resetPanel();
     }
 
     function clearSearch() {
@@ -578,9 +643,13 @@
         hoverRouteId = null;
         hideTooltip();
         clearNodeHover();
+        resetSmartZoom(false);
         if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
         restoreVisual();
-        if (panel) resetPanel();
+        if (panel) {
+          panel.hidden = true;
+          resetPanel();
+        }
       },
     };
   }

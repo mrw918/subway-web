@@ -177,9 +177,14 @@
           svg: svg,
           roadmapId: item.id,
           nodeData: data,
+          panel: infoPanel,
           searchInput: searchInput,
           searchResultsEl: searchResultsEl,
         });
+      }
+
+      if (infoPanel) {
+        infoPanel.hidden = !window.matchMedia("(max-width: 768px)").matches;
       }
     } catch (err) {
       console.error(err);
