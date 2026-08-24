@@ -533,10 +533,27 @@
     justify-content: center;
   }
 
+  .role-select__main {
+    transform: translateY(-8%);
+  }
+
   .role-select__watermark {
-    top: 52%;
-    font-size: min(clamp(40px, 12vw, 120px), var(--wm-font-cap));
-    letter-spacing: 0.03em;
+    top: 46%;
+    left: 50%;
+    width: 100vw;
+    max-width: none;
+    font-size: clamp(72px, 22vw, 220px);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #3f4d63;
+    opacity: 0.12;
+    text-align: center;
+  }
+
+  .role-select__hero-stage {
+    width: min(360px, 78vw);
+    height: min(42vh, calc(100% - 16px));
+    max-height: 42vh;
   }
 
   .role-select__nav {
@@ -562,12 +579,6 @@
   .role-select__orbit {
     width: min(760px, 98vw);
     height: 60px;
-  }
-
-  .role-select__hero-stage {
-    width: min(360px, 78vw);
-    height: min(42vh, calc(100% - 16px));
-    max-height: 42vh;
   }
 
   .role-select__hero {

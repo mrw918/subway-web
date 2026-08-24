@@ -297,10 +297,22 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
   min-width: 0;
 }
 
+.roadmap-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  color: #8a93a8;
+  pointer-events: none;
+}
+
 .roadmap-search-input {
   width: min(320px, 48vw);
   min-height: 36px;
-  padding: 7px 12px;
+  padding: 7px 12px 7px 36px;
   border: 1px solid rgba(28, 37, 92, 0.14);
   border-radius: 8px;
   font-size: 14px;
@@ -428,22 +440,46 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
   }
 
   #roadmap-stage {
-    flex: 0 0 55vh;
+    flex: 1 1 auto;
     min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  .roadmap-search-wrap {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .roadmap-search-input {
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 16px 8px 40px;
+    border-radius: 20px;
+  }
+
+  .roadmap-search-icon {
+    left: 14px;
+  }
+
+  .roadmap-search-results {
+    left: 0;
+    right: 0;
     width: 100%;
   }
 
   .info-panel {
     display: flex;
     flex-direction: column;
-    flex: 0 0 35vh;
+    flex: 0 0 auto;
     width: 100%;
     max-width: none;
-    max-height: 35vh;
-    height: 35vh;
+    max-height: 25vh;
+    height: auto;
     border-left: 0;
     border-top: 1px solid rgba(28, 37, 92, 0.1);
-    padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .info-panel[hidden] {
@@ -505,7 +541,7 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
   }
 
   .info-panel {
-    max-height: 40dvh;
+    max-height: 25vh;
   }
 
   .node-tooltip {
