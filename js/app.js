@@ -184,7 +184,7 @@
       }
 
       if (infoPanel) {
-        infoPanel.hidden = !window.matchMedia("(max-width: 768px)").matches;
+        infoPanel.hidden = true;
       }
     } catch (err) {
       console.error(err);

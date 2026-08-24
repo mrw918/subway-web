@@ -75,18 +75,19 @@
 
     function renderPanel(title, desc, types) {
       if (!panel) return;
+      if (!isMobileLayout()) {
+        panel.hidden = true;
+        return;
+      }
       var typeList = types && types.length ? types : [];
       var hasContent = !!(title || desc || typeList.length);
-      var closeBtn = isMobileLayout()
-        ? '<button type="button" class="info-panel__close" aria-label="关闭详情">×</button>'
-        : "";
       panel.hidden = false;
       panel.innerHTML =
         '<div class="info-panel__header">' +
           '<h3 class="info-panel__title">' +
-            escapeHtml(title || (isMobileLayout() ? "点击站点查看详情" : "请选择路线或站点")) +
+            escapeHtml(title || "点击站点查看详情") +
           "</h3>" +
-          closeBtn +
+          '<button type="button" class="info-panel__close" aria-label="关闭详情">×</button>' +
         "</div>" +
         (typeList.length
           ? '<div class="info-panel__types">' +
@@ -96,12 +97,7 @@
             "</div>"
           : "") +
         '<p class="info-panel__desc">' +
-          escapeHtml(
-            desc ||
-              (isMobileLayout()
-                ? "选择上方路线图中的站点，查看标签与说明。"
-                : "悬停或点击左侧查看详情。")
-          ) +
+          escapeHtml(desc || "选择上方路线图中的站点，查看标签与说明。") +
         "</p>";
       var closeEl = panel.querySelector(".info-panel__close");
       if (closeEl) {
@@ -114,6 +110,11 @@
     }
 
     function resetPanel() {
+      if (!panel) return;
+      if (!isMobileLayout()) {
+        panel.hidden = true;
+        return;
+      }
       renderPanel("", "", []);
     }
 

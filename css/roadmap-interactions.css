@@ -178,6 +178,7 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
 }
 
 .info-panel {
+  display: none;
   flex: 0 0 260px;
   width: 260px;
   max-width: 28vw;
@@ -433,6 +434,8 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
   }
 
   .info-panel {
+    display: flex;
+    flex-direction: column;
     flex: 0 0 35vh;
     width: 100%;
     max-width: none;
@@ -444,7 +447,7 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
   }
 
   .info-panel[hidden] {
-    display: block !important;
+    display: flex !important;
   }
 
   .info-panel__header {

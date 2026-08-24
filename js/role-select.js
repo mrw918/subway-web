@@ -53,11 +53,9 @@
       "    </svg>" +
       "  </div>" +
       '  <div class="role-select__aside">' +
-      '    <div class="role-select__title-row">' +
-      '      <div class="role-select__title" aria-live="polite">' +
-      '        <h1 class="role-select__title-zh"></h1>' +
-      '        <p class="role-select__title-en"></p>' +
-      "      </div>" +
+      '    <div class="role-select__title" aria-live="polite">' +
+      '      <h1 class="role-select__title-zh"></h1>' +
+      '      <p class="role-select__title-en"></p>' +
       '      <button type="button" class="role-select__details-toggle" aria-label="查看角色详情" aria-expanded="false">' +
       '        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">' +
       '          <path d="M3 5h12M3 9h12M3 13h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
