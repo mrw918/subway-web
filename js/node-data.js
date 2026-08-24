@@ -14,7 +14,7 @@ window.NODE_HOVER_DATA = {
   "AUTOSAR Communication": {
     nodeName: "AUTOSAR Communication",
     type: ["B站", "线上课程"],
-    match: ["AUTOSAR通信", "AUTOSAR"],
+    match: ["AUTOSAR通信", "AUTOSAR Communication"],
     description: "介绍在AUTOSAR CP架构下使用AUTOSAR组件进行不同应用层通信的机制。",
   },
   "CAN/CAN FD 协议": {

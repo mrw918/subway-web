@@ -2,91 +2,82 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>知识路线图</title>
-    <link rel="stylesheet" href="./css/node-hover-card.css?v=18" />
+    <link rel="stylesheet" href="./css/node-hover-card.css?v=21" />
+    <link rel="stylesheet" href="./css/roadmap-interactions.css?v=21" />
+    <link rel="stylesheet" href="./css/role-select.css?v=14" />
     <style>
       :root {
         color-scheme: light;
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-right: env(safe-area-inset-right, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-left: env(safe-area-inset-left, 0px);
+        --tap-min: 44px;
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
       html,
       body {
         margin: 0;
         width: 100%;
+        max-width: 100%;
         height: 100%;
+        height: 100dvh;
         overflow: hidden;
+        overflow-x: hidden;
+        overscroll-behavior-x: none;
         background: #ffffff;
         font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
         color: #2c292a;
       }
 
+      input,
+      textarea,
+      select {
+        font-size: 16px;
+      }
+
+      button,
+      a,
+      input,
+      textarea,
+      select,
+      .role-link,
+      .back-btn,
+      .roadmap-search-list__item,
+      .role-select__avatar-btn,
+      .role-select__entre,
+      .role-select__nav {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(75, 103, 175, 0.16);
+      }
+
       .page {
         width: 100%;
+        max-width: 100%;
         height: 100%;
+        overflow-x: hidden;
       }
 
-      .home-view {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 32px 24px;
-      }
-
-      .home-panel {
-        width: min(560px, 100%);
-      }
-
-      .home-title {
-        margin: 0 0 8px;
-        font-size: 28px;
-        font-weight: 700;
-        color: #1c255c;
-        letter-spacing: 0.02em;
-      }
-
-      .home-subtitle {
-        margin: 0 0 28px;
-        font-size: 14px;
-        color: #5a6170;
-      }
-
-      .role-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .role-link {
-        display: block;
-        padding: 14px 18px;
-        border-radius: 10px;
-        border: 1px solid rgba(28, 37, 92, 0.1);
-        background: #fff;
-        color: #1c255c;
-        text-decoration: none;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition:
-          background 0.18s ease,
-          border-color 0.18s ease,
-          transform 0.18s ease;
-      }
-
-      .role-link:hover {
-        background: rgba(75, 103, 175, 0.06);
-        border-color: rgba(75, 103, 175, 0.28);
-        transform: translateX(4px);
+      .home-view[hidden],
+      .role-select[hidden],
+      .roadmap-view[hidden] {
+        display: none !important;
       }
 
       .roadmap-view {
@@ -94,42 +85,56 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+        overflow-x: hidden;
       }
 
       .roadmap-toolbar {
         flex-shrink: 0;
         display: flex;
         align-items: center;
-        gap: 16px;
-        padding: 10px 16px;
+        gap: 12px;
+        padding: calc(6px + var(--safe-top)) calc(14px + var(--safe-right)) 6px
+          calc(14px + var(--safe-left));
         border-bottom: 1px solid rgba(28, 37, 92, 0.08);
         background: rgba(255, 255, 255, 0.96);
+      }
+
+      .roadmap-toolbar__meta {
+        min-width: 0;
+        flex: 1 1 auto;
       }
 
       .back-btn {
         border: 0;
         background: transparent;
         color: #4b67af;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 600;
         cursor: pointer;
-        padding: 6px 8px;
-        border-radius: 6px;
+        min-height: 34px;
+        min-width: 34px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        white-space: nowrap;
       }
 
-      .back-btn:hover {
-        background: rgba(75, 103, 175, 0.08);
+      @media (hover: hover) and (pointer: fine) {
+        .back-btn:hover {
+          background: rgba(75, 103, 175, 0.08);
+        }
       }
 
       .roadmap-title {
         margin: 0;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 650;
         color: #1c255c;
       }
 
       .roadmap-error {
         margin: 12px 16px 0;
+        margin-left: calc(16px + var(--safe-left));
+        margin-right: calc(16px + var(--safe-right));
         padding: 10px 12px;
         border-radius: 8px;
         background: rgba(220, 53, 69, 0.08);
@@ -147,11 +152,15 @@
         flex: 1;
         min-height: 0;
         background: #ffffff;
+        display: flex;
+        padding-left: var(--safe-left);
+        padding-right: var(--safe-right);
       }
 
       .svg-hover-stage {
         width: 100%;
         height: 100%;
+        overflow: hidden;
       }
 
       .roadmap-loading {
@@ -160,42 +169,90 @@
         font-size: 14px;
       }
 
-      .home-view[hidden],
-      .roadmap-view[hidden] {
-        display: none !important;
+      .roadmap-view--enter:not(.roadmap-view--enter-active) {
+        display: flex;
+      }
+
+      @media (max-width: 480px) {
+        .roadmap-toolbar {
+          display: grid;
+          grid-template-columns: auto 1fr;
+          grid-template-areas:
+            "back meta"
+            "search search";
+          align-items: center;
+          gap: 8px 10px;
+        }
+
+        .back-btn {
+          grid-area: back;
+        }
+
+        .roadmap-toolbar__meta {
+          grid-area: meta;
+        }
+
+        .roadmap-search-wrap {
+          grid-area: search;
+          margin-left: 0;
+          width: 100%;
+        }
+
+        .roadmap-title {
+          font-size: 14px;
+          line-height: 1.35;
+        }
       }
     </style>
   </head>
   <body>
     <main class="page">
-      <section id="home-view" class="home-view">
-        <div class="home-panel">
-          <h1 class="home-title">知识路线图</h1>
-          <p class="home-subtitle">请选择工程师方向，点击进入对应路线图</p>
-          <ul id="role-list" class="role-list"></ul>
-        </div>
-      </section>
+      <section id="home-view" class="role-select"></section>
 
       <section id="roadmap-view" class="roadmap-view" hidden>
         <header class="roadmap-toolbar">
           <button id="back-btn" class="back-btn" type="button">← 返回选择</button>
-          <h2 id="roadmap-title" class="roadmap-title"></h2>
+          <div class="roadmap-toolbar__meta">
+            <h2 id="roadmap-title" class="roadmap-title"></h2>
+          </div>
+            <div class="roadmap-search-wrap">
+            <input
+              id="roadmap-search"
+              class="roadmap-search-input"
+              type="search"
+              placeholder="搜索站点关键词…"
+              autocomplete="off"
+              spellcheck="false"
+              enterkeyhint="search"
+            />
+            <div id="roadmap-search-results" class="roadmap-search-results" hidden></div>
+          </div>
         </header>
         <p id="roadmap-error" class="roadmap-error" hidden></p>
         <div class="stage-shell">
           <div id="roadmap-stage" class="svg-hover-stage"></div>
+          <aside id="info-panel" class="info-panel" hidden>
+            <h3 class="info-panel__title">请选择路线或站点</h3>
+            <p class="info-panel__desc">悬停或点击左侧查看详情。</p>
+          </aside>
         </div>
       </section>
     </main>
 
-    <script src="./js/roadmaps.js?v=15"></script>
+    <script src="./js/roadmaps.js?v=20"></script>
     <script src="./js/node-data.js?v=11"></script>
     <script src="./js/node-data-network-test.js?v=11"></script>
     <script src="./js/node-data-diagnostic.js?v=2"></script>
-    <script src="./js/node-data-embedded.js?v=3"></script>
+    <script src="./js/node-data-embedded.js?v=4"></script>
     <script src="./js/node-data-mbse.js?v=1"></script>
     <script src="./js/node-data-soa.js?v=1"></script>
-    <script src="./js/svg-hover-card.js?v=18"></script>
-    <script src="./js/app.js?v=13"></script>
+    <script src="./js/node-data-calibration.js?v=1"></script>
+    <script src="./js/svg-roadmap-layers.js?v=6"></script>
+    <script src="./js/svg-hover-card.js?v=21"></script>
+    <script src="./js/route-presets.js?v=3"></script>
+    <script src="./js/svg-roadmap-graph.js?v=16"></script>
+    <script src="./js/svg-roadmap-interactions.js?v=27"></script>
+    <script src="./js/role-select.js?v=14"></script>
+    <script src="./js/app.js?v=22"></script>
   </body>
 </html>

@@ -1,0 +1,484 @@
+/* 选角页：极简白底 + 主图 + 圆弧传送带头像 + ENTRE */
+
+.role-select {
+  --track-block: 142px;
+  --entre-block: 68px;
+  --hero-overlap: 32px;
+  --title-zone-x: max(28px, calc(20px + var(--safe-left)));
+  --title-zone-w: min(280px, 40vw);
+  --wm-clear-left: calc(var(--title-zone-x) + var(--title-zone-w) + 16px);
+  --wm-clear-right: max(170px, calc(148px + var(--safe-right)));
+  --wm-max-half: min(calc(50vw - var(--wm-clear-left)), calc(50vw - var(--wm-clear-right)));
+  --wm-font-cap: max(52px, calc((2 * var(--wm-max-half)) / 4.7));
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  overflow: hidden;
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.role-select--exit {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+}
+
+.role-select__scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.role-select__logo {
+  position: absolute;
+  top: max(18px, calc(12px + var(--safe-top)));
+  right: max(22px, calc(16px + var(--safe-right)));
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.role-select__logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #ef4444;
+  font-family: "Arial Black", Impact, Haettenschweiler, sans-serif;
+}
+
+.role-select__logo-arrow {
+  display: block;
+  width: 11px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.role-select__title {
+  position: absolute;
+  left: max(28px, calc(20px + var(--safe-left)));
+  top: max(22px, calc(16px + var(--safe-top)));
+  z-index: 6;
+  max-width: min(280px, 40vw);
+  pointer-events: none;
+  user-select: none;
+}
+
+.role-select__title-zh {
+  margin: 0;
+  font-size: clamp(18px, 2.4vw, 24px);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: #3f4d63;
+}
+
+.role-select__title-en {
+  margin: 8px 0 0;
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  color: #5f6d82;
+  text-transform: uppercase;
+}
+
+.role-select__main {
+  position: absolute;
+  inset: 0;
+  bottom: calc(var(--track-block) + var(--entre-block) + max(8px, var(--safe-bottom)));
+  z-index: 1;
+  pointer-events: none;
+}
+
+.role-select__watermark {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  font-size: min(clamp(60px, 16vw, 220px), var(--wm-font-cap));
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: rgba(200, 204, 212, 0.38);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.role-select__hero-stage {
+  position: absolute;
+  left: 50%;
+  bottom: calc(-1 * var(--hero-overlap));
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(500px, 82vw);
+  height: min(calc(100% - 24px), 620px);
+  max-height: calc(100vh - var(--track-block) - var(--entre-block) - 48px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  --hero-scale: 1;
+  --hero-shift-x: 0px;
+  --hero-shift-y: 0px;
+  --hero-object-position: bottom center;
+}
+
+.role-select__hero {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: var(--hero-object-position, bottom center);
+  transform: translateX(calc(-50% + var(--hero-shift-x, 0px)))
+    translateY(var(--hero-shift-y, 0px))
+    scale(calc(var(--hero-scale, 1) * 0.94));
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transition:
+    opacity 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.role-select__hero.is-active {
+  opacity: 1;
+  transform: translateX(calc(-50% + var(--hero-shift-x, 0px)))
+    translateY(var(--hero-shift-y, 0px))
+    scale(var(--hero-scale, 1));
+}
+
+.role-select__hero.is-enter {
+  opacity: 0;
+  transform: translateX(calc(-50% + var(--hero-shift-x, 0px)))
+    translateY(var(--hero-shift-y, 0px))
+    scale(calc(var(--hero-scale, 1) * 0.92));
+}
+
+.role-select__hero.is-leave {
+  opacity: 0;
+  transform: translateX(calc(-50% + var(--hero-shift-x, 0px)))
+    translateY(var(--hero-shift-y, 0px))
+    scale(calc(var(--hero-scale, 1) * 1.04));
+}
+
+.role-select__footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 0 max(16px, var(--safe-right)) max(20px, var(--safe-bottom)) max(16px, var(--safe-left));
+  pointer-events: auto;
+}
+
+.role-select__avatar-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 1080px;
+  min-height: var(--track-block);
+  padding: 10px 0 4px;
+}
+
+.role-select__orbit {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  width: min(960px, 98vw);
+  height: 72px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.role-select__nav {
+  position: relative;
+  z-index: 5;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(210, 216, 226, 0.72);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.42);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow:
+    0 4px 18px rgba(28, 37, 92, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -1px 0 rgba(180, 186, 198, 0.16);
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.role-select__nav-icon {
+  display: block;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 1px rgba(120, 128, 142, 0.55)) drop-shadow(0 1px 2px rgba(28, 37, 92, 0.18));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .role-select__nav:hover {
+    background: rgba(255, 255, 255, 0.62);
+    border-color: rgba(190, 196, 208, 0.9);
+    transform: scale(1.04);
+  }
+}
+
+.role-select__avatar-viewport {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  width: min(860px, calc(100% - 108px));
+  height: 118px;
+  overflow: visible;
+}
+
+.role-select__focus-slot {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #ef4444;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.role-select__avatars {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.role-select__avatar-item {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 64px;
+  height: 64px;
+  margin: 0;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
+  pointer-events: auto;
+}
+
+.role-select__avatar-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: visible;
+}
+
+.role-select__avatar-btn img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.role-select__avatar-btn.is-selected img {
+  border: 2.5px solid #ffffff;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.35),
+    0 4px 14px rgba(28, 37, 92, 0.14);
+}
+
+.role-select__entre {
+  position: relative;
+  min-width: 168px;
+  min-height: 48px;
+  padding: 12px 48px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: #ffffff;
+  cursor: pointer;
+  background: linear-gradient(180deg, #f87171 0%, #ef4444 42%, #dc2626 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+    0 6px 0 #b91c1c,
+    0 10px 24px rgba(239, 68, 68, 0.32),
+    0 0 18px rgba(239, 68, 68, 0.12);
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    filter 0.14s ease;
+}
+
+.role-select__entre::after {
+  content: "";
+  position: absolute;
+  inset: 3px 12px auto;
+  height: 38%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent);
+  pointer-events: none;
+}
+
+.role-select__entre:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 3px 0 #b91c1c,
+    0 6px 16px rgba(239, 68, 68, 0.26);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .role-select__entre:hover {
+    filter: brightness(1.05);
+  }
+}
+
+.roadmap-view {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.roadmap-view--enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.roadmap-view--enter.roadmap-view--enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .role-select {
+    --track-block: 124px;
+    --entre-block: 62px;
+    --hero-overlap: 24px;
+    --title-zone-x: max(18px, calc(12px + var(--safe-left)));
+    --title-zone-w: min(210px, 52vw);
+    --wm-clear-right: max(120px, calc(110px + var(--safe-right)));
+  }
+
+  .role-select__logo-text {
+    font-size: 17px;
+  }
+
+  .role-select__logo-arrow {
+    width: 10px;
+  }
+
+  .role-select__title {
+    left: max(18px, calc(12px + var(--safe-left)));
+    top: max(18px, calc(14px + var(--safe-top)));
+    max-width: min(210px, 52vw);
+  }
+
+  .role-select__title-zh {
+    font-size: 17px;
+  }
+
+  .role-select__title-en {
+    margin-top: 6px;
+    font-size: 10px;
+  }
+
+  .role-select__watermark {
+    top: 56%;
+    font-size: min(clamp(48px, 14vw, 140px), var(--wm-font-cap));
+    letter-spacing: 0.03em;
+  }
+
+  .role-select__nav {
+    width: 38px;
+    height: 38px;
+  }
+
+  .role-select__nav-icon {
+    width: 8px;
+    height: 13px;
+  }
+
+  .role-select__avatar-track {
+    gap: 8px;
+    max-width: 100%;
+  }
+
+  .role-select__avatar-viewport {
+    width: min(100%, calc(100% - 92px));
+    height: 108px;
+  }
+
+  .role-select__orbit {
+    width: min(760px, 98vw);
+    height: 60px;
+  }
+
+  .role-select__hero-stage {
+    width: min(420px, 90vw);
+  }
+
+  .role-select__footer {
+    gap: 12px;
+  }
+
+  .role-select__entre {
+    min-width: 148px;
+    padding: 11px 36px;
+    font-size: 14px;
+  }
+}

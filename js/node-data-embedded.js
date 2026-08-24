@@ -12,7 +12,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   "AUTOSAR CP": {
     nodeName: "AUTOSAR CP",
     type: [],
-    match: ["AUTOSAR CP", "AUTOSAR CPAUTOSAR", "AUTOSAR"],
+    match: ["AUTOSAR CP", "AUTOSAR CPAUTOSAR"],
     description: "理解AUTOSAR CP的技术概念与方法论",
   },
   "AUTOSAR工具链": {
@@ -36,13 +36,13 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   "MICROSAR SIP": {
     nodeName: "MICROSAR SIP",
     type: [],
-    match: ["MICROSAR SIP", "MICROSAR SIPDavinci", "MICROSAR", "SIP"],
+    match: ["MICROSAR SIP"],
     description: "了解MICROSAR软件集成包的交付内容与结构形式",
   },
   "DaVinci基础配置": {
     nodeName: "DaVinci基础配置",
     type: [],
-    match: ["DaVinci基础配置", "基础配置"],
+    match: ["DaVinci基础配置", "DaVinci"],
     description: "学习并掌握DaVinci Developer Classic及DaVinci Configurator Classic的基本功能",
   },
   "ECU最小系统": {
@@ -108,7 +108,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   "AUTOSAR通信": {
     nodeName: "AUTOSAR通信",
     type: [],
-    match: ["AUTOSAR通信", "AUTOSAR"],
+    match: ["AUTOSAR通信"],
     description: "掌握AUTOSAR应用报文通信的核心链路，理解“数据→信号→PDU→报文”的转换过程",
   },
   "MSRC.COM": {

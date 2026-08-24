@@ -147,11 +147,17 @@
   }
 
   function positionCard(card, stage, anchorEl) {
+    var svg = stage.querySelector("svg");
+    if (global.SvgRoadmapLayers && global.SvgRoadmapLayers.positionTooltip) {
+      global.SvgRoadmapLayers.positionTooltip(card, stage, anchorEl, svg);
+      return;
+    }
+
     var stageRect = stage.getBoundingClientRect();
     var nodeRect = anchorEl.getBoundingClientRect();
     var cardWidth = card.offsetWidth;
     var cardHeight = card.offsetHeight;
-    var gap = 14;
+    var gap = 16;
     var pad = 8;
 
     var nodeBox = {
@@ -191,7 +197,7 @@
         right: left + cardWidth,
         bottom: top + cardHeight,
       };
-      if (!overlaps(box, nodeBox, 6)) {
+      if (!overlaps(box, nodeBox, 10)) {
         chosen = { left: left, top: top };
         break;
       }
@@ -786,7 +792,7 @@
     return chosen;
   }
 
-  function autoBindNodes(svg, data) {
+  function autoBindNodes(svg, data, options) {
     // 清掉旧的手动包裹，统一走命中层
     svg.querySelectorAll("g.svg-node[data-node-id]").forEach(function (g) {
       var parent = g.parentNode;
@@ -805,7 +811,10 @@
 
     var layer = document.createElementNS(SVG_NS, "g");
     layer.setAttribute("id", "hover-hit-layer");
-    svg.appendChild(layer);
+    var bindOnly = !!(options && options.bindOnly);
+    if (bindOnly) layer.setAttribute("pointer-events", "none");
+    var labelsLayer = svg.querySelector("g.labels") || svg.querySelector(".labels-layer");
+    (labelsLayer || svg).appendChild(layer);
 
     var fragments = collectFragments(svg);
 
@@ -895,16 +904,24 @@
       stage.style.position = "relative";
     }
 
-    autoBindNodes(svg, data);
+    autoBindNodes(svg, data, { bindOnly: !!options.bindOnly });
+
+    if (options.bindOnly) {
+      return { bindOnly: true };
+    }
 
     var veil = document.createElement("div");
     veil.className = "svg-hover-veil";
     veil.setAttribute("aria-hidden", "true");
 
     var card = createCard();
+    var tooltipHost =
+      global.SvgRoadmapLayers && global.SvgRoadmapLayers.ensureHtmlTooltipLayer
+        ? global.SvgRoadmapLayers.ensureHtmlTooltipLayer(stage)
+        : stage;
 
     stage.appendChild(veil);
-    stage.appendChild(card);
+    tooltipHost.appendChild(card);
 
     var hideTimer = null;
     var activeId = null;
