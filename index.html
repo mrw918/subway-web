@@ -9,9 +9,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>知识路线图</title>
-    <link rel="stylesheet" href="./css/node-hover-card.css?v=21" />
-    <link rel="stylesheet" href="./css/roadmap-interactions.css?v=21" />
-    <link rel="stylesheet" href="./css/role-select.css?v=14" />
+    <link rel="stylesheet" href="./css/node-hover-card.css?v=22" />
+    <link rel="stylesheet" href="./css/roadmap-interactions.css?v=22" />
+    <link rel="stylesheet" href="./css/role-select.css?v=18" />
     <style>
       :root {
         color-scheme: light;
@@ -81,14 +81,21 @@
       }
 
       .roadmap-view {
+        position: relative;
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
         overflow-x: hidden;
       }
 
       .roadmap-toolbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
         flex-shrink: 0;
         display: flex;
         align-items: center;
@@ -107,7 +114,7 @@
       .back-btn {
         border: 0;
         background: transparent;
-        color: #4b67af;
+        color: #dc2626;
         font-size: 13px;
         font-weight: 600;
         cursor: pointer;
@@ -120,7 +127,7 @@
 
       @media (hover: hover) and (pointer: fine) {
         .back-btn:hover {
-          background: rgba(75, 103, 175, 0.08);
+          background: rgba(220, 38, 38, 0.1);
         }
       }
 
@@ -132,9 +139,12 @@
       }
 
       .roadmap-error {
-        margin: 12px 16px 0;
-        margin-left: calc(16px + var(--safe-left));
-        margin-right: calc(16px + var(--safe-right));
+        position: absolute;
+        top: calc(52px + var(--safe-top));
+        left: calc(16px + var(--safe-left));
+        right: calc(16px + var(--safe-right));
+        z-index: 11;
+        margin: 0;
         padding: 10px 12px;
         border-radius: 8px;
         background: rgba(220, 53, 69, 0.08);
@@ -149,12 +159,13 @@
       }
 
       .stage-shell {
-        flex: 1;
+        position: absolute;
+        inset: 0;
+        flex: none;
         min-height: 0;
         background: #ffffff;
         display: flex;
-        padding-left: var(--safe-left);
-        padding-right: var(--safe-right);
+        padding: 0;
       }
 
       .svg-hover-stage {
@@ -173,34 +184,93 @@
         display: flex;
       }
 
-      @media (max-width: 480px) {
-        .roadmap-toolbar {
-          display: grid;
-          grid-template-columns: auto 1fr;
-          grid-template-areas:
-            "back meta"
-            "search search";
-          align-items: center;
-          gap: 8px 10px;
+      @media (max-width: 768px) {
+        .roadmap-view {
+          overflow: hidden;
         }
 
-        .back-btn {
-          grid-area: back;
+        .roadmap-toolbar {
+          display: flex;
+          flex-wrap: nowrap;
+          align-items: center;
+          gap: 10px;
+          overflow-x: auto;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding-bottom: 8px;
+        }
+
+        .roadmap-toolbar::-webkit-scrollbar {
+          display: none;
+        }
+
+        .back-btn,
+        .roadmap-toolbar__meta,
+        .roadmap-search-wrap {
+          flex: 0 0 auto;
         }
 
         .roadmap-toolbar__meta {
-          grid-area: meta;
-        }
-
-        .roadmap-search-wrap {
-          grid-area: search;
-          margin-left: 0;
-          width: 100%;
+          max-width: 42vw;
         }
 
         .roadmap-title {
-          font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 13px;
           line-height: 1.35;
+        }
+
+        .roadmap-search-wrap {
+          margin-left: 0;
+          width: min(220px, 58vw);
+          min-width: 160px;
+        }
+
+        .roadmap-search-input {
+          width: 100%;
+        }
+
+        .roadmap-error {
+          top: calc(56px + var(--safe-top));
+        }
+
+        .stage-shell {
+          overflow-x: auto;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          touch-action: pan-x pan-y;
+        }
+
+        #roadmap-stage.svg-hover-stage,
+        .svg-hover-stage {
+          width: auto;
+          min-width: 850px;
+          height: 100%;
+          overflow: visible;
+          overflow-x: visible;
+        }
+
+        .svg-hover-stage svg {
+          width: 850px;
+          min-width: 850px;
+          max-width: none;
+          height: 100%;
+          touch-action: manipulation;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .roadmap-error {
+          top: calc(56px + var(--safe-top));
+        }
+
+        .roadmap-search-wrap {
+          width: min(200px, 55vw);
+          min-width: 148px;
         }
       }
     </style>
@@ -239,7 +309,7 @@
       </section>
     </main>
 
-    <script src="./js/roadmaps.js?v=20"></script>
+    <script src="./js/roadmaps.js?v=21"></script>
     <script src="./js/node-data.js?v=11"></script>
     <script src="./js/node-data-network-test.js?v=11"></script>
     <script src="./js/node-data-diagnostic.js?v=2"></script>
@@ -252,7 +322,7 @@
     <script src="./js/route-presets.js?v=3"></script>
     <script src="./js/svg-roadmap-graph.js?v=16"></script>
     <script src="./js/svg-roadmap-interactions.js?v=27"></script>
-    <script src="./js/role-select.js?v=14"></script>
+    <script src="./js/role-select.js?v=16"></script>
     <script src="./js/app.js?v=22"></script>
   </body>
 </html>

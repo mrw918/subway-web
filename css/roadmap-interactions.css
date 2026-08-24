@@ -420,10 +420,24 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
   }
 }
 
+@media (max-width: 768px) {
+  .stage-shell {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  #roadmap-stage {
+    flex: 0 0 auto;
+    min-width: 850px;
+    width: auto;
+  }
+}
+
 @media (max-width: 480px) {
   .roadmap-search-wrap {
     margin-left: 0;
-    width: 100%;
   }
 
   .roadmap-search-input {

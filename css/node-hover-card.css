@@ -21,6 +21,22 @@
   transition: opacity 0.22s ease;
 }
 
+@media (max-width: 768px) {
+  .svg-hover-stage {
+    overflow: visible;
+    overflow-x: visible;
+    min-width: 850px;
+    width: auto;
+  }
+
+  .svg-hover-stage svg {
+    width: 850px;
+    min-width: 850px;
+    max-width: none;
+    height: 100%;
+  }
+}
+
 /* 悬停时保持路线图清晰可见，不再整体压暗 */
 .svg-hover-stage.is-hovering svg {
   opacity: 1;

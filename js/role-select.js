@@ -52,9 +52,36 @@
       '      <path d="M1 1l10 8-10 8" fill="none" stroke="#ef4444" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/>' +
       "    </svg>" +
       "  </div>" +
-      '  <div class="role-select__title" aria-live="polite">' +
-      '    <h1 class="role-select__title-zh"></h1>' +
-      '    <p class="role-select__title-en"></p>' +
+      '  <div class="role-select__aside">' +
+      '    <div class="role-select__title-row">' +
+      '      <div class="role-select__title" aria-live="polite">' +
+      '        <h1 class="role-select__title-zh"></h1>' +
+      '        <p class="role-select__title-en"></p>' +
+      "      </div>" +
+      '      <button type="button" class="role-select__details-toggle" aria-label="查看角色详情" aria-expanded="false">' +
+      '        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">' +
+      '          <path d="M3 5h12M3 9h12M3 13h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+      "        </svg>" +
+      "      </button>" +
+      "    </div>" +
+      '    <dl class="role-select__details role-select__details--desktop" aria-live="polite">' +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; ROLE</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="role"></dd>' +
+      "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; FOCUS</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="focus"></dd>' +
+      "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; SKILLS</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="skills"></dd>' +
+      "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; MISSION</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="mission"></dd>' +
+      "      </div>" +
+      "    </dl>" +
       "  </div>" +
       '  <div class="role-select__main">' +
       '    <div class="role-select__watermark" aria-hidden="true"></div>' +
@@ -85,17 +112,63 @@
       "    </div>" +
       '    <button type="button" class="role-select__entre">ENTRE</button>' +
       "  </footer>" +
+      '  <div class="role-select__sheet-backdrop" hidden></div>' +
+      '  <aside class="role-select__sheet" role="dialog" aria-modal="true" aria-label="角色详情" hidden>' +
+      '    <div class="role-select__sheet-handle" aria-hidden="true"></div>' +
+      '    <div class="role-select__sheet-header">' +
+      '      <div class="role-select__sheet-title">' +
+      '        <h2 class="role-select__sheet-title-zh"></h2>' +
+      '        <p class="role-select__sheet-title-en"></p>' +
+      "      </div>" +
+      '      <button type="button" class="role-select__sheet-close" aria-label="关闭详情">' +
+      '        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">' +
+      '          <path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+      "        </svg>" +
+      "      </button>" +
+      "    </div>" +
+      '    <dl class="role-select__details role-select__details--sheet" aria-live="polite">' +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; ROLE</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="role"></dd>' +
+      "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; FOCUS</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="focus"></dd>' +
+      "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; SKILLS</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="skills"></dd>' +
+      "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">&gt; MISSION</dt>' +
+      '        <dd class="role-select__detail-value" data-detail="mission"></dd>' +
+      "      </div>" +
+      "    </dl>" +
+      "  </aside>" +
       "</div>";
 
     var watermarkEl = root.querySelector(".role-select__watermark");
     var titleZhEl = root.querySelector(".role-select__title-zh");
     var titleEnEl = root.querySelector(".role-select__title-en");
+    var sheetTitleZhEl = root.querySelector(".role-select__sheet-title-zh");
+    var sheetTitleEnEl = root.querySelector(".role-select__sheet-title-en");
+    var detailsToggleBtn = root.querySelector(".role-select__details-toggle");
+    var sheetEl = root.querySelector(".role-select__sheet");
+    var sheetBackdrop = root.querySelector(".role-select__sheet-backdrop");
+    var sheetCloseBtn = root.querySelector(".role-select__sheet-close");
+    var detailEls = {
+      role: root.querySelectorAll('[data-detail="role"]'),
+      focus: root.querySelectorAll('[data-detail="focus"]'),
+      skills: root.querySelectorAll('[data-detail="skills"]'),
+      mission: root.querySelectorAll('[data-detail="mission"]'),
+    };
     var heroStage = root.querySelector(".role-select__hero-stage");
     var avatarViewport = root.querySelector(".role-select__avatar-viewport");
     var avatarList = root.querySelector(".role-select__avatars");
     var prevBtn = root.querySelector(".role-select__nav--prev");
     var nextBtn = root.querySelector(".role-select__nav--next");
     var entreBtn = root.querySelector(".role-select__entre");
+    var sheetOpen = false;
 
     var heroA = document.createElement("img");
     var heroB = document.createElement("img");
@@ -148,8 +221,52 @@
     }
 
     function applyRoleTitle(role) {
-      titleZhEl.textContent = (role && role.title) || "";
-      titleEnEl.textContent = (role && role.titleEn) || "";
+      var zh = (role && role.title) || "";
+      var en = (role && role.titleEn) || "";
+      titleZhEl.textContent = zh;
+      titleEnEl.textContent = en;
+      if (sheetTitleZhEl) sheetTitleZhEl.textContent = zh;
+      if (sheetTitleEnEl) sheetTitleEnEl.textContent = en;
+    }
+
+    function applyRoleDetails(role) {
+      var details = (role && role.details) || {};
+      Object.keys(detailEls).forEach(function (key) {
+        var nodes = detailEls[key];
+        if (!nodes) return;
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].textContent = details[key] || "";
+        }
+      });
+    }
+
+    function applyRoleMeta(role) {
+      applyRoleTitle(role);
+      applyRoleDetails(role);
+    }
+
+    function setSheetOpen(open) {
+      sheetOpen = !!open;
+      if (!sheetEl || !sheetBackdrop || !detailsToggleBtn) return;
+      detailsToggleBtn.setAttribute("aria-expanded", sheetOpen ? "true" : "false");
+      root.classList.toggle("role-select--sheet-open", sheetOpen);
+      if (sheetOpen) {
+        sheetEl.hidden = false;
+        sheetBackdrop.hidden = false;
+        requestAnimationFrame(function () {
+          sheetEl.classList.add("is-open");
+          sheetBackdrop.classList.add("is-open");
+        });
+      } else {
+        sheetEl.classList.remove("is-open");
+        sheetBackdrop.classList.remove("is-open");
+        window.setTimeout(function () {
+          if (!sheetOpen) {
+            sheetEl.hidden = true;
+            sheetBackdrop.hidden = true;
+          }
+        }, 320);
+      }
     }
 
     function setHeroImmediate(role) {
@@ -160,7 +277,7 @@
       idleHero.removeAttribute("src");
       applyHeroLayout(role);
       watermarkEl.textContent = role.watermark || role.title || "";
-      applyRoleTitle(role);
+      applyRoleMeta(role);
     }
 
     function crossfadeHero(role) {
@@ -169,7 +286,7 @@
       idleHero.className = "role-select__hero is-enter";
       applyHeroLayout(role);
       watermarkEl.textContent = role.watermark || role.title || "";
-      applyRoleTitle(role);
+      applyRoleMeta(role);
 
       activeHero.classList.remove("is-active");
       activeHero.classList.add("is-leave");
@@ -271,9 +388,30 @@
       var role = roles[selectedIndex];
       if (role && onEnter) onEnter(role.id);
     });
+    if (detailsToggleBtn) {
+      detailsToggleBtn.addEventListener("click", function () {
+        setSheetOpen(true);
+      });
+    }
+    if (sheetCloseBtn) {
+      sheetCloseBtn.addEventListener("click", function () {
+        setSheetOpen(false);
+      });
+    }
+    if (sheetBackdrop) {
+      sheetBackdrop.addEventListener("click", function () {
+        setSheetOpen(false);
+      });
+    }
 
     function onKeyDown(event) {
       if (root.hidden) return;
+      if (event.key === "Escape" && sheetOpen) {
+        event.preventDefault();
+        setSheetOpen(false);
+        return;
+      }
+      if (sheetOpen) return;
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         step(-1);
@@ -288,6 +426,9 @@
 
     function onResize() {
       layoutAvatars(false);
+      if (sheetOpen && window.matchMedia("(min-width: 769px)").matches) {
+        setSheetOpen(false);
+      }
     }
 
     window.addEventListener("keydown", onKeyDown);
@@ -302,6 +443,7 @@
         return roles[selectedIndex] && roles[selectedIndex].id;
       },
       destroy: function () {
+        setSheetOpen(false);
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("resize", onResize);
       },
