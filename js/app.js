@@ -20,7 +20,7 @@
     return hash || null;
   }
 
-  var SVG_ASSET_VERSION = "28";
+  var SVG_ASSET_VERSION = "30";
 
   function hideSvgCornerLogo(svg) {
     if (!svg) return;
@@ -117,11 +117,12 @@
     return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
   }
 
-  /** 收紧 viewBox 并在舞台内等比铺满（meet，不裁切） */
+  /** 收紧 viewBox 并在舞台内等比完整显示（meet，不裁切图例/下方信息） */
   function fitSvgToStage(svg) {
     if (!svg) return;
-    var pad = 20;
-    var padTop = 40; // 给左上角叠字留空
+    // 边距尽量小：标题已是 HTML 叠字，少留白即可让地图更大
+    var pad = 8;
+    var padTop = 14;
     var bb = contentViewBox(svg);
     if (bb && bb.width > 0 && bb.height > 0) {
       var x = bb.x - pad;
@@ -140,11 +141,30 @@
     svg.removeAttribute("width");
     svg.removeAttribute("height");
     svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    svg.style.position = "";
+    svg.style.left = "";
+    svg.style.top = "";
+    svg.style.right = "";
+    svg.style.bottom = "";
+    svg.style.margin = "";
+    svg.style.transform = "";
     svg.style.width = "100%";
     svg.style.height = "100%";
     svg.style.maxWidth = "100%";
     svg.style.maxHeight = "100%";
     svg.style.display = "block";
+    svg.style.background = "transparent";
+  }
+
+  /** 水印叠在地铁图之上但不可点击，避免被 SVG 白底/线面完全挡住 */
+  function mountMapWatermark(stage) {
+    if (!stage) return;
+    var old = stage.querySelector(".roadmap-watermark");
+    if (old) old.remove();
+    var el = document.createElement("div");
+    el.className = "roadmap-watermark";
+    el.setAttribute("aria-hidden", "true");
+    stage.appendChild(el);
   }
 
   /** 左上角角色名改 HTML 叠字：不参与 viewBox，地图可铺满；名字仍保留 */
@@ -310,8 +330,9 @@
         SvgRoadmapLayers.restructure(svg);
       }
 
-      // 图层重组后再量内容包围盒，保证整图落入可视区
+      // 图层重组后再量内容包围盒；meet 完整显示图例，水印叠在图上但不挡点击
       fitSvgToStage(svg);
+      mountMapWatermark(stage);
       mountMapTitleOverlay(stage, svg, item.title);
 
       var data = item.dataKey ? window[item.dataKey] || {} : {};

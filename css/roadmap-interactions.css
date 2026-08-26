@@ -49,7 +49,7 @@ svg.is-route-locked .line-segment.is-active {
 /* 路线悬浮：高亮整条链路 + 知识流 */
 .active-flow {
   stroke-dasharray: 10 6;
-  animation: flowAnimation 1s linear infinite;
+  animation: flowAnimation 1.8s linear infinite;
 }
 
 .flow-segment.active-flow.flow-reverse,
@@ -97,12 +97,18 @@ svg.is-route-locked .line-segment.is-active {
 
 .node {
   cursor: pointer;
-  pointer-events: all;
+  pointer-events: none;
 }
 
 .node-hit {
   fill: transparent;
   stroke: none;
+  pointer-events: all;
+}
+
+g.labels .node-label {
+  pointer-events: all;
+  cursor: pointer;
 }
 
 .node-ripple {
@@ -162,19 +168,14 @@ g.labels .node-label {
 
 svg.is-route-locked g.labels .node-label.is-dimmed-route-label,
 svg.is-route-locked g.labels #站点文字 text.is-dimmed-route-label {
-  opacity: 0.22;
-  visibility: visible;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 svg.is-route-locked g.labels .node-label.is-active-route-label,
 svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   opacity: 1;
-  visibility: visible;
-}
-
-/* 未打标的站名在锁定路线时也弱化 */
-svg.is-route-locked g.labels #站点文字 text:not(.is-active-route-label) {
-  opacity: 0.22;
   visibility: visible;
 }
 

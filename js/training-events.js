@@ -6,7 +6,6 @@ window.TRAINING_EVENTS = {
   title: "了解最新培训资讯",
   live: {
     label: "直播课",
-    desc: "课程精讲，直播互动",
     items: [
       {
         date: "2026/8/31",
@@ -30,7 +29,6 @@ window.TRAINING_EVENTS = {
   },
   open: {
     label: "公开课",
-    desc: "线下授课，实操练习",
     items: [
       {
         date: "2026/9/15-9/16",

@@ -7,7 +7,7 @@
 (function (global) {
   var SVG_NS = "http://www.w3.org/2000/svg";
 
-  var ROUTE_BADGE_RE = /^[A-Z]+\d+$/;
+  var ROUTE_BADGE_RE = /^[A-Z]{1,3}\d{1,2}$/;
 
   function normalizeColor(value) {
     return String(value || "").trim().toLowerCase();
@@ -112,16 +112,20 @@
     return Math.sqrt(dx * dx + dy * dy);
   }
 
+  // 必须用 SVG 用户坐标（与 getBBox / station.center 同一空间）；禁止 getCTM（那是屏幕坐标）
+  function pathPointAtLengthUser(path, atLength) {
+    var pt = path.getPointAtLength(atLength);
+    return transformPoint(parseMatrix(path.getAttribute("transform")), pt.x, pt.y);
+  }
+
   function pathDistanceToPoint(path, point) {
     try {
       var len = path.getTotalLength();
       if (!len) return Infinity;
-      var m = parseMatrix(path.getAttribute("transform"));
       var steps = Math.max(16, Math.ceil(len / 6));
       var min = Infinity;
       for (var i = 0; i <= steps; i += 1) {
-        var p = path.getPointAtLength((len * i) / steps);
-        var tp = transformPoint(m, p.x, p.y);
+        var tp = pathPointAtLengthUser(path, (len * i) / steps);
         var d = distance(tp, point);
         if (d < min) min = d;
       }
@@ -189,7 +193,8 @@
 
   function collectBadgeTexts(svg) {
     var badges = [];
-    svg.querySelectorAll("text").forEach(function (textEl) {
+    var scope = svg.querySelector("#路线名") || svg;
+    scope.querySelectorAll("text").forEach(function (textEl) {
       // 跳过隐藏延伸层，避免抢走正式路线颜色
       if (textEl.closest && textEl.closest('#延申, #延伸, [display="none"], .st26')) return;
       try {
@@ -371,43 +376,6 @@
     labelsLayer.appendChild(hit);
   }
 
-  function stationSamplePoints(station) {
-    var bb = station.bbox;
-    if (!bb) return [station.center];
-    var cx = bb.x + bb.width / 2;
-    var cy = bb.y + bb.height / 2;
-    var points = [{ x: cx, y: cy }];
-    if (!station.isJunction) return points;
-
-    var hw = bb.width / 2;
-    var hh = bb.height / 2;
-    // 所有换乘站沿轮廓取样，避免只取中心漏掉上下/左右支线
-    points.push(
-      { x: cx, y: bb.y + Math.min(6, hh * 0.35) },
-      { x: cx, y: bb.y + bb.height - Math.min(6, hh * 0.35) },
-      { x: bb.x + Math.min(6, hw * 0.35), y: cy },
-      { x: bb.x + bb.width - Math.min(6, hw * 0.35), y: cy },
-      { x: cx, y: bb.y + bb.height * 0.33 },
-      { x: cx, y: bb.y + bb.height * 0.66 }
-    );
-
-    // 高立柱：加密取样 + 右侧支线常见出口
-    if (bb.height > 72) {
-      points.push(
-        { x: cx, y: bb.y + bb.height * 0.12 },
-        { x: cx, y: bb.y + bb.height * 0.38 },
-        { x: cx, y: bb.y + bb.height * 0.62 },
-        { x: cx, y: bb.y + bb.height * 0.88 },
-        { x: cx + 16, y: cy },
-        { x: cx + 28, y: bb.y + bb.height * 0.22 },
-        { x: cx + 28, y: bb.y + bb.height * 0.5 },
-        { x: cx + 28, y: bb.y + bb.height * 0.78 },
-        { x: cx - 12, y: cy }
-      );
-    }
-    return points;
-  }
-
   function stationRoundCap(station) {
     var el = station && station.el;
     if (!el || !el.querySelector) return null;
@@ -427,139 +395,157 @@
     return null;
   }
 
-  function routesForStation(station, routes, svg) {
-    var bb = station.bbox || { width: 0, height: 0 };
-    var tallJunction = !!(station.isJunction && bb.height > 72);
-    var capsuleJunction =
-      !!(station.isJunction && bb.height > 12 && bb.height <= 72 && bb.height >= bb.width * 1.15);
-    // 高立柱才是多线枢纽；带圆点的短立柱只是单线站台，不能按整根柱子扫线
-    var points = tallJunction
-      ? stationSamplePoints(station)
-      : [stationRoundCap(station) || station.center];
-    var maxTol = tallJunction ? 28 : capsuleJunction && bb.height <= 24 ? 12 : 10;
+  function pointInRect(p, rect) {
+    return (
+      p.x >= rect.x &&
+      p.x <= rect.x + rect.width &&
+      p.y >= rect.y &&
+      p.y <= rect.y + rect.height
+    );
+  }
 
-    var scored = [];
+  function pathIntersectsRect(path, rect) {
+    try {
+      var len = path.getTotalLength();
+      if (!len) return false;
+      var steps = Math.max(16, Math.ceil(len / 3));
+      for (var i = 0; i <= steps; i += 1) {
+        var tp = pathPointAtLengthUser(path, (len * i) / steps);
+        if (pointInRect(tp, rect)) return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  function routesNearPoint(routes, svg, point, tol) {
+    if (!point) return [];
+    var ids = [];
     Object.keys(routes).forEach(function (rid) {
       var minD = Infinity;
       (routes[rid].pathIds || []).forEach(function (pid) {
         var path = svg.querySelector('[data-path-id="' + pid + '"]');
         if (!path) return;
-        points.forEach(function (pt) {
-          var d = pathDistanceToPoint(path, pt);
-          if (d < minD) minD = d;
+        minD = Math.min(minD, pathDistanceToPoint(path, point));
+      });
+      if (minD <= tol) ids.push(rid);
+    });
+    return ids;
+  }
+
+  function routesNearPoints(routes, svg, points, tol) {
+    if (!points || !points.length) return [];
+    var ids = [];
+    Object.keys(routes).forEach(function (rid) {
+      var minD = Infinity;
+      (routes[rid].pathIds || []).forEach(function (pid) {
+        var path = svg.querySelector('[data-path-id="' + pid + '"]');
+        if (!path) return;
+        points.forEach(function (point) {
+          if (!point) return;
+          minD = Math.min(minD, pathDistanceToPoint(path, point));
         });
       });
-      if (minD <= maxTol) scored.push({ id: rid, dist: minD });
+      if (minD <= tol) ids.push(rid);
     });
+    return ids;
+  }
 
-    if (!scored.length) return [];
-    scored.sort(function (a, b) {
-      return a.dist - b.dist;
+  function routesTouchingRect(routes, svg, rect) {
+    var ids = [];
+    Object.keys(routes).forEach(function (rid) {
+      var hit = (routes[rid].pathIds || []).some(function (pid) {
+        var path = svg.querySelector('[data-path-id="' + pid + '"]');
+        return path && pathIntersectsRect(path, rect);
+      });
+      if (hit) ids.push(rid);
     });
-    // 高立柱枢纽：落入容差的线路全部联动
-    if (tallJunction) {
-      return scored
-        .filter(function (item) {
-          return item.dist <= maxTol;
-        })
-        .map(function (item) {
-          return item.id;
-        });
+    return ids;
+  }
+
+  function unionRouteIds() {
+    var seen = {};
+    var out = [];
+    for (var i = 0; i < arguments.length; i += 1) {
+      (arguments[i] || []).forEach(function (rid) {
+        if (!rid || seen[rid]) return;
+        seen[rid] = true;
+        out.push(rid);
+      });
     }
-    // 矮换乘条（两线间距内）：允许最近的两三条
-    if (capsuleJunction && bb.height <= 24) {
-      var best = scored[0].dist;
-      return scored
-        .filter(function (item) {
-          return item.dist <= best + 6;
-        })
-        .map(function (item) {
-          return item.id;
-        });
+    return out;
+  }
+
+  // 换乘站取样：沿柱身加密，避免只取圆心漏掉中间交汇横线（如 ASR 通信）
+  function junctionBindingPoints(station) {
+    var bb = station.bbox;
+    var cap = stationRoundCap(station) || station.center;
+    if (!bb || !station.isJunction) return [cap];
+
+    var cx = cap ? cap.x : bb.x + bb.width / 2;
+    var points = [cap];
+    var steps = bb.height > 72 ? [0.08, 0.18, 0.28, 0.38, 0.5, 0.62, 0.72, 0.82, 0.92] : [0.15, 0.35, 0.5, 0.65, 0.85];
+    steps.forEach(function (t) {
+      points.push({ x: cx, y: bb.y + bb.height * t });
+    });
+    return points;
+  }
+
+  // 几何绑线：凡换乘柱（高/矮）一律识别「穿过柱身」的全部路线；普通圆点=圆心容差
+  function routesForStation(station, routes, svg) {
+    var bb = station.bbox || { width: 0, height: 0, x: 0, y: 0 };
+    var cap = stationRoundCap(station) || station.center;
+
+    if (!station.isJunction) {
+      return routesNearPoint(routes, svg, cap, 10);
     }
-    // 普通站点 / 单线站台立柱：只绑最近一条，避免把穿过立柱的无关线一起点亮
-    return [scored[0].id];
+
+    var tall = bb.height > 72;
+    var points = junctionBindingPoints(station);
+    var tol = tall ? 12 : 8;
+    var fromPoints = routesNearPoints(routes, svg, points, tol);
+
+    // 矮柱也要做柱身矩形检测：ASR 通信柱身会穿过中间数条横线
+    var padX = tall ? 14 : 5;
+    var padY = tall ? 6 : 1;
+    var fromRect = routesTouchingRect(routes, svg, {
+      x: bb.x - padX,
+      y: bb.y - padY,
+      width: bb.width + padX * 2,
+      height: bb.height + padY * 2,
+    });
+    return unionRouteIds(fromPoints, fromRect);
   }
 
   function pathUserEndpoints(path) {
     try {
       var len = path.getTotalLength();
       if (!len) return null;
-      var m = parseMatrix(path.getAttribute("transform"));
-      var s = path.getPointAtLength(0);
-      var e = path.getPointAtLength(len);
       return {
-        start: transformPoint(m, s.x, s.y),
-        end: transformPoint(m, e.x, e.y),
+        start: pathPointAtLengthUser(path, 0),
+        end: pathPointAtLengthUser(path, len),
       };
     } catch (err) {
       return null;
     }
   }
 
-  // 同一路线内统一知识流方向（左→右为主，竖段下→上）
+  // 每段独立：横向从左到右，纵向从上到下
+  function orientFlowSegment(el) {
+    var ep = pathUserEndpoints(el);
+    if (!ep) return;
+    var dx = ep.end.x - ep.start.x;
+    var dy = ep.end.y - ep.start.y;
+    var reverse;
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      reverse = dx < 0;
+    } else {
+      reverse = dy < 0;
+    }
+    el.classList.toggle("flow-reverse", reverse);
+  }
+
   function orientRouteFlowDirection(flowEls) {
-    if (!flowEls || flowEls.length < 2) {
-      if (flowEls && flowEls[0]) {
-        var alone = pathUserEndpoints(flowEls[0]);
-        if (alone) {
-          var adx = alone.end.x - alone.start.x;
-          var ady = alone.end.y - alone.start.y;
-          var reverseAlone =
-            Math.abs(adx) >= Math.abs(ady) ? adx < 0 : ady > 0;
-          flowEls[0].classList.toggle("flow-reverse", reverseAlone);
-        }
-      }
-      return;
-    }
-
-    var items = [];
-    flowEls.forEach(function (el) {
-      var ep = pathUserEndpoints(el);
-      if (!ep) return;
-      items.push({ el: el, start: ep.start, end: ep.end });
-    });
-    if (!items.length) return;
-
-    var tips = [];
-    items.forEach(function (it, idx) {
-      tips.push({ x: it.start.x, y: it.start.y, idx: idx, atStart: true });
-      tips.push({ x: it.end.x, y: it.end.y, idx: idx, atStart: false });
-    });
-    tips.sort(function (a, b) {
-      return a.x - b.x || b.y - a.y;
-    });
-
-    var used = {};
-    var cur = { x: tips[0].x, y: tips[0].y };
-    var guard = 0;
-    while (Object.keys(used).length < items.length && guard < items.length + 2) {
-      guard += 1;
-      var bestIdx = -1;
-      var bestDist = Infinity;
-      var bestAtStart = true;
-      items.forEach(function (it, idx) {
-        if (used[idx]) return;
-        var ds = distance(cur, it.start);
-        var de = distance(cur, it.end);
-        if (ds < bestDist) {
-          bestDist = ds;
-          bestIdx = idx;
-          bestAtStart = true;
-        }
-        if (de < bestDist) {
-          bestDist = de;
-          bestIdx = idx;
-          bestAtStart = false;
-        }
-      });
-      if (bestIdx < 0) break;
-      used[bestIdx] = true;
-      var pick = items[bestIdx];
-      // 从当前 tip 接到该段的 end → 该段方向与链式前进相反，需反转动画
-      pick.el.classList.toggle("flow-reverse", !bestAtStart);
-      cur = bestAtStart ? pick.end : pick.start;
-    }
+    (flowEls || []).forEach(orientFlowSegment);
   }
 
   function svgPointFromClient(svg, clientX, clientY) {
@@ -1104,8 +1090,12 @@
       var desc = (info.description || "").trim();
       var nodeId = "n" + (index + 1);
 
-      // 无文案的多线换乘枢纽仍可悬停，以便高亮全部相关链路
-      if (!desc && station.isJunction && routeIds.length > 1) {
+      // 无文案的换乘枢纽仍可悬停，以便高亮全部相关链路
+      if (
+        !desc &&
+        station.isJunction &&
+        (routeIds.length > 1 || (station.bbox && station.bbox.height > 72))
+      ) {
         desc = "此换乘站连接多条学习路线，悬停可查看全部相关链路。";
         info = {
           nodeName: "换乘枢纽",
@@ -1153,6 +1143,9 @@
         }
       });
     });
+
+    // 兜底：确保每条 flow 段都按「左→右 / 上→下」定向（含多段路线里的支线）
+    svg.querySelectorAll("g.flow-lines .flow-segment").forEach(orientFlowSegment);
 
     global.ROADMAP_GRAPH = { routes: routes, nodes: nodes };
     return { routes: routes, nodes: nodes };

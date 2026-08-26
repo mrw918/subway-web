@@ -1,0 +1,90 @@
+/* Noto Sans CJK SC：中英统一；仅换字体文件，不改其它样式 */
+
+@font-face {
+  font-family: "Noto Sans CJK SC";
+  src: url("../fonts/NotoSansCJKsc-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Noto Sans CJK SC";
+  src: url("../fonts/NotoSansCJKsc-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Noto Sans CJK SC";
+  src: url("../fonts/NotoSansCJKsc-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 地铁图 SVG 内嵌 Adobe 字体名 → 本地 Noto（保留原字重对应） */
+@font-face {
+  font-family: "NotoSansCJKsc-Regular-GBpc-EUC-H";
+  src: url("../fonts/NotoSansCJKsc-Regular.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NotoSansCJKsc-Medium-GBpc-EUC-H";
+  src: url("../fonts/NotoSansCJKsc-Medium.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NotoSansCJKsc-Bold-GBpc-EUC-H";
+  src: url("../fonts/NotoSansCJKsc-Bold.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SourceHanSansSC-Regular-GBpc-EUC-H";
+  src: url("../fonts/NotoSansCJKsc-Regular.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SourceHanSansSC-Medium-GBpc-EUC-H";
+  src: url("../fonts/NotoSansCJKsc-Medium.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Regular-Adobe";
+  src: url("../fonts/NotoSansCJKsc-Regular.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Light-Adobe";
+  src: url("../fonts/NotoSansCJKsc-Regular.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ClashVectorAdobe-Medium";
+  src: url("../fonts/NotoSansCJKsc-Medium.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 页面控件继承全局字体（不改字号/字重） */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}

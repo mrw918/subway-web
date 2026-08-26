@@ -16,6 +16,7 @@
     return g;
   }
 
+  // 流动在站点之下，避免虚线动画盖住圆点/换乘柱
   function placePaintLayers(svg, lines, flowLines, nodes, labels) {
     svg.appendChild(lines);
     svg.appendChild(flowLines);
@@ -147,15 +148,33 @@
       }
     }
 
-    var geo = {
-      x: bb.x + bb.width / 2,
-      y: bb.y + bb.height / 2,
-      r: Math.max(bb.width, bb.height) / 2,
-    };
-
     var probe = parts && parts.length ? parts[0] : null;
     var isJunction = looksLikeJunction(probe, bb);
     if (isJunction) wrap.classList.add("node--junction");
+    var tallHub = !!(isJunction && bb.height > 72);
+    if (tallHub) wrap.setAttribute("data-tall-hub", "1");
+
+    var capBb = null;
+    (parts || []).forEach(function (el) {
+      var tag = tagNameOf(el);
+      if (tag !== "circle" && tag !== "ellipse") return;
+      try {
+        var cap = el.getBBox();
+        if (Math.max(cap.width, cap.height) > 28) return;
+        if (!(cap.width > 0 || cap.height > 0)) return;
+        capBb = cap;
+      } catch (eCap) {}
+    });
+
+    // 高立柱只在圆点上命中，避免「ASR通信」等支线站名落到整根脊柱上
+    var hitBb = tallHub && capBb ? capBb : bb;
+    var geo = {
+      x: (tallHub && capBb ? capBb.x + capBb.width / 2 : bb.x + bb.width / 2),
+      y: (tallHub && capBb ? capBb.y + capBb.height / 2 : bb.y + bb.height / 2),
+      r: tallHub && capBb
+        ? Math.max(5.5, Math.max(capBb.width, capBb.height) / 2)
+        : Math.min(10, Math.max(5.5, Math.max(bb.width, bb.height) / 2)),
+    };
 
     addRipple(wrap, geo, "");
     addRipple(wrap, geo, "node-ripple--delay");
@@ -163,13 +182,21 @@
     var pad = isJunction ? 12 : 11;
     var hit = document.createElementNS(SVG_NS, "rect");
     hit.setAttribute("class", "node-hit");
-    hit.setAttribute("x", String(bb.x - pad));
-    hit.setAttribute("y", String(bb.y - pad));
-    hit.setAttribute("width", String(Math.max(bb.width + pad * 2, isJunction ? 22 : 18)));
-    hit.setAttribute("height", String(Math.max(bb.height + pad * 2, isJunction ? 22 : 18)));
-    hit.setAttribute("rx", String(Math.min(Math.max(bb.width, bb.height) / 2 + pad, isJunction ? 14 : 11)));
+    hit.setAttribute("x", String(hitBb.x - pad));
+    hit.setAttribute("y", String(hitBb.y - pad));
+    hit.setAttribute("width", String(Math.max(hitBb.width + pad * 2, isJunction ? 22 : 18)));
+    hit.setAttribute("height", String(Math.max(hitBb.height + pad * 2, isJunction ? 22 : 18)));
+    hit.setAttribute("rx", String(Math.min(Math.max(hitBb.width, hitBb.height) / 2 + pad, isJunction ? 14 : 11)));
     hit.setAttribute("fill", "transparent");
     wrap.appendChild(hit);
+
+    wrap.setAttribute(
+      "data-station-bbox",
+      JSON.stringify({ x: bb.x, y: bb.y, width: bb.width, height: bb.height })
+    );
+    wrap.setAttribute("data-station-center", JSON.stringify({ x: geo.x, y: geo.y }));
+    if (isJunction) wrap.setAttribute("data-station-junction", "1");
+    if (tallHub) wrap.setAttribute("data-station-tall", "1");
 
     return {
       el: wrap,
@@ -180,11 +207,34 @@
     };
   }
 
+  function polylineToPath(poly) {
+    var raw = (poly.getAttribute("points") || "").trim();
+    if (!raw) return poly;
+    var nums = raw.split(/[\s,]+/).map(Number).filter(function (n) {
+      return isFinite(n);
+    });
+    if (nums.length < 4) return poly;
+    var d = "M" + nums[0] + "," + nums[1];
+    for (var i = 2; i < nums.length; i += 2) {
+      d += " L" + nums[i] + "," + nums[i + 1];
+    }
+    var path = document.createElementNS(SVG_NS, "path");
+    Array.prototype.forEach.call(poly.attributes || [], function (attr) {
+      if (attr.name === "points") return;
+      path.setAttribute(attr.name, attr.value);
+    });
+    path.setAttribute("d", d);
+    if (poly.parentNode) poly.parentNode.replaceChild(path, poly);
+    return path;
+  }
+
   function moveTrackElements(trackLayer, linesLayer) {
     if (!trackLayer) return;
     var kids = Array.prototype.slice.call(trackLayer.querySelectorAll("path, line, polyline, polygon"));
     kids.forEach(function (el) {
-      if (tagNameOf(el) === "line") el = lineToPath(el);
+      var tag = tagNameOf(el);
+      if (tag === "line") el = lineToPath(el);
+      else if (tag === "polyline") el = polylineToPath(el);
       bakePresentation(el);
       el.classList.add("line-segment");
       if (!el.getAttribute("fill")) el.setAttribute("fill", "none");
@@ -303,6 +353,14 @@
     moveLabelLayers(svg, labels, ["路线名", "站点文字", "路线序号", "标题"]);
     hideTitleLogo(svg);
 
+    // 去掉 SVG 大白底，露出舞台水印；否则水印会被整幅白底盖住
+    var bgLayer = findGroupById(svg, "背景");
+    if (bgLayer) {
+      Array.prototype.forEach.call(bgLayer.querySelectorAll("rect"), function (rect) {
+        rect.setAttribute("fill", "none");
+      });
+    }
+
     var extendLayer = findGroupById(svg, "延申") || findGroupById(svg, "延伸");
     if (extendLayer) extendLayer.setAttribute("display", "none");
 
@@ -325,13 +383,40 @@
     if (svg.getAttribute("data-layers-ready") === "1") {
       var cachedStations = Array.prototype.map
         .call(svg.querySelectorAll("g.nodes > .node"), function (wrap) {
-          var bb = wrap.getBBox();
+          var bb = null;
+          var rawBBox = wrap.getAttribute("data-station-bbox");
+          if (rawBBox) {
+            try {
+              bb = JSON.parse(rawBBox);
+            } catch (eBBox) {}
+          }
+          if (!bb || !(bb.width > 0 || bb.height > 0)) {
+            try {
+              bb = wrap.getBBox();
+            } catch (eWrap) {
+              bb = { x: 0, y: 0, width: 12, height: 12 };
+            }
+          }
+          var cx = bb.x + bb.width / 2;
+          var cy = bb.y + bb.height / 2;
+          var rawCenter = wrap.getAttribute("data-station-center");
+          if (rawCenter) {
+            try {
+              var storedCenter = JSON.parse(rawCenter);
+              if (isFinite(storedCenter.x) && isFinite(storedCenter.y)) {
+                cx = storedCenter.x;
+                cy = storedCenter.y;
+              }
+            } catch (eCenter) {}
+          }
           return {
             el: wrap,
-            center: { x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 },
+            center: { x: cx, y: cy },
             radius: Math.max(bb.width, bb.height) / 2,
             bbox: { x: bb.x, y: bb.y, width: bb.width, height: bb.height },
-            isJunction: wrap.classList.contains("node--junction"),
+            isJunction:
+              wrap.getAttribute("data-station-junction") === "1" ||
+              wrap.classList.contains("node--junction"),
             stationIndex: parseInt(wrap.getAttribute("data-station-index") || "0", 10),
           };
         })

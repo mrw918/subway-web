@@ -174,17 +174,9 @@
       return out;
     }
 
-    // 站点悬停：只高亮本站所属链路（高立柱换乘站才多条）；不做全图相关扩散
-    function highlightNodeRoutes(routeIds, nodeEl) {
+    // 站点悬停：严格按几何绑定的 routeIds 全量高亮
+    function highlightNodeRoutes(routeIds) {
       var ownIds = (routeIds || []).filter(Boolean);
-      var tallHub = false;
-      if (nodeEl && nodeEl.getBBox) {
-        try {
-          var bb = nodeEl.getBBox();
-          tallHub = !!(bb && bb.height > 72);
-        } catch (e) {}
-      }
-      if (!tallHub && ownIds.length > 1) ownIds = ownIds.slice(0, 1);
       var paths = pathIdsForRoutes(ownIds);
       highlightPathIds(paths, paths);
     }
@@ -220,7 +212,18 @@
       });
       svg.querySelectorAll("g.flow-lines .flow-segment").forEach(function (path) {
         var pid = path.getAttribute("data-path-id");
-        path.classList.toggle("active-flow", on && !!flowSet[pid]);
+        var showFlow = on && !!flowSet[pid];
+        path.classList.toggle("active-flow", showFlow);
+        if (!showFlow) return;
+        var lineTwin = pid
+          ? svg.querySelector('g.lines .line-segment[data-path-id="' + pid + '"]')
+          : null;
+        if (lineTwin) {
+          lineTwin.classList.toggle(
+            "flow-reverse",
+            path.classList.contains("flow-reverse")
+          );
+        }
       });
 
       var activeRoutes = {};
@@ -229,6 +232,31 @@
           return set[pid];
         });
       });
+
+      var activeNodeIds = {};
+      var activeLabelEls =
+        typeof WeakSet !== "undefined" ? new WeakSet() : null;
+      var activeLabelFallback = activeLabelEls ? null : [];
+      Object.keys(activeRoutes).forEach(function (rid) {
+        if (!activeRoutes[rid]) return;
+        (routes[rid].nodeIds || []).forEach(function (nodeId) {
+          activeNodeIds[nodeId] = true;
+          var node = nodes[nodeId];
+          if (!node) return;
+          (node.labelEls || []).forEach(function (el) {
+            if (!el) return;
+            if (activeLabelEls) activeLabelEls.add(el);
+            else activeLabelFallback.push(el);
+          });
+        });
+      });
+
+      function isActiveLabelEl(el) {
+        if (!el) return false;
+        if (activeLabelEls) return activeLabelEls.has(el);
+        return activeLabelFallback.indexOf(el) !== -1;
+      }
+
       svg.querySelectorAll(".legend-target, .legend-hit").forEach(function (el) {
         var rid = el.getAttribute("data-route-id");
         var knownRoute = rid && routes[rid];
@@ -236,19 +264,24 @@
         el.classList.toggle("is-dimmed", on && !!knownRoute && !activeRoutes[rid]);
       });
       svg.querySelectorAll("g.nodes .node").forEach(function (el) {
+        var nodeId = el.getAttribute("data-node-id");
         var ids = (el.getAttribute("data-route-id") || "").split(/\s+/).filter(Boolean);
-        var hit = ids.some(function (id) {
-          return activeRoutes[id];
-        });
+        var hit =
+          !!(on && activeNodeIds[nodeId]) ||
+          ids.some(function (id) {
+            return activeRoutes[id];
+          });
         el.classList.toggle("is-on-active-route", on && hit);
         el.classList.toggle("is-dimmed", on && !hit);
       });
 
       Object.keys(nodes).forEach(function (nodeId) {
         var node = nodes[nodeId];
-        var hit = (node.routeIds || []).some(function (rid) {
-          return activeRoutes[rid];
-        });
+        var hit =
+          !!activeNodeIds[nodeId] ||
+          (node.routeIds || []).some(function (rid) {
+            return activeRoutes[rid];
+          });
         (node.labelEls || []).forEach(function (el) {
           el.classList.add("node-label");
           el.classList.toggle("is-active-route-label", on && hit);
@@ -264,8 +297,8 @@
           el.classList.add("node-label");
           var rid = el.getAttribute("data-route-id");
           var activeByRoute = !!(rid && activeRoutes[rid]);
-          var activeByClass = el.classList.contains("is-active-route-label");
-          var active = on && (activeByRoute || activeByClass);
+          var activeByLabel = isActiveLabelEl(el);
+          var active = on && (activeByRoute || activeByLabel);
           if (on) {
             el.classList.toggle("is-active-route-label", active);
             el.classList.toggle("is-dimmed-route-label", !active);
@@ -665,8 +698,16 @@
     function bindNodeHover(nodeEl) {
       var hitEl = nodeEl.querySelector(".node-hit") || nodeEl;
       var useClick = !canHover || isMobileLayout();
-      // 同时绑节点组与 hit，避免 hit 几何异常时圆点无法触发
+      var nodeId0 = nodeEl.getAttribute("data-node-id");
+      var nodeInfo = nodeId0 && nodes[nodeId0];
       var targets = hitEl === nodeEl ? [nodeEl] : [nodeEl, hitEl];
+      if (nodeInfo && nodeInfo.labelEls) {
+        nodeInfo.labelEls.forEach(function (labelEl) {
+          if (!labelEl) return;
+          labelEl.classList.add("node-label");
+          if (targets.indexOf(labelEl) === -1) targets.push(labelEl);
+        });
+      }
 
       function onEnter() {
         var nodeId = nodeEl.getAttribute("data-node-id");
@@ -685,6 +726,14 @@
       function onLeave(event) {
         var related = event && event.relatedTarget;
         if (related && nodeEl.contains(related)) return;
+        if (
+          related &&
+          targets.some(function (t) {
+            return t === related || (t.contains && t.contains(related));
+          })
+        ) {
+          return;
+        }
         nodeEl.classList.remove("is-hover");
         hoverNodeId = null;
         hideTooltip();
@@ -736,7 +785,7 @@
       return !!(
         target &&
         target.closest &&
-        target.closest(".node, .node-hit, .legend-hit, .legend-target, [data-trigger-route], .node-tooltip")
+        target.closest(".node, .node-hit, .node-label, .legend-hit, .legend-target, [data-trigger-route], .node-tooltip")
       );
     }
 

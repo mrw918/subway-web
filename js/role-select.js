@@ -59,13 +59,7 @@
     root.innerHTML =
       '<div class="role-select__scene">' +
       '  <div class="role-select__logo" aria-label="VECTOR">' +
-      '    <div class="role-select__logo-copy">' +
-      '      <span class="role-select__logo-tagline">YOUR JOURNEY. YOUR ROLE.</span>' +
-      '      <span class="role-select__logo-text">VECTOR</span>' +
-      "    </div>" +
-      '    <svg class="role-select__logo-arrow" viewBox="0 0 20 36" role="img" aria-hidden="true">' +
-      '      <path d="M3 2 L17 18 L3 34" fill="none" stroke="#e10600" stroke-width="5" stroke-linecap="butt" stroke-linejoin="miter"/>' +
-      "    </svg>" +
+      '    <img class="role-select__logo-mark" src="./assets/vector-logo-red.png" alt="VECTOR" width="160" height="36" decoding="async" />' +
       "  </div>" +
       '  <div class="role-select__aside">' +
       '    <div class="role-select__title" aria-live="polite">' +
@@ -96,18 +90,6 @@
       detailChevron +
       "角色使命</dt>" +
       '      <dd class="role-select__detail-value" data-detail="mission"></dd>' +
-      "    </div>" +
-      '    <div class="role-select__detail-item">' +
-      '      <dt class="role-select__detail-label">' +
-      detailChevron +
-      "学习路径</dt>" +
-      '      <dd class="role-select__detail-value" data-detail="paths"></dd>' +
-      "    </div>" +
-      '    <div class="role-select__detail-item">' +
-      '      <dt class="role-select__detail-label">' +
-      detailChevron +
-      "学习站点</dt>" +
-      '      <dd class="role-select__detail-value" data-detail="stations"></dd>' +
       "    </div>" +
       '    <button type="button" class="role-select__detail-item role-select__detail-item--link" data-open-training>' +
       '      <span class="role-select__detail-label">' +
@@ -178,18 +160,6 @@
       "角色使命</dt>" +
       '        <dd class="role-select__detail-value" data-detail="mission"></dd>' +
       "      </div>" +
-      '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">' +
-      detailChevron +
-      "学习路径</dt>" +
-      '        <dd class="role-select__detail-value" data-detail="paths"></dd>' +
-      "      </div>" +
-      '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">' +
-      detailChevron +
-      "学习站点</dt>" +
-      '        <dd class="role-select__detail-value" data-detail="stations"></dd>' +
-      "      </div>" +
       '      <button type="button" class="role-select__detail-item role-select__detail-item--link" data-open-training>' +
       '        <span class="role-select__detail-label">' +
       detailChevron +
@@ -225,8 +195,6 @@
       focus: root.querySelectorAll('[data-detail="focus"]'),
       skills: root.querySelectorAll('[data-detail="skills"]'),
       mission: root.querySelectorAll('[data-detail="mission"]'),
-      paths: root.querySelectorAll('[data-detail="paths"]'),
-      stations: root.querySelectorAll('[data-detail="stations"]'),
     };
     var heroStage = root.querySelector(".role-select__hero-stage");
     var avatarViewport = root.querySelector(".role-select__avatar-viewport");
@@ -276,9 +244,6 @@
         '<h4 class="role-select__training-label">' +
         escapeHtml(section.label || "") +
         "</h4>" +
-        '<p class="role-select__training-desc">' +
-        escapeHtml(section.desc || "") +
-        "</p>" +
         '<ul class="role-select__training-list">' +
         list +
         "</ul>" +
@@ -402,8 +367,6 @@
         focus: details.focus || "",
         skills: details.skills || "",
         mission: details.mission || "",
-        paths: countPaths(role),
-        stations: countStations(role),
       };
       Object.keys(detailEls).forEach(function (key) {
         var nodes = detailEls[key];
@@ -486,10 +449,10 @@
      * For 7 items, center slot is 0; left are negative, right positive.
      */
     function layoutAvatars(animate) {
-      var vw = avatarViewport.clientWidth || 760;
-      var baseSize = Math.min(72, Math.max(42, vw * 0.105));
-      var radiusX = Math.min(vw * 0.5, 380);
-      var radiusY = Math.min(26, vw * 0.04);
+      var vw = avatarViewport.clientWidth || 720;
+      var baseSize = Math.min(68, Math.max(42, vw * 0.1));
+      var radiusX = Math.min(vw * 0.48, 320);
+      var radiusY = Math.min(22, vw * 0.038);
       var half = Math.floor(count / 2);
       var stepX = half === 0 ? 0 : radiusX / half;
 
@@ -506,7 +469,8 @@
 
         var t = half === 0 ? 0 : slot / half;
         var x = slot * stepX;
-        var y = (1 - Math.cos(Math.abs(t) * Math.PI * 0.5)) * radiusY;
+        // U 形：中间低、两侧高（CSS y 向下为正）
+        var y = (Math.cos(Math.abs(t) * Math.PI * 0.5) - 1) * radiusY;
         var dist = Math.abs(slot);
         var scale = dist === 0 ? 1.18 : Math.max(0.56, 1 - dist * 0.14);
         var opacity = dist === 0 ? 1 : Math.max(0.28, 0.72 - dist * 0.12);
