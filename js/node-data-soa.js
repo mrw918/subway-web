@@ -21,34 +21,34 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["DDS协议", "DDS"],
     description: "掌握DDS协议相关知识，理解DDS与SOME/IP的异同",
   },
-  "AUTOSAR": {
-    nodeName: "AUTOSAR",
+  "ASR": {
+    nodeName: "ASR",
     type: [],
-    match: ["AUTOSAR"],
+    match: ["ASR"],
     description: "理解AUTOSAR CP/AP的技术概念与方法论",
   },
-  "S2S与E/E服务化": {
-    nodeName: "S2S与E/E服务化",
+  "E/E服务化": {
+    nodeName: "E/E服务化",
     type: [],
-    match: ["S2S与E/E服务化", "E/E服务化", "E/E", "服务化"],
+    match: ["E/E服务化", "E/E"],
     description: "理解传统的信号通信与服务通信之间的转化与共存方式",
   },
-  "PREEvision.SOA概论": {
-    nodeName: "PREEvision.SOA概论",
+  "PREEvision.SOA": {
+    nodeName: "PREEvision.SOA",
     type: [],
-    match: ["PREEvision.SOA概论", "PREEvision . SOA概论", "PREEvision.SOA"],
+    match: ["PREEvision.SOA", "PREEvision.SOA概论", "PREEvision . SOA概论"],
     description: "理解PREEvision的SOA模型组成和原理",
   },
-  "PREEvision.SOA AP": {
-    nodeName: "PREEvision.SOA AP",
+  "SOA AP": {
+    nodeName: "SOA AP",
     type: [],
-    match: ["PREEvision.SOA AP", "PREEvision . SOA AP", "PREEvision.SOAAP", "PREEvision . SOAAP"],
+    match: ["SOAAP", "SOA AP", "PREEvision.SOA AP", "PREEvision . SOA AP", "PREEvision.SOAAP", "PREEvision . SOAAP"],
     description: "使用PREEvision基于AUTOSAR AP方法论进行SOA设计",
   },
-  "PREEvision.SOA CP": {
-    nodeName: "PREEvision.SOA CP",
+  "SOA CP": {
+    nodeName: "SOA CP",
     type: [],
-    match: ["PREEvision.SOA CP", "PREEvision . SOA CP", "PREEvision.SOACP", "PREEvision . SOACP"],
+    match: ["SOACP", "SOA CP", "PREEvision.SOA CP", "PREEvision . SOA CP", "PREEvision.SOACP", "PREEvision . SOACP"],
     description: "使用PREEvision基于AUTOSAR CP方法论进行SOA设计",
   },
   "S2S": {
@@ -84,7 +84,7 @@ window.NODE_HOVER_DATA_SOA = {
   "Proxy & Skeleton": {
     nodeName: "Proxy & Skeleton",
     type: [],
-    match: ["Proxy & Skeleton", "Proxy", "Skeleton"],
+    match: ["Proxy & Skeleton", "Proxy&Skeleton", "Proxy", "Skeleton"],
     description: "理解Proxy & Skeleton架构，掌握相关接口并实现调用",
   },
   "SOA测试概论": {
@@ -93,10 +93,10 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["SOA测试概论", "测试概论"],
     description: "了解SOA相关测试项目",
   },
-  "ASR.PDU & Socket": {
-    nodeName: "ASR.PDU & Socket",
+  "PDU & Socket": {
+    nodeName: "PDU & Socket",
     type: [],
-    match: ["ASR.PDU & Socket", "ASR.PDU&Socket", "ASR . PDU", "ASR.PDU", "PDU&Socket"],
+    match: ["PDU & Socket", "PDU&Socket", "ASR.PDU & Socket", "ASR.PDU&Socket"],
     description: "掌握AUTOSAR CP对以太网的兼容方式",
   },
   "MSRA.S2S": {

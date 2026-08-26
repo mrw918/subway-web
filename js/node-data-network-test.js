@@ -9,10 +9,10 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     match: ["测试概论"],
     description: "在此站点，您将了解测试相关的术语和定义，理解常见的测试类型如静态测试、黑盒测试以及白盒测试。",
   },
-  "Vector测试工具链": {
-    nodeName: "Vector测试工具链",
+  "测试工具链": {
+    nodeName: "测试工具链",
     type: ["B站"],
-    match: ["Vector测试工具链"],
+    match: ["测试工具链"],
     description: "ECU测试工具链支持您高效地进行仿真和测试环境的搭建。在此站点，您将了解Vector在测试领域提供的软硬件工具如CANoe、vTESTstudio、VT System等。",
   },
   "CAN协议": {
@@ -36,7 +36,7 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
   "VS Code测试开发": {
     nodeName: "VS Code测试开发",
     type: ["B站"],
-    match: ["VS Code测试开发", "VS Code", "vscode"],
+    match: ["VS Code测试开发", "VSCode测试开发", "VS Code", "vscode"],
     description: "Vector在VS Code中提供了测试开发的解决方案。在此站点，您将应用VS Code编写测试脚本，包括vtestunit.yaml、vtesttree.yaml文件、CAPL库文件的创建与编辑。",
   },
   "HIL&SIL": {
@@ -78,31 +78,31 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
   "VT/VIO System": {
     nodeName: "VT/VIO System",
     type: ["B站"],
-    match: ["VT/VIO System", "VT System"],
+    match: ["VT/VIO System", "VT/VIOSystem", "VT System"],
     description: "在此站点，您将了解VT System概况。",
   },
   "VT System配置": {
     nodeName: "VT System配置",
     type: ["B站"],
-    match: ["VT System配置"],
+    match: ["VT System配置", "VTSystem配置"],
     description: "在此站点，您将了解常见VT板卡及其配置。",
   },
   "SIL Kit": {
     nodeName: "SIL Kit",
     type: ["B站"],
-    match: ["SIL Kit", "SlL Kit", "SlLKit"],
+    match: ["SIL Kit", "SILKit", "SlL Kit", "SlLKit"],
     description: "SIL Kit是一个多功能的开源库，旨在促进软件在环（SIL）环境（如仿真器、虚拟机和模拟器）之间的连接。在此站点，您将了解SIL Kit的功能特性、应用场景。",
   },
   "SIL Adapter": {
     nodeName: "SIL Adapter",
     type: ["B站"],
-    match: ["SIL Adapter"],
+    match: ["SIL Adapter", "SILAdapter"],
     description: "SIL Adapter 基于被测应用的功能系统接口描述生成，可在纯软件层面上实现对 SUT（被测系统）的访问。在此站点，您将学习应用vCDL将SUT的功能系统接口描述为分布式对象，并生成SIL Adapter。。",
   },
-  "AUTOSAR概论": {
-    nodeName: "AUTOSAR概论",
+  "ASR概论": {
+    nodeName: "ASR概论",
     type: ["B站"],
-    match: ["AUTOSAR概论"],
+    match: ["ASR概论", "AUTOSAR概论"],
     description: "了解AUTOSAR相关知识是学习vVIRTUALtarget的前提。在此站点，您将学习到有关 AUTOSAR Classic Platform 的方法论、技术概念以及 RTE 和基础软件组件的相关知识。",
   },
   "vVIRTUALtarget": {
@@ -141,22 +141,22 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     match: ["LIN一致性测试"],
     description: "LIN 一致性测试是依据 LIN 协议规范，对 Master、Slave 节点及相关 ECU 的通信行为进行标准符合性验证的测试方法。介绍通过对帧格式、调度机制、主从通信、错误处理、网络管理及诊断服务等内容进行测试，验证设备是否满足 LIN 标准要求。",
   },
-  "Ethernet基础协议": {
-    nodeName: "Ethernet基础协议",
+  "ETH基础协议": {
+    nodeName: "ETH基础协议",
     type: ["B站", "OET 课程", "ELN", "CIT 课程"],
-    match: ["Ethernet基础协议"],
+    match: ["ETH基础协议", "Ethernet基础协议"],
     description: "在此站点，您将学习以太网基础协议的内容，内容包括以太网物理层、数据链路层（MAC地址和VLAN）、网络层（IPv4/IPv6）和传输层(TCP/UDP)。",
   },
-  "Ethernet应用协议": {
-    nodeName: "Ethernet应用协议",
+  "ETH应用协议": {
+    nodeName: "ETH应用协议",
     type: ["B站", "OET 课程", "ELN", "CIT 课程"],
-    match: ["Ethernet应用协议"],
+    match: ["ETH应用协议", "Ethernet应用协议"],
     description: "在此站点，您将学习以太网应用协议的内容，包括SOME/IP和DoIP。SOME/IP包括服务类型介绍、SOME/IP-SD服务发现过程和SOME/IP报文格式定义；DoIP包括DoIP诊断的工作流程，DoIP报文格式定义。",
   },
-  "CANoe.Ethernet": {
-    nodeName: "CANoe.Ethernet",
+  "CANoe.ETH": {
+    nodeName: "CANoe.ETH",
     type: ["B站", "OET 课程", "ELN", "CIT 课程"],
-    match: ["CANoe.Ethernet"],
+    match: ["CANoe.ETH", "CANoe.Ethernet"],
     description: "在此站点，您将首先学习以太网硬件（VN5000系列）配置，随后学习在CANoe中测量分析以太网网络数据。最后，您将结合Add-on、CAPL和Panel实现节点的仿真。",
   },
   "TC8&TC10测试": {
@@ -176,6 +176,12 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     type: ["OET 课程", "ELN", "CIT 课程"],
     match: ["CANoe.J1939"],
     description: "重点介绍CANoe中J1939网络的分析与仿真功能，通过理论结合实践的方式，掌握J1939网络搭建、报文分析、节点仿真、故障排查及系统验证等关键技能。",
+  },
+  "J1939-82": {
+    nodeName: "J1939-82",
+    type: [],
+    match: ["J1939-82", "J193982"],
+    description: "SAE J1939-82 是商用车网络一致性测试规范。在此站点，您将了解该规范的测试范围、测试项目划分以及与 ECU 互操作验证相关的要求。",
   },
   "J1939一致性测试": {
     nodeName: "J1939一致性测试",

@@ -19,6 +19,7 @@ window.ROADMAP_CATALOG = [
     homeOrder: 0,
     svgFile: "知识路线图 新ci 1-7.svg",
     dataKey: "NODE_HOVER_DATA_DIAGNOSTIC",
+    pathCount: 6,
   },
   {
     id: "mbse",
@@ -36,6 +37,7 @@ window.ROADMAP_CATALOG = [
     homeOrder: 1,
     svgFile: "知识路线图 新ci 1-3.svg",
     dataKey: "NODE_HOVER_DATA_MBSE",
+    pathCount: 5,
   },
   {
     id: "soa",
@@ -54,6 +56,7 @@ window.ROADMAP_CATALOG = [
     homeOrder: 2,
     svgFile: "知识路线图 新ci 1-1.svg",
     dataKey: "NODE_HOVER_DATA_SOA",
+    pathCount: 5,
   },
   {
     id: "calibration",
@@ -71,6 +74,7 @@ window.ROADMAP_CATALOG = [
     homeOrder: 3,
     svgFile: "知识路线图 新ci 1-2.svg",
     dataKey: "NODE_HOVER_DATA_CALIBRATION",
+    pathCount: 4,
   },
   {
     id: "network-dev",
@@ -88,6 +92,7 @@ window.ROADMAP_CATALOG = [
     homeOrder: 4,
     svgFile: "知识路线图 新ci 1-5.svg",
     dataKey: "NODE_HOVER_DATA",
+    pathCount: 10,
   },
   {
     id: "network-test",
@@ -106,6 +111,7 @@ window.ROADMAP_CATALOG = [
     homeOrder: 5,
     svgFile: "知识路线图 新ci 1-4.svg",
     dataKey: "NODE_HOVER_DATA_NETWORK_TEST",
+    pathCount: 12,
   },
   {
     id: "embedded",
@@ -123,5 +129,6 @@ window.ROADMAP_CATALOG = [
     homeOrder: 6,
     svgFile: "知识路线图 新ci 1-6.svg",
     dataKey: "NODE_HOVER_DATA_EMBEDDED",
+    pathCount: 11,
   },
 ];

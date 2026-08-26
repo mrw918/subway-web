@@ -153,18 +153,35 @@
       return;
     }
 
+    var pad = 10;
+    var vw = window.innerWidth || document.documentElement.clientWidth || 0;
+    var vh = window.innerHeight || document.documentElement.clientHeight || 0;
     var stageRect = stage.getBoundingClientRect();
     var nodeRect = anchorEl.getBoundingClientRect();
-    var cardWidth = card.offsetWidth;
-    var cardHeight = card.offsetHeight;
+    var cardWidth = card.offsetWidth || 280;
+    var cardHeight = card.offsetHeight || 80;
     var gap = 16;
-    var pad = 8;
+
+    card.style.position = "fixed";
+
+    var minLeft = Math.max(pad, stageRect.left + pad);
+    var maxLeft = Math.min(vw - pad, stageRect.right - pad) - cardWidth;
+    var minTop = Math.max(pad, stageRect.top + pad);
+    var maxTop = Math.min(vh - pad, stageRect.bottom - pad) - cardHeight;
+    if (maxLeft < minLeft) {
+      minLeft = pad;
+      maxLeft = Math.max(pad, vw - cardWidth - pad);
+    }
+    if (maxTop < minTop) {
+      minTop = pad;
+      maxTop = Math.max(pad, vh - cardHeight - pad);
+    }
 
     var nodeBox = {
-      left: nodeRect.left - stageRect.left,
-      top: nodeRect.top - stageRect.top,
-      right: nodeRect.right - stageRect.left,
-      bottom: nodeRect.bottom - stageRect.top,
+      left: nodeRect.left,
+      top: nodeRect.top,
+      right: nodeRect.right,
+      bottom: nodeRect.bottom,
     };
 
     var candidates = [
@@ -189,8 +206,8 @@
     var chosen = null;
     for (var i = 0; i < candidates.length; i += 1) {
       var c = candidates[i];
-      var left = clamp(c.left, pad, Math.max(pad, stageRect.width - cardWidth - pad));
-      var top = clamp(c.top, pad, Math.max(pad, stageRect.height - cardHeight - pad));
+      var left = clamp(c.left, minLeft, Math.max(minLeft, maxLeft));
+      var top = clamp(c.top, minTop, Math.max(minTop, maxTop));
       var box = {
         left: left,
         top: top,
@@ -207,17 +224,15 @@
       chosen = {
         left: clamp(
           nodeBox.left + (nodeBox.right - nodeBox.left) / 2 - cardWidth / 2,
-          pad,
-          Math.max(pad, stageRect.width - cardWidth - pad)
+          minLeft,
+          Math.max(minLeft, maxLeft)
         ),
-        top: clamp(
-          nodeBox.bottom + gap,
-          pad,
-          Math.max(pad, stageRect.height - cardHeight - pad)
-        ),
+        top: clamp(nodeBox.bottom + gap, minTop, Math.max(minTop, maxTop)),
       };
     }
 
+    card.style.right = "auto";
+    card.style.bottom = "auto";
     card.style.left = chosen.left + "px";
     card.style.top = chosen.top + "px";
   }

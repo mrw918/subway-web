@@ -11,16 +11,16 @@ window.NODE_HOVER_DATA = {
     match: ["汽车通信概论"],
     description: "为所有网络开发工程的必备内容，在这部分内容中可以让学员从0开始认识网络，包括EE、ECU、MCU、总线等概念，夯实网络开发的基础。",
   },
-  "AUTOSAR Communication": {
-    nodeName: "AUTOSAR Communication",
+  "ASR 通信": {
+    nodeName: "ASR通信",
     type: ["B站", "线上课程"],
-    match: ["AUTOSAR通信", "AUTOSAR Communication"],
+    match: ["ASR通信", "ASR 通信", "AUTOSAR通信", "AUTOSAR Communication"],
     description: "介绍在AUTOSAR CP架构下使用AUTOSAR组件进行不同应用层通信的机制。",
   },
-  "CAN/CAN FD 协议": {
-    nodeName: "CAN/CAN FD 协议",
+  "CAN/CAN FD": {
+    nodeName: "CAN/CAN FD",
     type: ["B站", "线上课程", "ELN", "CIT 课程"],
-    match: ["CAN&CAN FD", "CAN/CAN FD"],
+    match: ["CAN&CANFD", "CAN&CAN FD", "CAN/CAN FD", "CAN/CANFD"],
     description: "学习车载网络最核心的 CAN/CAN FD 通信技术，掌握报文传输、仲裁机制、错误处理等关键知识。",
   },
   "CAN数据库": {
@@ -42,34 +42,34 @@ window.NODE_HOVER_DATA = {
     description: "系统学习 CAPL 脚本语言的语法、事件机制与报文处理逻辑，掌握 CANoe/CANalyzer 环境下的自动化开发能力。通过实战案例与脚本练习，提升网络仿真、测试与问题定位效率。",
   },
   "IL仿真": {
-    nodeName: "IL仿真",
+    nodeName: "交互层仿真",
     type: [],
-    match: ["IL仿真", "IL Addon"],
-    description: "",
+    match: ["交互层仿真", "交互层Addon", "IL仿真", "IL Addon", "ILAddon"],
+    description: "学习 CAN 交互层（Interaction Layer）仿真与 Addon 配置，掌握信号级通信仿真与残余总线搭建方法。",
   },
   "NM协议": {
     nodeName: "NM协议",
     type: [],
     match: ["NM协议"],
-    description: "",
+    description: "学习网络管理（Network Management）协议原理，掌握休眠/唤醒、节点监控与网络状态管理机制。",
   },
   "NM仿真": {
     nodeName: "NM仿真",
     type: [],
     match: ["NM仿真"],
-    description: "",
+    description: "在 CANoe 中实现 NM 网络管理仿真，掌握节点休眠唤醒流程验证与网络管理行为分析。",
   },
-  "CAN TP": {
-    nodeName: "CAN TP",
+  "CAN 传输协议": {
+    nodeName: "CAN传输协议",
     type: [],
-    match: ["CAN TP"],
-    description: "",
+    match: ["CAN传输协议", "CAN 传输协议", "CAN TP", "CANTP"],
+    description: "学习 CAN 传输层协议（ISO-TP），掌握多帧分段传输、流控与数据重组，为诊断通信打下基础。",
   },
   "CAN诊断": {
     nodeName: "CAN诊断",
     type: [],
     match: ["CAN诊断"],
-    description: "",
+    description: "学习基于 CAN 的诊断通信，掌握 UDS 诊断服务流程、报文分析与常见诊断问题定位方法。",
   },
   "LIN协议": {
     nodeName: "LIN协议",
@@ -80,7 +80,7 @@ window.NODE_HOVER_DATA = {
   "LDF Explorer": {
     nodeName: "LDF Explorer",
     type: ["ELN"],
-    match: ["LDF Explorer"],
+    match: ["LDFExplorer", "LDF Explorer", "LDF Explorer"],
     description: "重点介绍LIN Description File（LDF）文件的结构与配置方法，学习节点定义、信号描述、帧配置以及调度表管理等内容，掌握LIN网络数据库的创建、维护与工程化管理能力。",
   },
   "CANoe.LIN": {
@@ -92,13 +92,13 @@ window.NODE_HOVER_DATA = {
   "LIN CAPL": {
     nodeName: "LIN CAPL",
     type: ["OET 课程", "ELN"],
-    match: ["LIN CAPL", "LINCAPL"],
+    match: ["LINCAPL", "LIN CAPL"],
     description: "系统学习基于LIN网络的CAPL脚本开发技术，掌握事件机制、报文处理、节点模拟及自动化测试方法。通过实际案例训练，提升LIN网络仿真、自动化验证与问题定位效率。",
   },
-  "LIN TP": {
-    nodeName: "LIN TP",
+  "LIN传输协议": {
+    nodeName: "LIN传输协议",
     type: ["ELN"],
-    match: ["LIN TP", "LINTP"],
+    match: ["LIN传输协议", "LIN TP", "LINTP"],
     description: "深入学习LIN Transport Protocol（LIN传输层协议），掌握长报文分段传输机制、数据重组流程以及与诊断服务的交互原理，为复杂诊断应用开发打下基础。",
   },
   "LIN诊断": {
@@ -128,25 +128,25 @@ window.NODE_HOVER_DATA = {
   "J1939 CAPL": {
     nodeName: "J1939 CAPL",
     type: ["OET 课程", "ELN"],
-    match: ["J1939 CAPL", "J1939CAPL"],
+    match: ["J1939CAPL", "J1939 CAPL"],
     description: "系统学习基于J1939协议的CAPL脚本开发技术，掌握PGN解析、地址声明模拟、节点行为仿真及自动化测试开发方法，通过实际案例提升开发与调试效率。",
   },
-  "J1939 IL": {
-    nodeName: "J1939 IL",
+  "J1939交互层": {
+    nodeName: "J1939交互层",
     type: ["ELN"],
-    match: ["J1939 IL"],
+    match: ["J1939交互层", "J1939 IL", "J1939IL"],
     description: "深入学习J1939 IL层传输协议（Transport Protocol），掌握BAM广播传输、RTS/CTS连接管理、多包数据传输等机制，了解DLL文件，并尝试使用其进行IL层设置。",
   },
-  "Ethernet基础协议": {
-    nodeName: "Ethernet基础协议",
+  "ETH基础协议": {
+    nodeName: "ETH基础协议",
     type: ["线上课程", "ELN"],
-    match: ["Ethernet基础协议"],
+    match: ["ETH基础协议", "Ethernet基础协议"],
     description: "在此站点，您将学习以太网基础协议的内容，内容包括以太网物理层、数据链路层（MAC地址和VLAN）、网络层（IPv4/IPv6）和传输层(TCP/UDP)。",
   },
-  "Ethernet数据库": {
-    nodeName: "Ethernet数据库",
+  "ETH数据库": {
+    nodeName: "ETH数据库",
     type: ["ELN"],
-    match: ["Ethernet数据库"],
+    match: ["ETH数据库", "Ethernet数据库"],
     description: "在测量分析以太网通信及搭建以太网残余总线仿真环境时，数据库是基础。在此站点，您将了解ARXML和FIBEX两种文件类型以及ARXML文件查看工具AUTOSAR Viewer。",
   },
   "VN硬件配置": {
@@ -155,28 +155,28 @@ window.NODE_HOVER_DATA = {
     match: ["VN硬件配置"],
     description: "Vector Hardware Manager是Vector 的硬件配置工具。在此站点，您将学习VN5000系列硬件接口卡的配置，包括TAP、DC、Switch等。",
   },
-  "CANoe.Ethernet": {
-    nodeName: "CANoe.Ethernet",
+  "CANoe.ETH": {
+    nodeName: "CANoe.ETH",
     type: ["OET 课程", "ELN", "CIT 课程"],
-    match: ["CANoe.Ethernet"],
+    match: ["CANoe.ETH", "CANoe.Ethernet"],
     description: "在此站点，您将学习在CANoe中搭建以太网工程，包括添加数据库、配置TCP/IP Stack、发送以太网数据包等。此外，您还将了解以太网相关的分析窗口如Protocol Monitor。",
   },
   "Ethernet CAPL": {
-    nodeName: "Ethernet CAPL",
+    nodeName: "ETH CAPL",
     type: ["OET 课程", "ELN", "CIT 课程"],
-    match: ["Ethernet CAPL", "EthernetCAPL"],
+    match: ["ETHCAPL", "ETH CAPL", "Ethernet CAPL", "EthernetCAPL"],
     description: "在此站点，您将学习以太网相关的CAPL，包括发送/访问以太网数据包、TCP Socket 编程以及UDP Socket 编程等。",
   },
-  "PDU Multiplexing": {
-    nodeName: "PDU Multiplexing",
+  "PduMux": {
+    nodeName: "PduMux",
     type: ["ELN"],
-    match: ["PDU Multiplexing"],
+    match: ["PduMux", "PDU Multiplexing", "PDUMultiplexing"],
     description: "在此站点，您将学习PDU的概念及结构以及Container PDU的概念。",
   },
   "ETH IL": {
     nodeName: "ETH IL",
     type: ["ELN"],
-    match: ["ETH IL"],
+    match: ["ETHIL", "ETH IL", "ETHIL"],
     description: "在此站点，您将学习应用CANoeILNL_AUTOSAR_ETH.DLL及AsrPDUIL2.DLL在以太网中实现基于信号的通信，并对通信数据进行分析。",
   },
   "SOME/IP协议": {
@@ -192,15 +192,15 @@ window.NODE_HOVER_DATA = {
     description: "CANoe中SOME/IP的仿真功能基于SomeIP_IL.dll以及CANoeILNL_AUTOSAR_ETH.DLL实现。在此站点，你将学习如何应用上述DLL实现SOME/IP仿真。",
   },
   "TSN协议组": {
-    nodeName: "TSN协议组",
+    nodeName: "TSN协议",
     type: ["ELN"],
-    match: ["TSN协议组", "TSN"],
+    match: ["TSN协议", "TSN协议组", "TSN"],
     description: "TSN是一个庞大的协议组，在此站点，您将学习gPTP协议、AVTP协议。",
   },
   "AVB IL": {
     nodeName: "AVB IL",
     type: ["ELN"],
-    match: ["AVB IL"],
+    match: ["AVBIL", "AVB IL", "AVB IL"],
     description: "在此站点，您将学习应用AVB_IL.DLL仿真gPTP协议、AVTP协议。",
   },
   "DoIP协议": {

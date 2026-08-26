@@ -4,39 +4,39 @@
  */
 window.NODE_HOVER_DATA_MBSE = {
   "系统工程理论": {
-    nodeName: "系统工程理论",
+    nodeName: "系统工程概论",
     type: [],
-    match: ["系统工程理论", "系统工程概论"],
+    match: ["系统工程概论", "系统工程理论"],
     description: "了解系统工程的相关理论基础",
   },
   "V模型": {
     nodeName: "V模型",
     type: [],
-    match: ["V模型", "模型"],
+    match: ["V模型"],
     description: "了解V模型的概念",
   },
   "ASPICE过程管理": {
-    nodeName: "ASPICE过程管理",
+    nodeName: "ASPICE",
     type: [],
-    match: ["ASPICE过程管理", "ASPICE", "过程管理"],
+    match: ["ASPICE", "ASPICE过程管理"],
     description: "了解ASPICE的概念",
   },
   "RFLP方法": {
     nodeName: "RFLP方法",
     type: [],
-    match: ["RFLP方法", "RFLP", "方法"],
+    match: ["RFLP方法", "RFLP"],
     description: "理解RFLP建模方法",
   },
   "PREEvision基础": {
-    nodeName: "PREEvision基础",
+    nodeName: "PREEvision",
     type: [],
-    match: ["PREEvision基础", "PREEvision", "基础"],
+    match: ["PREEvision", "PREEvision基础"],
     description: "掌握PREEvision的基础建模功能",
   },
   "UML/SysML设计": {
-    nodeName: "UML/SysML设计",
+    nodeName: "UML/SysML",
     type: [],
-    match: ["UML/SysML设计", "AUML/SysML", "SysML"],
+    match: ["UML/SysML", "UML/SysML设计", "AUML/SysML", "SysML"],
     description: "理解UML/SysML设计语言，掌握PREEvision中的SysML建模操作",
   },
   "RFLP.需求管理": {
@@ -69,10 +69,10 @@ window.NODE_HOVER_DATA_MBSE = {
     match: ["RFLP.软件设计", "软件设计"],
     description: "使用PREEvision基于AUTOSAR CP方法论进行软件设计",
   },
-  "S2S与E/E服务化": {
-    nodeName: "S2S与E/E服务化",
+  "E/E服务化": {
+    nodeName: "E/E服务化",
     type: [],
-    match: ["S2S与E/E服务化", "S2S", "E/E服务化"],
+    match: ["E/E服务化"],
     description: "理解传统的信号通信与服务通信之间的转化与共存方式",
   },
   "SOME/IP协议": {
@@ -84,25 +84,25 @@ window.NODE_HOVER_DATA_MBSE = {
   "AUTOSAR CP": {
     nodeName: "AUTOSAR CP",
     type: [],
-    match: ["AUTOSAR CP"],
+    match: ["ASRCP", "ASR CP", "ASR  CP", "AUTOSAR CP"],
     description: "理解AUTOSAR CP的技术概念与方法论，掌握AUTOSAR CP对服务通信的兼容方式",
   },
   "SOA CP设计": {
     nodeName: "SOA CP设计",
     type: [],
-    match: ["SOA CP设计", "SOACP", "SOA CP"],
+    match: ["SOACP设计", "SOA CP设计", "SOACP", "SOA CP"],
     description: "使用PREEvision基于AUTOSAR CP方法论进行SOA设计",
   },
   "AUTOSAR AP": {
     nodeName: "AUTOSAR AP",
     type: [],
-    match: ["AUTOSAR AP"],
+    match: ["ASRAP", "ASR AP", "AUTOSAR AP"],
     description: "理解AUTOSAR AP的技术概念与方法论",
   },
   "SOA AP设计": {
     nodeName: "SOA AP设计",
     type: [],
-    match: ["SOA AP设计", "SOAAP", "SOA AP"],
+    match: ["SOAAP设计", "SOA AP设计", "SOAAP", "SOA AP"],
     description: "使用PREEvision基于AUTOSAR AP方法论进行SOA设计",
   },
   "RFLP.硬件需求": {

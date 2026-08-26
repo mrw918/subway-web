@@ -31,6 +31,14 @@
     return ((index % length) + length) % length;
   }
 
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
   function mount(options) {
     options = options || {};
     var root = options.root;
@@ -43,13 +51,20 @@
     var count = roles.length;
     var selectedIndex = 0;
     var animating = false;
+    var detailChevron =
+      '<svg class="role-select__detail-chevron" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true">' +
+      '<path d="M2 1.5 L8 7 L2 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="butt" stroke-linejoin="miter"/>' +
+      "</svg>";
 
     root.innerHTML =
       '<div class="role-select__scene">' +
       '  <div class="role-select__logo" aria-label="VECTOR">' +
-      '    <span class="role-select__logo-text">VECTOR</span>' +
-      '    <svg class="role-select__logo-arrow" viewBox="0 0 12 18" role="img" aria-hidden="true">' +
-      '      <path d="M1 1l10 8-10 8" fill="none" stroke="#ef4444" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="miter"/>' +
+      '    <div class="role-select__logo-copy">' +
+      '      <span class="role-select__logo-tagline">YOUR JOURNEY. YOUR ROLE.</span>' +
+      '      <span class="role-select__logo-text">VECTOR</span>' +
+      "    </div>" +
+      '    <svg class="role-select__logo-arrow" viewBox="0 0 20 36" role="img" aria-hidden="true">' +
+      '      <path d="M3 2 L17 18 L3 34" fill="none" stroke="#e10600" stroke-width="5" stroke-linecap="butt" stroke-linejoin="miter"/>' +
       "    </svg>" +
       "  </div>" +
       '  <div class="role-select__aside">' +
@@ -62,25 +77,45 @@
       "        </svg>" +
       "      </button>" +
       "    </div>" +
-      '    <dl class="role-select__details role-select__details--desktop" aria-live="polite">' +
-      '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; ROLE</dt>' +
-      '        <dd class="role-select__detail-value" data-detail="role"></dd>' +
-      "      </div>" +
-      '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; FOCUS</dt>' +
-      '        <dd class="role-select__detail-value" data-detail="focus"></dd>' +
-      "      </div>" +
-      '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; SKILLS</dt>' +
-      '        <dd class="role-select__detail-value" data-detail="skills"></dd>' +
-      "      </div>" +
-      '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; MISSION</dt>' +
-      '        <dd class="role-select__detail-value" data-detail="mission"></dd>' +
-      "      </div>" +
-      "    </dl>" +
       "  </div>" +
+      '  <dl class="role-select__details role-select__details--desktop" aria-live="polite">' +
+      '    <div class="role-select__detail-item">' +
+      '      <dt class="role-select__detail-label">' +
+      detailChevron +
+      "核心方向</dt>" +
+      '      <dd class="role-select__detail-value" data-detail="focus"></dd>' +
+      "    </div>" +
+      '    <div class="role-select__detail-item">' +
+      '      <dt class="role-select__detail-label">' +
+      detailChevron +
+      "关键技能</dt>" +
+      '      <dd class="role-select__detail-value" data-detail="skills"></dd>' +
+      "    </div>" +
+      '    <div class="role-select__detail-item">' +
+      '      <dt class="role-select__detail-label">' +
+      detailChevron +
+      "角色使命</dt>" +
+      '      <dd class="role-select__detail-value" data-detail="mission"></dd>' +
+      "    </div>" +
+      '    <div class="role-select__detail-item">' +
+      '      <dt class="role-select__detail-label">' +
+      detailChevron +
+      "学习路径</dt>" +
+      '      <dd class="role-select__detail-value" data-detail="paths"></dd>' +
+      "    </div>" +
+      '    <div class="role-select__detail-item">' +
+      '      <dt class="role-select__detail-label">' +
+      detailChevron +
+      "学习站点</dt>" +
+      '      <dd class="role-select__detail-value" data-detail="stations"></dd>' +
+      "    </div>" +
+      '    <button type="button" class="role-select__detail-item role-select__detail-item--link" data-open-training>' +
+      '      <span class="role-select__detail-label">' +
+      detailChevron +
+      "更多资讯</span>" +
+      '      <span class="role-select__detail-value">直播课 / 公开课</span>' +
+      "    </button>" +
+      "  </dl>" +
       '  <div class="role-select__main">' +
       '    <div class="role-select__watermark" aria-hidden="true"></div>' +
       '    <div class="role-select__hero-stage"></div>' +
@@ -108,7 +143,7 @@
       "        </svg>" +
       "      </button>" +
       "    </div>" +
-      '    <button type="button" class="role-select__entre">ENTRE</button>' +
+      '    <button type="button" class="role-select__entre">ENTER</button>' +
       "  </footer>" +
       '  <div class="role-select__sheet-backdrop" hidden></div>' +
       '  <aside class="role-select__sheet" role="dialog" aria-modal="true" aria-label="角色详情" hidden>' +
@@ -126,23 +161,55 @@
       "    </div>" +
       '    <dl class="role-select__details role-select__details--sheet" aria-live="polite">' +
       '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; ROLE</dt>' +
-      '        <dd class="role-select__detail-value" data-detail="role"></dd>' +
-      "      </div>" +
-      '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; FOCUS</dt>' +
+      '        <dt class="role-select__detail-label">' +
+      detailChevron +
+      "核心方向</dt>" +
       '        <dd class="role-select__detail-value" data-detail="focus"></dd>' +
       "      </div>" +
       '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; SKILLS</dt>' +
+      '        <dt class="role-select__detail-label">' +
+      detailChevron +
+      "关键技能</dt>" +
       '        <dd class="role-select__detail-value" data-detail="skills"></dd>' +
       "      </div>" +
       '      <div class="role-select__detail-item">' +
-      '        <dt class="role-select__detail-label">&gt; MISSION</dt>' +
+      '        <dt class="role-select__detail-label">' +
+      detailChevron +
+      "角色使命</dt>" +
       '        <dd class="role-select__detail-value" data-detail="mission"></dd>' +
       "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">' +
+      detailChevron +
+      "学习路径</dt>" +
+      '        <dd class="role-select__detail-value" data-detail="paths"></dd>' +
+      "      </div>" +
+      '      <div class="role-select__detail-item">' +
+      '        <dt class="role-select__detail-label">' +
+      detailChevron +
+      "学习站点</dt>" +
+      '        <dd class="role-select__detail-value" data-detail="stations"></dd>' +
+      "      </div>" +
+      '      <button type="button" class="role-select__detail-item role-select__detail-item--link" data-open-training>' +
+      '        <span class="role-select__detail-label">' +
+      detailChevron +
+      "更多资讯</span>" +
+      '        <span class="role-select__detail-value">直播课 / 公开课</span>' +
+      "      </button>" +
       "    </dl>" +
       "  </aside>" +
+      '  <div class="role-select__training-backdrop" data-training-backdrop hidden></div>' +
+      '  <div class="role-select__training-modal" role="dialog" aria-modal="true" aria-label="培训资讯" data-training-modal hidden>' +
+      '    <div class="role-select__training-head">' +
+      '      <h3 class="role-select__training-title"></h3>' +
+      '      <button type="button" class="role-select__training-close" aria-label="关闭培训资讯" data-training-close>' +
+      '        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">' +
+      '          <path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+      "        </svg>" +
+      "      </button>" +
+      "    </div>" +
+      '    <div class="role-select__training-body" data-training-body></div>' +
+      "  </div>" +
       "</div>";
 
     var watermarkEl = root.querySelector(".role-select__watermark");
@@ -155,10 +222,11 @@
     var sheetBackdrop = root.querySelector(".role-select__sheet-backdrop");
     var sheetCloseBtn = root.querySelector(".role-select__sheet-close");
     var detailEls = {
-      role: root.querySelectorAll('[data-detail="role"]'),
       focus: root.querySelectorAll('[data-detail="focus"]'),
       skills: root.querySelectorAll('[data-detail="skills"]'),
       mission: root.querySelectorAll('[data-detail="mission"]'),
+      paths: root.querySelectorAll('[data-detail="paths"]'),
+      stations: root.querySelectorAll('[data-detail="stations"]'),
     };
     var heroStage = root.querySelector(".role-select__hero-stage");
     var avatarViewport = root.querySelector(".role-select__avatar-viewport");
@@ -167,6 +235,86 @@
     var nextBtn = root.querySelector(".role-select__nav--next");
     var entreBtn = root.querySelector(".role-select__entre");
     var sheetOpen = false;
+    var trainingOpen = false;
+    var trainingBackdrop = root.querySelector("[data-training-backdrop]");
+    var trainingModal = root.querySelector("[data-training-modal]");
+    var trainingBody = root.querySelector("[data-training-body]");
+    var trainingTitleEl = root.querySelector(".role-select__training-title");
+    var trainingCloseBtn = root.querySelector("[data-training-close]");
+    var trainingOpenBtns = root.querySelectorAll("[data-open-training]");
+
+    function renderTrainingSection(section) {
+      if (!section) return "";
+      var items = section.items || [];
+      var list = items
+        .map(function (item) {
+          var meta = [item.date, item.place].filter(Boolean).join(" ");
+          var paid = item.paid
+            ? '<span class="role-select__training-paid">付费</span>'
+            : "";
+          var titleText = escapeHtml(item.title || "");
+          var titleHtml = item.url
+            ? '<a class="role-select__training-course" href="' +
+              escapeHtml(item.url) +
+              '" target="_blank" rel="noopener noreferrer">' +
+              titleText +
+              '<span class="role-select__training-arrow" aria-hidden="true">→</span></a>'
+            : '<span class="role-select__training-course is-plain">' + titleText + "</span>";
+          return (
+            '<li class="role-select__training-item">' +
+            '<div class="role-select__training-meta">' +
+            escapeHtml(meta) +
+            paid +
+            "</div>" +
+            titleHtml +
+            "</li>"
+          );
+        })
+        .join("");
+      return (
+        '<section class="role-select__training-section">' +
+        '<h4 class="role-select__training-label">' +
+        escapeHtml(section.label || "") +
+        "</h4>" +
+        '<p class="role-select__training-desc">' +
+        escapeHtml(section.desc || "") +
+        "</p>" +
+        '<ul class="role-select__training-list">' +
+        list +
+        "</ul>" +
+        "</section>"
+      );
+    }
+
+    function fillTrainingModal() {
+      var data = global.TRAINING_EVENTS || {};
+      if (trainingTitleEl) {
+        trainingTitleEl.textContent = data.title || "了解最新培训资讯";
+      }
+      if (trainingBody) {
+        trainingBody.innerHTML =
+          renderTrainingSection(data.live) + renderTrainingSection(data.open);
+      }
+    }
+
+    function setTrainingOpen(open) {
+      trainingOpen = !!open;
+      if (!trainingModal || !trainingBackdrop) return;
+      if (trainingOpen) {
+        fillTrainingModal();
+        trainingModal.hidden = false;
+        trainingBackdrop.hidden = false;
+        requestAnimationFrame(function () {
+          trainingModal.classList.add("is-open");
+          trainingBackdrop.classList.add("is-open");
+        });
+      } else {
+        trainingModal.classList.remove("is-open");
+        trainingBackdrop.classList.remove("is-open");
+        trainingModal.hidden = true;
+        trainingBackdrop.hidden = true;
+      }
+    }
 
     var heroA = document.createElement("img");
     var heroB = document.createElement("img");
@@ -227,13 +375,41 @@
       if (sheetTitleEnEl) sheetTitleEnEl.textContent = en;
     }
 
+    function countStations(role) {
+      if (!role || !role.dataKey) return "—";
+      var data = global[role.dataKey];
+      if (!data) return "—";
+      var n = Object.keys(data).length;
+      return n ? String(n) : "—";
+    }
+
+    function countPaths(role) {
+      if (!role) return "—";
+      if (role.pathCount != null) return String(role.pathCount);
+      if (role.details && role.details.paths != null) {
+        return String(role.details.paths);
+      }
+      var presets = (global.ROUTE_PRESETS || {})[role.id];
+      if (presets && Object.keys(presets).length) {
+        return String(Object.keys(presets).length);
+      }
+      return "—";
+    }
+
     function applyRoleDetails(role) {
       var details = (role && role.details) || {};
+      var values = {
+        focus: details.focus || "",
+        skills: details.skills || "",
+        mission: details.mission || "",
+        paths: countPaths(role),
+        stations: countStations(role),
+      };
       Object.keys(detailEls).forEach(function (key) {
         var nodes = detailEls[key];
         if (!nodes) return;
         for (var i = 0; i < nodes.length; i++) {
-          nodes[i].textContent = details[key] || "";
+          nodes[i].textContent = values[key] || "";
         }
       });
     }
@@ -402,14 +578,37 @@
       });
     }
 
+    Array.prototype.forEach.call(trainingOpenBtns, function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        setTrainingOpen(true);
+      });
+    });
+    if (trainingCloseBtn) {
+      trainingCloseBtn.addEventListener("click", function () {
+        setTrainingOpen(false);
+      });
+    }
+    if (trainingBackdrop) {
+      trainingBackdrop.addEventListener("click", function () {
+        setTrainingOpen(false);
+      });
+    }
+
     function onKeyDown(event) {
       if (root.hidden) return;
+      if (event.key === "Escape" && trainingOpen) {
+        event.preventDefault();
+        setTrainingOpen(false);
+        return;
+      }
       if (event.key === "Escape" && sheetOpen) {
         event.preventDefault();
         setSheetOpen(false);
         return;
       }
-      if (sheetOpen) return;
+      if (sheetOpen || trainingOpen) return;
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         step(-1);
@@ -441,6 +640,7 @@
         return roles[selectedIndex] && roles[selectedIndex].id;
       },
       destroy: function () {
+        setTrainingOpen(false);
         setSheetOpen(false);
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("resize", onResize);

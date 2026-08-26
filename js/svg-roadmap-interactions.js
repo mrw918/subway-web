@@ -174,24 +174,53 @@
       return out;
     }
 
-    function highlightPathIds(pathIds) {
+    // 站点悬停：只高亮本站所属链路（高立柱换乘站才多条）；不做全图相关扩散
+    function highlightNodeRoutes(routeIds, nodeEl) {
+      var ownIds = (routeIds || []).filter(Boolean);
+      var tallHub = false;
+      if (nodeEl && nodeEl.getBBox) {
+        try {
+          var bb = nodeEl.getBBox();
+          tallHub = !!(bb && bb.height > 72);
+        } catch (e) {}
+      }
+      if (!tallHub && ownIds.length > 1) ownIds = ownIds.slice(0, 1);
+      var paths = pathIdsForRoutes(ownIds);
+      highlightPathIds(paths, paths);
+    }
+
+    // pathIds: 高亮并保留的链路；flowPathIds: 仅这些链路播放知识流（默认=全部高亮）
+    function highlightPathIds(pathIds, flowPathIds) {
       var set = {};
       (pathIds || []).forEach(function (id) {
         set[id] = true;
       });
+      var flowSet = {};
+      var flowSrc = flowPathIds == null ? pathIds : flowPathIds;
+      (flowSrc || []).forEach(function (id) {
+        flowSet[id] = true;
+      });
       var on = !!(pathIds && pathIds.length);
       svg.classList.toggle("is-route-locked", on);
+      svg.classList.remove("is-node-route-focus");
 
       svg.querySelectorAll("g.lines .line-segment").forEach(function (path) {
         var pid = path.getAttribute("data-path-id");
         var active = on && !!set[pid];
         path.classList.toggle("is-active", active);
         path.classList.toggle("is-dimmed", on && !active);
-        path.classList.toggle("active-flow", active);
+        path.classList.toggle("active-flow", on && !!flowSet[pid]);
+        var flowTwin = pid
+          ? svg.querySelector('g.flow-lines .flow-segment[data-path-id="' + pid + '"]')
+          : null;
+        path.classList.toggle(
+          "flow-reverse",
+          !!(flowTwin && flowTwin.classList.contains("flow-reverse"))
+        );
       });
       svg.querySelectorAll("g.flow-lines .flow-segment").forEach(function (path) {
         var pid = path.getAttribute("data-path-id");
-        path.classList.toggle("active-flow", on && !!set[pid]);
+        path.classList.toggle("active-flow", on && !!flowSet[pid]);
       });
 
       var activeRoutes = {};
@@ -202,15 +231,15 @@
       });
       svg.querySelectorAll(".legend-target, .legend-hit").forEach(function (el) {
         var rid = el.getAttribute("data-route-id");
-        // Only dim elements that belong to a known route but not the active one.
-        // Elements without a valid route-id (e.g. title text) must never be dimmed.
         var knownRoute = rid && routes[rid];
         el.classList.toggle("is-active", on && !!activeRoutes[rid]);
         el.classList.toggle("is-dimmed", on && !!knownRoute && !activeRoutes[rid]);
       });
       svg.querySelectorAll("g.nodes .node").forEach(function (el) {
         var ids = (el.getAttribute("data-route-id") || "").split(/\s+/).filter(Boolean);
-        var hit = ids.some(function (id) { return activeRoutes[id]; });
+        var hit = ids.some(function (id) {
+          return activeRoutes[id];
+        });
         el.classList.toggle("is-on-active-route", on && hit);
         el.classList.toggle("is-dimmed", on && !hit);
       });
@@ -221,10 +250,30 @@
           return activeRoutes[rid];
         });
         (node.labelEls || []).forEach(function (el) {
+          el.classList.add("node-label");
           el.classList.toggle("is-active-route-label", on && hit);
           el.classList.toggle("is-dimmed-route-label", on && !hit);
         });
       });
+
+      var stationTextRoot = svg.getElementById("站点文字");
+      var textRoot = stationTextRoot || svg.querySelector("g.labels");
+      if (textRoot) {
+        textRoot.querySelectorAll("text").forEach(function (el) {
+          if (el.closest && el.closest("#标题, #路线名")) return;
+          el.classList.add("node-label");
+          var rid = el.getAttribute("data-route-id");
+          var activeByRoute = !!(rid && activeRoutes[rid]);
+          var activeByClass = el.classList.contains("is-active-route-label");
+          var active = on && (activeByRoute || activeByClass);
+          if (on) {
+            el.classList.toggle("is-active-route-label", active);
+            el.classList.toggle("is-dimmed-route-label", !active);
+          } else {
+            el.classList.remove("is-active-route-label", "is-dimmed-route-label");
+          }
+        });
+      }
     }
 
     function restoreVisual() {
@@ -236,26 +285,80 @@
     }
 
     function hideTooltip() {
-      if (panel) return;
       tooltip.classList.remove("is-visible");
     }
 
     function positionTooltip(anchorEl) {
-      var stageRect = stage.getBoundingClientRect();
-      var pad = 8;
+      var pad = 10;
+      var gap = 16;
+      var vw = window.innerWidth || document.documentElement.clientWidth || 0;
+      var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+
+      tooltip.style.position = "fixed";
 
       if (isNarrow()) {
         tooltip.style.left = pad + "px";
         tooltip.style.right = pad + "px";
         tooltip.style.width = "auto";
         tooltip.style.top = "auto";
-        tooltip.style.bottom = pad + "px";
+        tooltip.style.bottom =
+          Math.max(pad, (window.visualViewport && window.visualViewport.offsetTop) || 0) + pad + "px";
         return;
       }
 
-      var nodeRect = anchorEl.getBoundingClientRect();
+      var nodeWrap = anchorEl.closest ? anchorEl.closest(".node") : null;
+      var hitEl = (nodeWrap && nodeWrap.querySelector(".node-hit")) || anchorEl;
+      var nodeRect = hitEl.getBoundingClientRect();
+      var nodeCx = nodeRect.left + nodeRect.width / 2;
+      var nodeCy = nodeRect.top + nodeRect.height / 2;
+
+      var nodeId = nodeWrap && nodeWrap.getAttribute("data-node-id");
+      var nodeKey = nodeWrap && nodeWrap.getAttribute("data-node-key");
+      var ownNode = (nodeId && nodes[nodeId]) || null;
+      var ownLabels = (ownNode && ownNode.labelEls) || [];
+      if (!ownLabels.length && nodeKey) {
+        svg.querySelectorAll('[data-node-id="' + nodeKey + '"]').forEach(function (el) {
+          ownLabels.push(el);
+        });
+      }
+
+      // 本站站名合并框 + 相对圆点的方位（方案2）
+      var ownLabelBox = null;
+      var labelDx = 0;
+      var labelDy = 0;
+      ownLabels.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        if (!ownLabelBox) {
+          ownLabelBox = { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+        } else {
+          ownLabelBox.left = Math.min(ownLabelBox.left, r.left);
+          ownLabelBox.top = Math.min(ownLabelBox.top, r.top);
+          ownLabelBox.right = Math.max(ownLabelBox.right, r.right);
+          ownLabelBox.bottom = Math.max(ownLabelBox.bottom, r.bottom);
+        }
+      });
+      if (ownLabelBox) {
+        labelDx = (ownLabelBox.left + ownLabelBox.right) / 2 - nodeCx;
+        labelDy = (ownLabelBox.top + ownLabelBox.bottom) / 2 - nodeCy;
+        // 站名离圆点过远时不参与锚点（避免卡片被拉到角落）
+        if (labelDx * labelDx + labelDy * labelDy > 90 * 90) {
+          ownLabelBox = null;
+          labelDx = 0;
+          labelDy = 0;
+        }
+      }
+
       var tw = tooltip.offsetWidth || 280;
       var th = tooltip.offsetHeight || 80;
+      var minLeft = pad;
+      var maxLeft = Math.max(pad, vw - tw - pad);
+      var minTop = pad;
+      var maxTop = Math.max(pad, vh - th - pad);
+      var maxNear = Math.max(tw, th) * 1.15 + 56;
+      var stageRect = stage.getBoundingClientRect();
+      var stageCx = stageRect.left + stageRect.width / 2;
+      var stageCy = stageRect.top + stageRect.height * 0.42;
 
       function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
@@ -269,68 +372,184 @@
         return x2 > x1 && y2 > y1 ? (x2 - x1) * (y2 - y1) : 0;
       }
 
-      function candidateRect(left, top) {
+      function inflate(r, m) {
         return {
-          left: left,
-          top: top,
-          right: left + tw,
-          bottom: top + th,
+          left: r.left - m,
+          top: r.top - m,
+          right: r.right + m,
+          bottom: r.bottom + m,
         };
       }
 
-      function scoreCandidate(left, top) {
-        var rect = candidateRect(left, top);
-        var score = 0;
-        var stageBox = {
-          left: 0,
-          top: 0,
-          right: stageRect.width,
-          bottom: stageRect.height,
-        };
-        var outside = 0;
-        if (rect.left < stageBox.left) outside += (stageBox.left - rect.left) * th;
-        if (rect.top < stageBox.top) outside += (stageBox.top - rect.top) * tw;
-        if (rect.right > stageBox.right) outside += (rect.right - stageBox.right) * th;
-        if (rect.bottom > stageBox.bottom) outside += (rect.bottom - stageBox.bottom) * tw;
-        score += outside * 10;
+      // 方案1：邻近障碍 = 本站名 + 同链路附近站名 + 附近高亮路径采样点
+      var blockers = [];
+      function addBlocker(rect, weight) {
+        if (!rect || !(rect.right > rect.left) || !(rect.bottom > rect.top)) return;
+        blockers.push({ rect: rect, weight: weight || 1 });
+      }
 
-        var blockers = svg.querySelectorAll("g.nodes .node, g.labels text");
-        blockers.forEach(function (el) {
-          if (anchorEl === el || (anchorEl.closest && anchorEl.closest(".node") === el)) return;
-          var r = el.getBoundingClientRect();
-          var local = {
-            left: r.left - stageRect.left,
-            top: r.top - stageRect.top,
-            right: r.right - stageRect.left,
-            bottom: r.bottom - stageRect.top,
-          };
-          score += intersectArea(rect, local);
+      addBlocker(inflate(nodeRect, 6), 50);
+      if (ownLabelBox) addBlocker(inflate(ownLabelBox, 8), 80);
+
+      var nearLimit = 220;
+      svg.querySelectorAll(
+        "g.labels .node-label.is-active-route-label, g.labels #站点文字 text.is-active-route-label"
+      ).forEach(function (el) {
+        if (ownLabels.indexOf(el) !== -1) return;
+        var r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        var cx = (r.left + r.right) / 2;
+        var cy = (r.top + r.bottom) / 2;
+        var dx = cx - nodeCx;
+        var dy = cy - nodeCy;
+        if (dx * dx + dy * dy > nearLimit * nearLimit) return;
+        addBlocker(inflate(r, 4), 12);
+      });
+
+      svg.querySelectorAll("g.lines .line-segment.is-active").forEach(function (path) {
+        try {
+          var len = path.getTotalLength();
+          if (!len) return;
+          var steps = Math.max(8, Math.min(24, Math.ceil(len / 18)));
+          var ctm = path.getScreenCTM();
+          if (!ctm) return;
+          for (var i = 0; i <= steps; i += 1) {
+            var p = path.getPointAtLength((len * i) / steps);
+            var sp = svg.createSVGPoint();
+            sp.x = p.x;
+            sp.y = p.y;
+            var screen = sp.matrixTransform(ctm);
+            var dx = screen.x - nodeCx;
+            var dy = screen.y - nodeCy;
+            if (dx * dx + dy * dy > nearLimit * nearLimit) continue;
+            addBlocker(
+              {
+                left: screen.x - 5,
+                top: screen.y - 5,
+                right: screen.x + 5,
+                bottom: screen.y + 5,
+              },
+              6
+            );
+          }
+        } catch (e) {
+          /* ignore path sample errors */
+        }
+      });
+
+      // 优先放在节点朝向地图视觉中心的一侧，避免贴边；站名近时再避开同侧
+      var toCx = stageCx - nodeCx;
+      var toCy = stageCy - nodeCy;
+      var sideOrder =
+        Math.abs(toCx) >= Math.abs(toCy)
+          ? toCx >= 0
+            ? ["right", "bottom", "top", "left"]
+            : ["left", "bottom", "top", "right"]
+          : toCy >= 0
+            ? ["bottom", "right", "left", "top"]
+            : ["top", "right", "left", "bottom"];
+      if (ownLabelBox) {
+        if (Math.abs(labelDy) >= Math.abs(labelDx)) {
+          if (labelDy >= 0) sideOrder = sideOrder.filter(function (s) { return s !== "bottom"; }).concat(["bottom"]);
+          else sideOrder = sideOrder.filter(function (s) { return s !== "top"; }).concat(["top"]);
+        } else {
+          if (labelDx >= 0) sideOrder = sideOrder.filter(function (s) { return s !== "right"; }).concat(["right"]);
+          else sideOrder = sideOrder.filter(function (s) { return s !== "left"; }).concat(["left"]);
+        }
+      }
+      var sideRank = {};
+      sideOrder.forEach(function (side, idx) {
+        sideRank[side] = idx;
+      });
+
+      var anchor = {
+        left: nodeRect.left,
+        top: nodeRect.top,
+        right: nodeRect.right,
+        bottom: nodeRect.bottom,
+      };
+      if (ownLabelBox) {
+        // 选位相对「圆点」，但间距按站名外缘再让一点，避免压住斜标签
+        anchor = {
+          left: Math.min(nodeRect.left, ownLabelBox.left),
+          top: Math.min(nodeRect.top, ownLabelBox.top),
+          right: Math.max(nodeRect.right, ownLabelBox.right),
+          bottom: Math.max(nodeRect.bottom, ownLabelBox.bottom),
+        };
+      }
+
+      var midX = nodeCx - tw / 2;
+      var midY = nodeCy - th / 2;
+      var sideMap = {
+        top: { left: midX, top: anchor.top - th - gap, prefer: "top" },
+        bottom: { left: midX, top: anchor.bottom + gap, prefer: "bottom" },
+        left: { left: anchor.left - tw - gap, top: midY, prefer: "left" },
+        right: { left: anchor.right + gap, top: midY, prefer: "right" },
+      };
+      var extras = [
+        { left: anchor.right + gap, top: anchor.top - th - gap, prefer: "top" },
+        { left: anchor.left - tw - gap, top: anchor.top - th - gap, prefer: "top" },
+        { left: anchor.right + gap, top: anchor.bottom + gap, prefer: "bottom" },
+        { left: anchor.left - tw - gap, top: anchor.bottom + gap, prefer: "bottom" },
+      ];
+
+      var raw = [];
+      sideOrder.forEach(function (side) {
+        if (sideMap[side]) raw.push(sideMap[side]);
+      });
+      extras.forEach(function (c) {
+        raw.push(c);
+      });
+
+      function scoreCandidate(rawPos) {
+        var left = clamp(rawPos.left, minLeft, maxLeft);
+        var top = clamp(rawPos.top, minTop, maxTop);
+        var box = { left: left, top: top, right: left + tw, bottom: top + th };
+        var score = 0;
+
+        blockers.forEach(function (b) {
+          score += intersectArea(box, b.rect) * b.weight;
         });
 
-        var cx = nodeRect.left - stageRect.left + nodeRect.width / 2;
-        var cy = nodeRect.top - stageRect.top + nodeRect.height / 2;
-        var rx = left + tw / 2;
-        var ry = top + th / 2;
-        var dx = rx - cx;
-        var dy = ry - cy;
-        score += Math.sqrt(dx * dx + dy * dy) * 0.25;
-        return {
-          left: clamp(left, pad, Math.max(pad, stageRect.width - tw - pad)),
-          top: clamp(top, pad, Math.max(pad, stageRect.height - th - pad)),
-          score: score,
-        };
+        // 裁切到视口边缘的惩罚
+        score += Math.abs(left - rawPos.left) * 16 + Math.abs(top - rawPos.top) * 16;
+
+        // 必须待在节点附近，禁止飞远
+        var bx = left + tw / 2;
+        var by = top + th / 2;
+        var dist = Math.sqrt((bx - nodeCx) * (bx - nodeCx) + (by - nodeCy) * (by - nodeCy));
+        score += dist * 0.42;
+        if (dist > maxNear) score += (dist - maxNear) * 10;
+
+        // 靠近地图视觉中心，避免贴在角落
+        score += Math.sqrt((bx - stageCx) * (bx - stageCx) + (by - stageCy) * (by - stageCy)) * 0.22;
+
+        // 偏好方位：按站名对面排序加分（分数越低越好）
+        score += (sideRank[rawPos.prefer] != null ? sideRank[rawPos.prefer] : 3) * 16;
+
+        // 站名方位：若卡片仍落在站名同侧，加重惩罚
+        if (ownLabelBox) {
+          var cardCx = bx;
+          var cardCy = by;
+          if (Math.abs(labelDy) >= Math.abs(labelDx)) {
+            if (labelDy >= 0 && cardCy > nodeCy) score += 120;
+            if (labelDy < 0 && cardCy < nodeCy) score += 120;
+          } else {
+            if (labelDx >= 0 && cardCx > nodeCx) score += 120;
+            if (labelDx < 0 && cardCx < nodeCx) score += 120;
+          }
+        }
+
+        return { left: left, top: top, score: score };
       }
 
-      var candidates = [
-        scoreCandidate(nodeRect.right - stageRect.left + 12, nodeRect.top - stageRect.top - 8),
-        scoreCandidate(nodeRect.left - stageRect.left - tw - 12, nodeRect.top - stageRect.top - 8),
-        scoreCandidate(nodeRect.left - stageRect.left + nodeRect.width / 2 - tw / 2, nodeRect.top - stageRect.top - th - 12),
-        scoreCandidate(nodeRect.left - stageRect.left + nodeRect.width / 2 - tw / 2, nodeRect.bottom - stageRect.top + 12),
-      ];
-      candidates.sort(function (a, b) {
+      var ranked = raw.map(scoreCandidate).sort(function (a, b) {
         return a.score - b.score;
       });
-      var best = candidates[0];
+      var best = ranked[0] || {
+        left: clamp(nodeCx - tw / 2, minLeft, maxLeft),
+        top: clamp(nodeRect.top - th - gap, minTop, maxTop),
+      };
 
       tooltip.style.right = "auto";
       tooltip.style.bottom = "auto";
@@ -360,6 +579,7 @@
         typesEl.hidden = true;
       }
       tooltip.classList.add("is-visible");
+      positionTooltip(anchorEl);
       requestAnimationFrame(function () {
         positionTooltip(anchorEl);
       });
@@ -445,53 +665,65 @@
     function bindNodeHover(nodeEl) {
       var hitEl = nodeEl.querySelector(".node-hit") || nodeEl;
       var useClick = !canHover || isMobileLayout();
+      // 同时绑节点组与 hit，避免 hit 几何异常时圆点无法触发
+      var targets = hitEl === nodeEl ? [nodeEl] : [nodeEl, hitEl];
+
+      function onEnter() {
+        var nodeId = nodeEl.getAttribute("data-node-id");
+        var hasNode = !!nodes[nodeId];
+        if (!hasNode && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
+        var routeIds = hasNode ? (nodes[nodeId].routeIds || []) : [];
+        hoverNodeId = nodeId;
+        clearNodeHover();
+        nodeEl.classList.add("is-hover");
+        if (hasNode) {
+          highlightNodeRoutes(routeIds, nodeEl);
+          showNodeTooltip(nodeId, nodeEl);
+        }
+      }
+
+      function onLeave(event) {
+        var related = event && event.relatedTarget;
+        if (related && nodeEl.contains(related)) return;
+        nodeEl.classList.remove("is-hover");
+        hoverNodeId = null;
+        hideTooltip();
+        restoreVisual();
+        resetSmartZoom(true);
+        if (hoverRouteId && routes[hoverRouteId]) {
+          var trigger = svg.querySelector('[data-trigger-route="' + hoverRouteId + '"]');
+          if (trigger) showRouteTooltip(hoverRouteId, trigger);
+        } else if (panel) {
+          resetPanel();
+        }
+      }
 
       if (!useClick) {
-        hitEl.addEventListener("mouseenter", function () {
-          var nodeId = nodeEl.getAttribute("data-node-id");
-          var hasNode = !!nodes[nodeId];
-          if (!hasNode && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
-          var routeIds = hasNode ? (nodes[nodeId].routeIds || []) : [];
-          hoverNodeId = nodeId;
-          clearNodeHover();
-          nodeEl.classList.add("is-hover");
-          if (hasNode) {
-            highlightPathIds(pathIdsForRoutes(routeIds));
-            showNodeTooltip(nodeId, nodeEl);
-          }
-        });
-        hitEl.addEventListener("mouseleave", function () {
-          nodeEl.classList.remove("is-hover");
-          hoverNodeId = null;
-          hideTooltip();
-          restoreVisual();
-          resetSmartZoom(true);
-          if (hoverRouteId && routes[hoverRouteId]) {
-            var trigger = svg.querySelector('[data-trigger-route="' + hoverRouteId + '"]');
-            if (trigger) showRouteTooltip(hoverRouteId, trigger);
-          } else if (panel) {
-            resetPanel();
-          }
+        targets.forEach(function (el) {
+          el.addEventListener("mouseenter", onEnter);
+          el.addEventListener("mouseleave", onLeave);
         });
         return;
       }
 
-      hitEl.addEventListener("click", function (event) {
-        event.stopPropagation();
-        var nodeId = nodeEl.getAttribute("data-node-id");
-        if (!nodes[nodeId] && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
-        if (hoverNodeId === nodeId) {
-          clearFocusState();
-          return;
-        }
-        var routeIds = nodes[nodeId] ? (nodes[nodeId].routeIds || []) : [];
-        hoverNodeId = nodeId;
-        clearNodeHover();
-        nodeEl.classList.add("is-hover");
-        if (nodes[nodeId]) {
-          highlightPathIds(pathIdsForRoutes(routeIds));
-          showNodeTooltip(nodeId, nodeEl);
-        }
+      targets.forEach(function (el) {
+        el.addEventListener("click", function (event) {
+          event.stopPropagation();
+          var nodeId = nodeEl.getAttribute("data-node-id");
+          if (!nodes[nodeId] && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
+          if (hoverNodeId === nodeId) {
+            clearFocusState();
+            return;
+          }
+          var routeIds = nodes[nodeId] ? (nodes[nodeId].routeIds || []) : [];
+          hoverNodeId = nodeId;
+          clearNodeHover();
+          nodeEl.classList.add("is-hover");
+          if (nodes[nodeId]) {
+            highlightNodeRoutes(routeIds, nodeEl);
+            showNodeTooltip(nodeId, nodeEl);
+          }
+        });
       });
     }
 
@@ -499,6 +731,35 @@
       ? "g.nodes .node"
       : "g.nodes .node:not(.node--empty)";
     svg.querySelectorAll(nodeSelector).forEach(bindNodeHover);
+
+    function isInteractiveTarget(target) {
+      return !!(
+        target &&
+        target.closest &&
+        target.closest(".node, .node-hit, .legend-hit, .legend-target, [data-trigger-route], .node-tooltip")
+      );
+    }
+
+    function clearHoverIfBlank(target) {
+      if (isInteractiveTarget(target)) return;
+      if (!hoverNodeId && !hoverRouteId && !tooltip.classList.contains("is-visible")) return;
+      hoverNodeId = null;
+      hoverRouteId = null;
+      clearNodeHover();
+      hideTooltip();
+      restoreVisual();
+      if (panel && isMobileLayout()) resetPanel();
+    }
+
+    svg.addEventListener("mousemove", function (event) {
+      if (!canHover || isMobileLayout()) return;
+      clearHoverIfBlank(event.target);
+    });
+
+    stage.addEventListener("mouseleave", function () {
+      if (!canHover || isMobileLayout()) return;
+      clearHoverIfBlank(null);
+    });
 
     svg.addEventListener("click", function (event) {
       if (canHover && !isMobileLayout()) return;
@@ -578,7 +839,7 @@
             hoverNodeId = nodeId;
             clearNodeHover();
             nodeEl.classList.add("is-hover");
-            highlightPathIds(pathIdsForRoutes(routeIds));
+            highlightNodeRoutes(routeIds, nodeEl);
             showNodeTooltip(nodeId, nodeEl);
           }
         });

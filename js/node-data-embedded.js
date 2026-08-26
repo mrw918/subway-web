@@ -9,16 +9,16 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     match: ["ECU软件概论", "软件概论"],
     description: "了解ECU软件发展历史，理解ECU软件运行与实现机制，建立ECU软件工程体系整体认知",
   },
-  "AUTOSAR CP": {
-    nodeName: "AUTOSAR CP",
+  "ASR CP": {
+    nodeName: "ASR CP",
     type: [],
-    match: ["AUTOSAR CP", "AUTOSAR CPAUTOSAR"],
+    match: ["ASR CP", "ASRCP", "AUTOSAR CP", "AUTOSAR CPAUTOSAR"],
     description: "理解AUTOSAR CP的技术概念与方法论",
   },
-  "AUTOSAR工具链": {
-    nodeName: "AUTOSAR工具链",
+  "ASR工具链": {
+    nodeName: "ASR工具链",
     type: [],
-    match: ["AUTOSAR工具链", "工具链"],
+    match: ["ASR工具链", "AUTOSAR工具链", "ASR 工具链"],
     description: "了解AUTOSAR工具链在系统设计、软件开发、通信配置、仿真测试及变更管理等维度的整体协同",
   },
   "CANoe分析": {
@@ -36,7 +36,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   "MICROSAR SIP": {
     nodeName: "MICROSAR SIP",
     type: [],
-    match: ["MICROSAR SIP"],
+    match: ["MICROSAR SIP", "MICROSARSIP"],
     description: "了解MICROSAR软件集成包的交付内容与结构形式",
   },
   "DaVinci基础配置": {
@@ -100,15 +100,15 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     description: "掌握应用软件集成时的服务映射方法及注意事项",
   },
   "DaVinci进阶配置": {
-    nodeName: "DaVinci进阶配置",
+    nodeName: "DaVinci进阶",
     type: [],
-    match: ["DaVinci进阶配置", "进阶配置"],
+    match: ["DaVinci进阶", "DaVinci进阶配置", "进阶配置"],
     description: "掌握应用软件集成相关的其他DaVinci配置项及其作用",
   },
   "AUTOSAR通信": {
-    nodeName: "AUTOSAR通信",
+    nodeName: "ASR通信",
     type: [],
-    match: ["AUTOSAR通信"],
+    match: ["ASR通信", "AUTOSAR通信"],
     description: "掌握AUTOSAR应用报文通信的核心链路，理解“数据→信号→PDU→报文”的转换过程",
   },
   "MSRC.COM": {
@@ -171,10 +171,10 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     match: ["ETH底层协议", "底层协议"],
     description: "了解以太网底层协议相关知识",
   },
-  "ASR.PDU & Socket": {
-    nodeName: "ASR.PDU & Socket",
+  "PDU & Socket": {
+    nodeName: "PDU & Socket",
     type: [],
-    match: ["ASR.PDU & Socket", "ASR.PDU&Socket", "ASR.PDU&SocketMSRC.ETHMSRC.SomeIPSQME/IP"],
+    match: ["PDU & Socket", "PDU&Socket", "ASR.PDU & Socket"],
     description: "掌握AUTOSAR CP对以太网的兼容方式",
   },
   "MSRC.ETH": {
@@ -231,6 +231,30 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     match: ["存储技术"],
     description: "理解Flash及EEPROM存储技术特点",
   },
+  "MSRC.NvM": {
+    nodeName: "MSRC.NvM",
+    type: [],
+    match: ["MSRC.NvM", "NvM"],
+    description: "掌握NvM组件功能与配置方法",
+  },
+  "MSRC.Ea": {
+    nodeName: "MSRC.Ea",
+    type: [],
+    match: ["MSRC.Ea", "Ea"],
+    description: "掌握Ea组件功能与配置方法",
+  },
+  "MSRC.Fee": {
+    nodeName: "MSRC.Fee",
+    type: [],
+    match: ["MSRC.Fee", "Fee"],
+    description: "掌握Fee组件功能与配置方法",
+  },
+  "MSRC.MemAcc": {
+    nodeName: "MSRC.MemAcc",
+    type: [],
+    match: ["MSRC.MemAcc", "MemAcc"],
+    description: "掌握MemAcc组件功能与配置方法",
+  },
   "MSRC.MEM基础": {
     nodeName: "MSRC.MEM基础",
     type: [],
@@ -240,37 +264,37 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   "MSRC.MEM进阶": {
     nodeName: "MSRC.MEM进阶",
     type: [],
-    match: ["MSRC.MEM进阶", "MSRC.MEM"],
+    match: ["MSRC.MEM进阶"],
     description: "掌握存储组件进阶功能与配置方法",
   },
   "I/O与CDD": {
     nodeName: "I/O与CDD",
     type: [],
-    match: ["1/0与CDD", "I/O与CDD"],
+    match: ["1/0与CDD", "I/O与CDD", "I/O与CDD"],
     description: "理解I/O与CDD功能在AUTOSAR平台下的开发模式",
   },
   "I/O MCAL": {
     nodeName: "I/O MCAL",
     type: [],
-    match: ["1/0 MCAL"],
+    match: ["1/0 MCAL", "I/O MCAL", "I/OMCAL", "IO MCAL"],
     description: "理解I/O相关常见MCAL组件功能",
   },
   "开发合规&过程管理": {
-    nodeName: "开发合规&过程管理",
+    nodeName: "合规与过程管理",
     type: [],
-    match: ["开发合规&过程管理", "开发合规", "过程管理"],
+    match: ["合规与过程管理", "开发合规&过程管理", "开发合规", "过程管理", "合规"],
     description: "建立ASPICE、功能安全、信息安全基本认知",
   },
   "密码学基础": {
-    nodeName: "密码学基础",
+    nodeName: "密码学",
     type: [],
-    match: ["密码学基础"],
+    match: ["密码学", "密码学基础"],
     description: "了解对称加密、非对称加密、MAC、数字签名、证书等基础知识",
   },
   "信息安全设计": {
-    nodeName: "信息安全设计",
+    nodeName: "信息安全",
     type: [],
-    match: ["信息安全设计"],
+    match: ["信息安全", "信息安全设计"],
     description: "了解产品生命周期中的信息安全设计活动",
   },
   "MSRC.Security": {
@@ -285,10 +309,10 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     match: ["MSRC.veHSM", "veHSM"],
     description: "掌握HSM固件的功能及配置方法",
   },
-  "功能安全设计": {
-    nodeName: "功能安全设计",
+  "功能安全": {
+    nodeName: "功能安全",
     type: [],
-    match: ["功能安全设计"],
+    match: ["功能安全"],
     description: "了解功能安全设计相关活动",
   },
   "MSRC.Safety": {

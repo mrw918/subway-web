@@ -7,7 +7,11 @@ g.labels {
   pointer-events: none;
 }
 
-g.lines .line-segment,
+/* 线路不抢站点命中；路线高亮靠图例 trigger */
+g.lines .line-segment {
+  pointer-events: none;
+}
+
 g.nodes .node-hit,
 g.labels .legend-hit,
 g.labels .legend-target {
@@ -24,11 +28,13 @@ g.flow-lines {
 }
 
 svg.is-route-locked .line-segment.is-dimmed {
-  opacity: 0.15;
+  opacity: 0.18;
+  visibility: visible;
 }
 
 svg.is-route-locked .line-segment.is-active {
   opacity: 1;
+  visibility: visible;
 }
 
 .flow-segment {
@@ -46,6 +52,11 @@ svg.is-route-locked .line-segment.is-active {
   animation: flowAnimation 1s linear infinite;
 }
 
+.flow-segment.active-flow.flow-reverse,
+.line-segment.active-flow.flow-reverse {
+  animation-name: flowAnimationReverse;
+}
+
 .flow-segment.active-flow,
 .line-segment.active-flow {
   opacity: 1;
@@ -58,6 +69,15 @@ svg.is-route-locked .line-segment.is-active {
   }
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+@keyframes flowAnimationReverse {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 32;
   }
 }
 
@@ -127,22 +147,35 @@ svg.is-route-locked .line-segment.is-active {
 
 svg.is-route-locked .node.is-dimmed {
   opacity: 0.35;
+  visibility: visible;
+  pointer-events: none;
 }
 
 svg.is-route-locked .node.is-on-active-route {
   opacity: 1;
+  visibility: visible;
 }
 
 g.labels .node-label {
   transition: opacity 0.22s ease;
 }
 
-svg.is-route-locked g.labels .node-label.is-dimmed-route-label {
-  opacity: 0.12;
+svg.is-route-locked g.labels .node-label.is-dimmed-route-label,
+svg.is-route-locked g.labels #站点文字 text.is-dimmed-route-label {
+  opacity: 0.22;
+  visibility: visible;
 }
 
-svg.is-route-locked g.labels .node-label.is-active-route-label {
+svg.is-route-locked g.labels .node-label.is-active-route-label,
+svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   opacity: 1;
+  visibility: visible;
+}
+
+/* 未打标的站名在锁定路线时也弱化 */
+svg.is-route-locked g.labels #站点文字 text:not(.is-active-route-label) {
+  opacity: 0.22;
+  visibility: visible;
 }
 
 .legend-hit {
@@ -230,14 +263,18 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
 }
 
 .node-tooltip {
-  position: absolute;
-  z-index: 40;
-  width: min(340px, calc(100% - 24px));
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(28, 37, 92, 0.12);
-  border-radius: 10px;
-  box-shadow: 0 10px 28px rgba(28, 37, 92, 0.14);
+  position: fixed;
+  z-index: 120;
+  width: min(440px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  padding: 20px 22px 22px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid rgba(28, 37, 92, 0.14);
+  border-radius: 14px;
+  box-shadow:
+    0 8px 18px rgba(28, 37, 92, 0.1),
+    0 22px 44px rgba(28, 37, 92, 0.16);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -252,18 +289,18 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
 }
 
 .node-tooltip__title {
-  margin: 0 0 8px;
-  font-size: 17px;
-  font-weight: 650;
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 750;
   color: #141b45;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .node-tooltip__types {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin: 0 0 10px;
+  gap: 6px;
+  margin: 0 0 12px;
 }
 
 .node-tooltip__types[hidden] {
@@ -272,10 +309,10 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
 
 .node-tooltip__type {
   display: inline-block;
-  padding: 2px 9px;
+  padding: 4px 11px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 650;
   background: rgba(75, 103, 175, 0.1);
   color: #4b67af;
   border: 1px solid rgba(75, 103, 175, 0.2);
@@ -283,8 +320,8 @@ svg.is-route-locked g.labels .node-label.is-active-route-label {
 
 .node-tooltip__desc {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.65;
   color: #3f4654;
 }
 

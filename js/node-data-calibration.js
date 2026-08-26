@@ -1,175 +1,135 @@
 /**
  * 知识路线图节点 Hover 数据（标定工程师）
- * 来源：标定工程师.docx
- * svgIndex: SVG 文档顺序中 station 路径的索引（0-based），用于直接分配，绕过文字匹配
+ * 来源：标定工程师.docx；站名对齐「知识路线图 新ci 1-2.svg」
  */
 window.NODE_HOVER_DATA_CALIBRATION = {
-  "通信协议CAN/LIN/ETH": {
-    nodeName: "通信协议CAN/LIN/ETH",
-    svgIndex: 0,
+  "通信协议": {
+    nodeName: "通信协议",
     type: [],
-    match: ["通信协议", "CAN/LIN/Ethernet", "CAN/LIN/ETH"],
+    match: ["通信协议", "通信协议CAN/LIN/ETH", "CAN/LIN/ETH", "CAN/LIN/Ethernet"],
     description: "基础通信协议学习",
   },
   "标定协议XCP": {
     nodeName: "标定协议XCP",
-    svgIndex: 1,
     type: [],
-    match: ["标定协议XCP", "XCP"],
+    match: ["标定协议XCP", "标定协议", "XCP"],
     description: "掌握标定的基础协议",
   },
-  "Database Handling": {
-    nodeName: "Database Handling",
-    svgIndex: 5,
+  "标定数据库": {
+    nodeName: "标定数据库",
     type: [],
-    match: ["DatabaseHandling", "Database Handling"],
+    match: ["标定数据库", "Database Handling", "DatabaseHandling"],
     description: "掌握数据库的基础处理和使用方式",
   },
-  "CANape Basic": {
-    nodeName: "CANape Basic",
-    svgIndex: 6,
+  "CANape基础": {
+    nodeName: "CANape基础",
     type: [],
-    match: ["CANapeBasic", "CANape Basic"],
+    match: ["CANape基础", "CANape Basic", "CANapeBasic"],
     description: "掌握CANape的基础功能",
   },
-  "Measurement": {
-    nodeName: "Measurement",
-    svgIndex: 2,
+  "标定数据管理": {
+    nodeName: "标定数据管理",
     type: [],
-    match: ["Measurement"],
-    description: "掌握CANape的基础测量方式",
-  },
-  "Calibration": {
-    nodeName: "Calibration",
-    svgIndex: 4,
-    type: [],
-    match: ["Calibration"],
-    description: "掌握CANape的基础标定方式",
-  },
-  "Calibration Data Management": {
-    nodeName: "Calibration Data Management",
-    svgIndex: 3,
-    type: [],
-    match: ["CalibrationDataManagement"],
+    match: ["标定数据管理", "Calibration Data Management", "CalibrationDataManagement"],
     description: "掌握标定数据的基本管理方式",
   },
-  "Open or Create an A2L file": {
-    nodeName: "Open or Create an A2L file",
-    svgIndex: 7,
+  "数据记录": {
+    nodeName: "数据记录",
     type: [],
-    match: ["OpenorCreateanA2Lfile"],
-    description: "A2L文件的打开及创建方式",
-  },
-  "Update A2L": {
-    nodeName: "Update A2L",
-    svgIndex: 8,
-    type: [],
-    match: ["UpdateA2L"],
-    description: "如何更新A2L文件",
-  },
-  "A2L Reporting": {
-    nodeName: "A2L Reporting",
-    svgIndex: 9,
-    type: [],
-    match: ["A2LReporting"],
-    description: "如何生成分析报告用于对比并呈现A2L文件以及相关软件数据集之间的差异",
-  },
-  "Logging": {
-    nodeName: "Logging",
-    svgIndex: 11,
-    type: [],
-    match: ["Logging"],
+    match: ["数据记录", "Logging"],
     description: "学习使用CANape进行数据记录的方式",
   },
-  "vMeasure": {
-    nodeName: "vMeasure",
-    svgIndex: 17,
-    type: [],
-    match: ["vMeassure", "vMeasure"],
-    description: "学习如何使用vMeasure",
-  },
-  "Smart Logger": {
-    nodeName: "Smart Logger",
-    svgIndex: 15,
-    type: [],
-    match: ["SmartLogger"],
-    description: "学习如何使用Smart Logger",
-  },
-  "GL Logger": {
+  "GLLogger": {
     nodeName: "GL Logger",
-    svgIndex: 12,
     type: [],
-    match: ["GLLogger"],
+    match: ["GLLogger", "GL Logger", "GL Logger"],
     description: "学习如何使用GL Logger",
   },
-  "Data Analysis": {
-    nodeName: "Data Analysis",
-    svgIndex: 13,
+  "SmartLogger": {
+    nodeName: "Smart Logger",
     type: [],
-    match: ["DataAnalysis"],
+    match: ["SmartLogger", "Smart Logger", "Smart Logger"],
+    description: "学习如何使用Smart Logger",
+  },
+  "vMeassure": {
+    nodeName: "vMeasure",
+    type: [],
+    match: ["vMeassure", "vMeasure", "vMeassure"],
+    description: "学习如何使用vMeasure",
+  },
+  "数据分析": {
+    nodeName: "数据分析",
+    type: [],
+    match: ["数据分析", "Data Analysis", "DataAnalysis"],
     description: "在记录数据后的数据分析能力学习",
   },
   "CASL": {
     nodeName: "CASL",
-    svgIndex: 20,
     type: [],
     match: ["CASL"],
     description: "掌握CANape中用于数据分析的CASL语言",
   },
-  "Data Mining": {
-    nodeName: "Data Mining",
-    svgIndex: 21,
+  "数据挖掘": {
+    nodeName: "数据挖掘",
     type: [],
-    match: ["DataMining"],
+    match: ["数据挖掘", "Data Mining", "DataMining"],
     description: "掌握从大量数据中，自动搜索满足特定条件的目标工况、事件或数据特征，并对搜索结果进行汇总和分析的能力",
   },
-  "vCDM Studio": {
-    nodeName: "vCDM Studio",
-    svgIndex: 10,
+  "A2L文件": {
+    nodeName: "A2L文件",
     type: [],
-    match: ["vCDMStudio"],
+    match: ["A2L文件", "A2L", "Open or Create an A2L file", "Update A2L", "A2L Reporting"],
+    description: "A2L文件的打开、创建、更新及差异报告相关能力",
+  },
+  "vCDMStudio": {
+    nodeName: "vCDM Studio",
+    type: [],
+    match: ["vCDMStudio", "vCDM Studio", "vCDM Studio"],
     description: "学习使用vCDM Studio管理和维护标定数据",
   },
   "vCDM": {
     nodeName: "vCDM",
-    svgIndex: 16,
     type: [],
     match: ["vCDM"],
     description: "学习 vCDM 标定数据管理平台的基本概念与使用方法",
   },
-  "vCDM Tool Set": {
+  "vCDMToolSet": {
     nodeName: "vCDM Tool Set",
-    svgIndex: 22,
     type: [],
-    match: ["VCDMToolSet"],
+    match: ["vCDMToolSet", "vCDM Tool Set", "VCDMToolSet", "vCDMTool Set"],
     description: "学习使用vCDM Tool Set完成标定数据处理及工程任务",
   },
-  "Calibration Data Quality and Calibration Process": {
-    nodeName: "Calibration Data Quality and Calibration Process",
-    svgIndex: 14,
+  "标定数据质量及流程": {
+    nodeName: "标定数据质量及流程",
     type: [],
-    match: ["CalibrationDataQualityandCalibrationProcess"],
+    match: [
+      "标定数据质量及流程",
+      "标定数据质量及流程",
+      "Calibration Data Quality and Calibration Process",
+      "CalibrationDataQualityandCalibrationProcess",
+    ],
     description: "学习标定数据采集与标定流程管理，理解从数据获取、整理到标定数据形成和维护的完整过程",
   },
-  "Display/Compare/Edit Parameters": {
-    nodeName: "Display/Compare/Edit Parameters",
-    svgIndex: 23,
+  "标定参数处理": {
+    nodeName: "标定参数处理",
     type: [],
-    match: ["Display,compareandEditparameters"],
+    match: [
+      "标定参数处理",
+      "Display/Compare/Edit Parameters",
+      "Display,compareandEditparameters",
+    ],
     description: "掌握标定参数的显示、比较和编辑方法，能够对不同版本、不同标定数据集之间的参数差异进行分析和调整",
   },
-  "Generate HEX": {
-    nodeName: "Generate HEX",
-    svgIndex: 19,
+  "刷写文件": {
+    nodeName: "刷写文件",
     type: [],
-    match: ["GeneroteHEX"],
+    match: ["刷写文件", "Generate HEX", "GeneroteHEX", "HEX"],
     description: "学习根据标定数据生成 HEX 文件，理解标定数据与 ECU 软件镜像之间的关系，为后续 ECU 刷写提供可用的数据文件",
   },
-  "Flash": {
-    nodeName: "Flash",
-    svgIndex: 18,
+  "数据刷写": {
+    nodeName: "数据刷写",
     type: [],
-    match: ["Flash"],
+    match: ["数据刷写", "Flash"],
     description: "学习将生成的 HEX 文件刷写至 ECU，掌握从标定数据管理到 ECU 数据更新的完整闭环流程",
   },
 };

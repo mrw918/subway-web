@@ -3,10 +3,10 @@
  * 来源：诊断工程师.docx
  */
 window.NODE_HOVER_DATA_DIAGNOSTIC = {
-  "汽车电子与嵌入式基础": {
-    nodeName: "汽车电子与嵌入式基础",
+  "汽车电子基础": {
+    nodeName: "汽车电子基础",
     type: ["B站"],
-    match: ["汽车电子与嵌入式基础"],
+    match: ["汽车电子基础", "汽车电子与嵌入式基础", "汽⻋电⼦基础"],
     description: "在此站点，您将学习现代汽车电子电气（E/E）系统中的技术和概念，如“什么是ECU“、”汽车诊断的必要性“、”如何更新ECU软件“、”什么是UDS“等，为后续深入学习诊断奠定基础。",
   },
   "汽车通信概论": {
@@ -14,6 +14,18 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     type: ["线上课程"],
     match: ["汽车通信概论"],
     description: "现代汽车中存在多种数据通信网络及协议，包括CAN、LIN、FlexRay等。此外，以太网和TCP/IP等传统计算机网络技术也已在汽车中得到应用。在此站点，将向您介绍汽车通信的整体概况以及不同通信网络之间的区别。",
+  },
+  "ETH基础协议": {
+    nodeName: "ETH基础协议",
+    type: [],
+    match: ["ETH基础协议", "ETH 基础协议"],
+    description: "了解车载以太网基础协议与通信概念，为 DoIP 等诊断传输方式打基础。",
+  },
+  "DoIP协议": {
+    nodeName: "DoIP协议",
+    type: [],
+    match: ["DoIP协议", "DoIP"],
+    description: "了解基于 IP 的诊断通信（DoIP）协议与应用场景。",
   },
   "CAN协议": {
     nodeName: "CAN协议",
@@ -36,7 +48,7 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
   "OBDonUDS/ZEVonUDS": {
     nodeName: "OBDonUDS/ZEVonUDS",
     type: ["OET 课程"],
-    match: ["OBDonUDS/ZEVonUDS", "OBDOnUDS/ZEVonUDS", "OBDOnUDS", "ZEVonUDS"],
+    match: ["OBDonUDS/ZEVonUDS", "OBDOnUDS/ZEVonUDS", "OBDonUDS", "OBDOnUDS", "ZEVonUDS"],
     description: "SAE J1979-2标准（OBDonUDS）要求使用UDS读取OBD诊断数据。SAE J1979-3定义了诊断仪获取新能源汽车动力系统数据的通信规则。在此站点，您将了解相关标准。",
   },
   "MICROSAR.DIAG": {
@@ -45,10 +57,10 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     match: ["MICROSAR.DIAG", "MICROSAR.DIA"],
     description: "在此站点，您将了解AUTOSAR诊断相关的基础软件： DCM（诊断通信管理器）、 DEM（诊断事件管理器）和FIM（功能抑制管理器）。",
   },
-  "Vector诊断工具链": {
-    nodeName: "Vector诊断工具链",
+  "诊断工具链": {
+    nodeName: "诊断工具链",
     type: ["OET 课程"],
-    match: ["Vector诊断工具链", "诊断工具链"],
+    match: ["诊断工具链", "Vector诊断工具链"],
     description: "在诊断开发过程中，Vector提供了功能强大的软件工具，适用于整个车辆诊断开发过程的每个阶段。在此站点，您将整体了解Vector诊断工具链，包括CANdelaStudio、ODXStudio、CANoe.DiVa、Indigo及vFlash。",
   },
   "CDD": {
@@ -168,19 +180,19 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
   "Security概论": {
     nodeName: "Security概论",
     type: ["ELN"],
-    match: ["Securitv概论", "Security概论"],
+    match: ["Securitv概论", "Security概论", "Security 概论"],
     description: "在此站点，您将学习哈希算法、对称密钥、非对称密钥、MAC消息验证码、数字签名、证书、Diffie-Hellman密钥交换等密码技术，这是了解上层协议的基础。",
   },
   "UDS 0x27服务": {
     nodeName: "UDS 0x27服务",
     type: ["线上课程"],
-    match: ["UDS 0x27服务", "UDS Ox27服务", "Ox27服务"],
+    match: ["UDS 0x27服务", "UDS Ox27服务", "Ox27服务", "UDS0x27服务"],
     description: "UDS 0x27服务实现种子-密钥机制，用于控制访问权限，是最常见的诊断安全实现方式。在此站点，您将学习UDS 0x27服务的具体内容。",
   },
   "UDS 0x29服务": {
     nodeName: "UDS 0x29服务",
     type: ["线上课程"],
-    match: ["UDS 0x29服务", "UDS Ox29服务", "Ox29服务"],
+    match: ["UDS 0x29服务", "UDS Ox29服务", "Ox29服务", "UDS0x29服务"],
     description: "0x29用于更高级别的安全认证，支持更复杂的安全策略。在此站点，您将学习UDS 0x29服务的具体内容。",
   },
   "诊断安全配置": {

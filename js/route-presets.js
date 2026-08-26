@@ -25,11 +25,11 @@ window.ROUTE_PRESETS = {
     },
   },
   mbse: {
-    M1: { description: "MBSE 方法论与系统工程基础，建立模型驱动设计思维。" },
-    M2: { description: "需求与功能建模，掌握用例、活动与状态等核心模型元素。" },
-    M3: { description: "架构与接口设计，完成系统分层与模块划分。" },
-    M4: { description: "仿真、验证与 V 模型闭环，保障设计可追溯。" },
-    M5: { description: "工具链与协同开发，支撑 MBSE 落地与团队协作。" },
+    M1: { color: "#d82a36", description: "MBSE 方法论与系统工程基础，建立模型驱动设计思维。" },
+    M2: { color: "#89b33d", colors: ["#89b43b"], description: "需求与功能建模，掌握用例、活动与状态等核心模型元素。" },
+    M3: { color: "#eb5e42", description: "架构与接口设计，完成系统分层与模块划分。" },
+    M4: { color: "#50b5ca", description: "仿真、验证与 V 模型闭环，保障设计可追溯。" },
+    M5: { color: "#e5a025", description: "工具链与协同开发，支撑 MBSE 落地与团队协作。" },
   },
   calibration: {
     C1: { color: "#ee373b" },
