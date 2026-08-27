@@ -84,8 +84,9 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
   "VT System配置": {
     nodeName: "VT System配置",
     type: ["B站"],
-    match: ["VT System配置", "VTSystem配置"],
+    match: ["VT System配置", "VTSystem配置", "VT System 配置"],
     description: "在此站点，您将了解常见VT板卡及其配置。",
+    svgIndex: 4,
   },
   "SIL Kit": {
     nodeName: "SIL Kit",

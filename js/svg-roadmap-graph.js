@@ -529,14 +529,15 @@
     }
   }
 
-  // 每段独立：横向从左到右，纵向从上到下
+  // 每段：有明显横向位移则左→右；仅近乎竖线时才上→下
+  // （避免「先右再上」的 L 形被当成竖线而反流）
   function orientFlowSegment(el) {
     var ep = pathUserEndpoints(el);
     if (!ep) return;
     var dx = ep.end.x - ep.start.x;
     var dy = ep.end.y - ep.start.y;
     var reverse;
-    if (Math.abs(dx) >= Math.abs(dy)) {
+    if (Math.abs(dx) >= Math.max(8, Math.abs(dy) * 0.25)) {
       reverse = dx < 0;
     } else {
       reverse = dy < 0;

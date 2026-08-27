@@ -949,14 +949,14 @@
 
 a.role-select__training-course {
   color: #2f3a4c;
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
-  text-decoration-color: rgba(47, 58, 76, 0.35);
 }
 
 a.role-select__training-course:hover {
   color: #1c2433;
+  text-decoration: underline;
   text-decoration-color: rgba(28, 36, 51, 0.55);
 }
 
