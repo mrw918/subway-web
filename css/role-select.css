@@ -685,9 +685,9 @@
 
 @media (max-width: 768px) {
   .role-select {
-    --track-block: 104px;
-    --entre-block: 52px;
-    --hero-overlap: 28px;
+    --track-block: 112px;
+    --entre-block: 56px;
+    --hero-overlap: 12px;
     --title-zone-x: max(18px, calc(12px + var(--safe-left)));
     --title-zone-w: min(210px, 52vw);
     --wm-clear-right: max(120px, calc(110px + var(--safe-right)));
@@ -750,9 +750,9 @@
   }
 
   .role-select__hero-stage {
-    width: min(300px, 68vw);
-    height: min(36vh, calc(100% - 12px));
-    max-height: 36vh;
+    width: min(360px, 84vw);
+    height: min(52vh, calc(100% - 8px));
+    max-height: 52vh;
     bottom: calc(-1 * var(--hero-overlap));
   }
 
@@ -790,7 +790,7 @@
   }
 
   .role-select__footer {
-    gap: 8px;
+    gap: 12px;
     padding-bottom: max(10px, var(--safe-bottom));
   }
 

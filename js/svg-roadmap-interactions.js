@@ -333,14 +333,34 @@
       suppressClickUntil = Date.now() + 280;
     }
 
-    function renderPanel(title, desc, types) {
+    function safeCssColor(value) {
+      var s = String(value || "").trim();
+      if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(s)) return s;
+      if (/^rgba?\(\s*[\d.]+\s*,\s*[\d.]+\s*,\s*[\d.]+(?:\s*,\s*[\d.]+)?\s*\)$/.test(s)) {
+        return s;
+      }
+      return "#4b5563";
+    }
+
+    function renderPanel(title, desc, types, routeIds) {
       if (!panel) return;
       if (!isMobileLayout()) {
         panel.hidden = true;
         return;
       }
       var typeList = types && types.length ? types : [];
-      var hasContent = !!(title || desc || typeList.length);
+      var routeList = [];
+      (routeIds || []).forEach(function (rid) {
+        var route = routes[rid];
+        if (!route) return;
+        var name = String(route.name || "").trim();
+        if (!name) return;
+        routeList.push({
+          name: name,
+          color: safeCssColor(route.color),
+        });
+      });
+      var hasContent = !!(title || desc || typeList.length || routeList.length);
       panel.hidden = false;
       panel.innerHTML =
         '<div class="info-panel__header">' +
@@ -349,11 +369,32 @@
           "</h3>" +
           '<button type="button" class="info-panel__close" aria-label="关闭详情">×</button>' +
         "</div>" +
+        (routeList.length
+          ? '<div class="info-panel__routes">' +
+              routeList
+                .map(function (r) {
+                  return (
+                    '<span class="info-panel__route" style="--route-color:' +
+                    r.color +
+                    '">' +
+                    escapeHtml(r.name) +
+                    "</span>"
+                  );
+                })
+                .join("") +
+            "</div>"
+          : "") +
         (typeList.length
           ? '<div class="info-panel__types">' +
-              typeList.map(function (t) {
-                return '<span class="info-panel__type">' + escapeHtml(formatTypeLabel(t)) + "</span>";
-              }).join("") +
+              typeList
+                .map(function (t) {
+                  return (
+                    '<span class="info-panel__type">' +
+                    escapeHtml(formatTypeLabel(t)) +
+                    "</span>"
+                  );
+                })
+                .join("") +
             "</div>"
           : "") +
         '<p class="info-panel__desc">' +
@@ -367,6 +408,7 @@
         });
       }
       panel.classList.toggle("is-empty", !hasContent);
+      panel.scrollTop = 0;
     }
 
     function resetPanel() {
@@ -859,7 +901,7 @@
       if (!node) return;
       opts = opts || {};
       if (panel && isMobileLayout()) {
-        renderPanel(node.name, node.desc, node.type || []);
+        renderPanel(node.name, node.desc, node.type || [], node.routeIds || []);
       } else {
         showTooltip(node.name, node.desc, node.type || [], anchorEl);
       }
@@ -872,7 +914,12 @@
       if (!info || !info.desc) return false;
       opts = opts || {};
       if (panel && isMobileLayout()) {
-        renderPanel(info.name, info.desc, info.type || []);
+        var routeAttr = String(
+          (nodeEl && (nodeEl.getAttribute("data-route-id") || nodeEl.getAttribute("data-route"))) ||
+            ""
+        ).trim();
+        var calibRoutes = routeAttr ? routeAttr.split(/\s+/).filter(Boolean) : [];
+        renderPanel(info.name, info.desc, info.type || [], calibRoutes);
       } else {
         showTooltip(info.name, info.desc, info.type || [], anchorEl || nodeEl);
       }

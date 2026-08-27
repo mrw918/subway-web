@@ -184,8 +184,23 @@
       if (/工程师/.test(content) && content.length <= 8) return;
       var fontSize = parseFloat(textEl.getAttribute("font-size") || "0");
       if (fontSize && fontSize > 16) return;
-      splitTspanFragments(textEl).forEach(function (frag) {
-        list.push(frag);
+      // 图例名按整段文字取（避免「车辆」「诊断」被拆成两个碎片）
+      var m = parseMatrix(tf);
+      var x = m.e;
+      var y = m.f;
+      var firstTspan = textEl.querySelector("tspan");
+      if (firstTspan) {
+        var tx = parseFloat(firstTspan.getAttribute("x") || "0");
+        var ty = parseFloat(firstTspan.getAttribute("y") || "0");
+        var pt = transformPoint(m, tx, ty);
+        x = pt.x;
+        y = pt.y;
+      }
+      list.push({
+        title: content,
+        el: textEl,
+        x: x,
+        y: y,
       });
     });
     return list;
@@ -894,8 +909,32 @@
     var spatialColors = orderedRouteColors(colorGroups);
 
     smallBadges.forEach(function (badge, badgeIndex) {
-      if (routes[badge.id]) return;
       var preset = presets[badge.id] || {};
+      // 同编号会在图上/图例各出现一次；优先用预设全名，其次用更完整的图例中文名补全
+      if (routes[badge.id]) {
+        var rematch = nearestLabel(badge, fragments, usedFrag);
+        var existingName = String(routes[badge.id].name || "").trim();
+        if (preset.title || preset.name) {
+          routes[badge.id].name = preset.title || preset.name;
+          if (preset.desc || preset.description) {
+            routes[badge.id].desc = preset.desc || preset.description;
+          }
+        } else if (rematch) {
+          var nextTitle = String(rematch.frag.title || "").trim();
+          if (
+            nextTitle &&
+            (isRouteBadgeId(existingName) ||
+              existingName === badge.id ||
+              nextTitle.length > existingName.length)
+          ) {
+            usedFrag[rematch.index] = true;
+            routes[badge.id].name = nextTitle;
+            routes[badge.id].desc =
+              "本路线涵盖「" + nextTitle + "」相关知识站点。";
+          }
+        }
+        return;
+      }
       var color = preset.color ? normalizeColor(preset.color) : null;
       var unusedSwatches = orderedSwatches.filter(function (sw) {
         return !usedColors[sw.color];
