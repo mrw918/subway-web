@@ -458,6 +458,59 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   overflow: hidden;
 }
 
+/* 大屏 / TV：地图顶栏搜索与下拉结果放大 */
+@media (min-width: 1920px) {
+  .roadmap-search-wrap {
+    gap: 12px;
+  }
+
+  .roadmap-search-icon {
+    left: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .roadmap-search-input {
+    width: min(440px, 36vw);
+    min-height: 50px;
+    padding: 10px 16px 10px 48px;
+    border-radius: 12px;
+    font-size: 18px;
+  }
+
+  .roadmap-search-results {
+    top: calc(100% + 8px);
+    max-height: 55vh;
+    padding: 12px 14px 14px;
+    border-radius: 14px;
+  }
+
+  .roadmap-search-results__summary {
+    margin: 0 0 10px;
+    font-size: 15px;
+  }
+
+  .roadmap-search-results__empty {
+    font-size: 17px;
+  }
+
+  .roadmap-search-list__item {
+    min-height: 48px;
+    line-height: 48px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-size: 18px;
+  }
+
+  .roadmap-search-list__title {
+    font-size: 18px;
+  }
+
+  .roadmap-search-list__desc {
+    font-size: 15px;
+  }
+}
+
 @media (max-width: 860px) {
   .stage-shell {
     flex-direction: column;

@@ -450,9 +450,12 @@
      */
     function layoutAvatars(animate) {
       var vw = avatarViewport.clientWidth || 720;
-      var baseSize = Math.min(68, Math.max(42, vw * 0.1));
-      var radiusX = Math.min(vw * 0.48, 320);
-      var radiusY = Math.min(22, vw * 0.038);
+      var isTv = window.matchMedia("(min-width: 1920px)").matches;
+      var baseSize = isTv
+        ? Math.min(96, Math.max(72, vw * 0.1))
+        : Math.min(68, Math.max(42, vw * 0.1));
+      var radiusX = Math.min(vw * 0.48, isTv ? 460 : 320);
+      var radiusY = Math.min(isTv ? 32 : 22, vw * 0.038);
       var half = Math.floor(count / 2);
       var stepX = half === 0 ? 0 : radiusX / half;
 

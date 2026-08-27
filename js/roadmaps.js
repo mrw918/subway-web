@@ -53,6 +53,7 @@ window.ROADMAP_CATALOG = [
     heroImage: "素材/soa工程师.png",
     avatarImage: "素材/soa工程师小图.png",
     heroVersion: 2,
+    heroAdjust: { scale: 1.18 },
     homeOrder: 2,
     svgFile: "知识路线图 新ci 1-1.svg",
     dataKey: "NODE_HOVER_DATA_SOA",
