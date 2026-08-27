@@ -21,6 +21,18 @@
       .replace(/>/g, "&gt;");
   }
 
+  /** 仅悬浮信息标签展示用；兼容旧数据名 */
+  function formatTypeLabel(value) {
+    var raw = String(value || "").trim();
+    var key = raw.replace(/\s+/g, " ");
+    if (key === "OET 课程" || key === "OET") return "公开课";
+    if (key === "CIT 课程" || key === "CIT") return "内训课";
+    if (key === "ELN") return "自学课";
+    if (key === "B站") return "视频课";
+    if (key === "线上课程") return "直播课";
+    return raw;
+  }
+
   function mount(options) {
     var stage = options.stage;
     var svg = options.svg;
@@ -53,6 +65,7 @@
 
     var hoverRouteId = null;
     var hoverNodeId = null;
+    var pinnedNodeId = null;
     var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     var isMobileLayout = function () {
       return window.matchMedia("(max-width: 768px)").matches;
@@ -60,6 +73,26 @@
     var isNarrow = function () {
       return window.matchMedia("(max-width: 480px)").matches;
     };
+
+    /* 自由缩放/平移镜头；点节点只对焦，不锁死 */
+    var VIEW_MIN = 1;
+    var VIEW_MAX = 4;
+    var viewScale = 1;
+    var viewTx = 0;
+    var viewTy = 0;
+    var viewAnimating = false;
+    var gestureMoved = false;
+    var suppressClickUntil = 0;
+    var activePointers = {};
+    var panPointerId = null;
+    var panLastX = 0;
+    var panLastY = 0;
+    var pinchStartDist = 0;
+    var pinchStartScale = 1;
+    var pinchStartTx = 0;
+    var pinchStartTy = 0;
+    var pinchCenterX = 0;
+    var pinchCenterY = 0;
 
     var tooltip = document.createElement("div");
     tooltip.className = "node-tooltip";
@@ -72,6 +105,91 @@
     tooltip.addEventListener("click", function (event) {
       event.stopPropagation();
     });
+
+    function clamp(n, min, max) {
+      return Math.max(min, Math.min(max, n));
+    }
+
+    function applyView(animate) {
+      viewAnimating = !!animate;
+      svg.style.transition = animate
+        ? "transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)"
+        : "none";
+      svg.style.transformOrigin = "0 0";
+      svg.style.transform =
+        "translate(" +
+        viewTx.toFixed(2) +
+        "px, " +
+        viewTy.toFixed(2) +
+        "px) scale(" +
+        viewScale.toFixed(4) +
+        ")";
+      stage.classList.toggle("is-zoomed", viewScale > 1.02);
+      if (animate) {
+        window.setTimeout(function () {
+          viewAnimating = false;
+          svg.style.transition = "none";
+        }, 400);
+      }
+    }
+
+    function resetView(animate) {
+      viewScale = 1;
+      viewTx = 0;
+      viewTy = 0;
+      applyView(animate !== false);
+      stage.classList.remove("is-node-focused");
+      stage.classList.remove("is-panning");
+    }
+
+    function resetSmartZoom(animate) {
+      resetView(animate);
+    }
+
+    function stagePointFromClient(clientX, clientY) {
+      var rect = stage.getBoundingClientRect();
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function zoomAt(stageX, stageY, nextScale, animate) {
+      var sx = (stageX - viewTx) / viewScale;
+      var sy = (stageY - viewTy) / viewScale;
+      viewScale = clamp(nextScale, VIEW_MIN, VIEW_MAX);
+      viewTx = stageX - sx * viewScale;
+      viewTy = stageY - sy * viewScale;
+      applyView(!!animate);
+    }
+
+    function focusNode(nodeEl) {
+      if (!nodeEl) return;
+      var stageRect = stage.getBoundingClientRect();
+      var nodeRect = nodeEl.getBoundingClientRect();
+      var localX = nodeRect.left + nodeRect.width / 2 - stageRect.left;
+      var localY = nodeRect.top + nodeRect.height / 2 - stageRect.top;
+      var svgX = (localX - viewTx) / viewScale;
+      var svgY = (localY - viewTy) / viewScale;
+      var nextScale = isMobileLayout() ? 2.35 : 1.85;
+      var targetX = stageRect.width * 0.5;
+      var targetY = stageRect.height * (isMobileLayout() ? 0.38 : 0.42);
+      viewScale = nextScale;
+      viewTx = targetX - svgX * nextScale;
+      viewTy = targetY - svgY * nextScale;
+      applyView(true);
+      stage.classList.add("is-node-focused");
+    }
+
+    function smartZoomToNode(nodeEl) {
+      focusNode(nodeEl);
+    }
+
+    function gestureConsumedClick() {
+      return gestureMoved || Date.now() < suppressClickUntil;
+    }
+
+    function markGestureClickSuppress() {
+      gestureMoved = true;
+      suppressClickUntil = Date.now() + 280;
+    }
 
     function renderPanel(title, desc, types) {
       if (!panel) return;
@@ -92,7 +210,7 @@
         (typeList.length
           ? '<div class="info-panel__types">' +
               typeList.map(function (t) {
-                return '<span class="info-panel__type">' + escapeHtml(t) + "</span>";
+                return '<span class="info-panel__type">' + escapeHtml(formatTypeLabel(t)) + "</span>";
               }).join("") +
             "</div>"
           : "") +
@@ -118,44 +236,14 @@
       renderPanel("", "", []);
     }
 
-    function resetSmartZoom(animate) {
-      svg.style.transition =
-        animate === false ? "none" : "transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)";
-      svg.style.transform = "";
-      svg.style.transformOrigin = "0 0";
-      stage.classList.remove("is-node-focused");
-    }
-
-    function smartZoomToNode(nodeEl) {
-      if (!isMobileLayout() || !nodeEl) return;
-      resetSmartZoom(false);
-      void svg.getBoundingClientRect();
-
-      var stageRect = stage.getBoundingClientRect();
-      var svgRect = svg.getBoundingClientRect();
-      var nodeRect = nodeEl.getBoundingClientRect();
-      var nx = nodeRect.left + nodeRect.width / 2 - svgRect.left;
-      var ny = nodeRect.top + nodeRect.height / 2 - svgRect.top;
-      var targetX = stageRect.left + stageRect.width / 2 - svgRect.left;
-      var targetY = stageRect.top + stageRect.height / 2 - svgRect.top;
-      var scale = 2.35;
-      var tx = targetX - nx * scale;
-      var ty = targetY - ny * scale;
-
-      svg.style.transformOrigin = "0 0";
-      svg.style.transition = "transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)";
-      svg.style.transform =
-        "translate(" + tx.toFixed(2) + "px, " + ty.toFixed(2) + "px) scale(" + scale + ")";
-      stage.classList.add("is-node-focused");
-    }
-
     function clearFocusState() {
       hoverRouteId = null;
       hoverNodeId = null;
+      pinnedNodeId = null;
       clearNodeHover();
       hideTooltip();
       restoreVisual();
-      resetSmartZoom(true);
+      resetView(true);
       if (panel) resetPanel();
     }
 
@@ -603,7 +691,7 @@
       if (typeList.length) {
         typesEl.innerHTML = typeList
           .map(function (t) {
-            return '<span class="node-tooltip__type">' + escapeHtml(t) + "</span>";
+            return '<span class="node-tooltip__type">' + escapeHtml(formatTypeLabel(t)) + "</span>";
           })
           .join("");
         typesEl.hidden = false;
@@ -624,27 +712,29 @@
       showTooltip(route.name, route.desc, [], anchorEl);
     }
 
-    function showNodeTooltip(nodeId, anchorEl) {
+    function showNodeTooltip(nodeId, anchorEl, opts) {
       var node = nodes[nodeId];
       if (!node) return;
+      opts = opts || {};
       if (panel && isMobileLayout()) {
         renderPanel(node.name, node.desc, node.type || []);
-        smartZoomToNode(anchorEl);
-        return;
+      } else {
+        showTooltip(node.name, node.desc, node.type || [], anchorEl);
       }
-      showTooltip(node.name, node.desc, node.type || [], anchorEl);
+      if (opts.focus) focusNode(anchorEl);
     }
 
-    function showCalibrationFallback(nodeEl, anchorEl) {
+    function showCalibrationFallback(nodeEl, anchorEl, opts) {
       var stationIndex = nodeEl.getAttribute("data-station-index");
       var info = calibrationFallbackByStation[String(stationIndex)];
       if (!info || !info.desc) return false;
+      opts = opts || {};
       if (panel && isMobileLayout()) {
         renderPanel(info.name, info.desc, info.type || []);
-        smartZoomToNode(anchorEl || nodeEl);
-        return true;
+      } else {
+        showTooltip(info.name, info.desc, info.type || [], anchorEl || nodeEl);
       }
-      showTooltip(info.name, info.desc, info.type || [], anchorEl);
+      if (opts.focus) focusNode(anchorEl || nodeEl);
       return true;
     }
 
@@ -697,7 +787,7 @@
 
     function bindNodeHover(nodeEl) {
       var hitEl = nodeEl.querySelector(".node-hit") || nodeEl;
-      var useClick = !canHover || isMobileLayout();
+      var useClickOnly = !canHover || isMobileLayout();
       var nodeId0 = nodeEl.getAttribute("data-node-id");
       var nodeInfo = nodeId0 && nodes[nodeId0];
       var targets = hitEl === nodeEl ? [nodeEl] : [nodeEl, hitEl];
@@ -710,6 +800,7 @@
       }
 
       function onEnter() {
+        if (pinnedNodeId) return;
         var nodeId = nodeEl.getAttribute("data-node-id");
         var hasNode = !!nodes[nodeId];
         if (!hasNode && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
@@ -724,6 +815,7 @@
       }
 
       function onLeave(event) {
+        if (pinnedNodeId) return;
         var related = event && event.relatedTarget;
         if (related && nodeEl.contains(related)) return;
         if (
@@ -738,7 +830,6 @@
         hoverNodeId = null;
         hideTooltip();
         restoreVisual();
-        resetSmartZoom(true);
         if (hoverRouteId && routes[hoverRouteId]) {
           var trigger = svg.querySelector('[data-trigger-route="' + hoverRouteId + '"]');
           if (trigger) showRouteTooltip(hoverRouteId, trigger);
@@ -747,32 +838,49 @@
         }
       }
 
-      if (!useClick) {
+      function onNodeActivate(event) {
+        if (gestureConsumedClick()) return;
+        event.stopPropagation();
+        var nodeId = nodeEl.getAttribute("data-node-id");
+        var hasNode = !!nodes[nodeId];
+        var calibKey = "calib-" + nodeEl.getAttribute("data-station-index");
+        if (
+          (hasNode && pinnedNodeId === nodeId) ||
+          (!hasNode && pinnedNodeId === calibKey)
+        ) {
+          clearFocusState();
+          return;
+        }
+        if (!hasNode) {
+          if (
+            roadmapId === "calibration" &&
+            showCalibrationFallback(nodeEl, nodeEl, { focus: true })
+          ) {
+            pinnedNodeId = calibKey;
+            hoverNodeId = nodeId;
+            clearNodeHover();
+            nodeEl.classList.add("is-hover");
+          }
+          return;
+        }
+        var routeIds = nodes[nodeId].routeIds || [];
+        pinnedNodeId = nodeId;
+        hoverNodeId = nodeId;
+        clearNodeHover();
+        nodeEl.classList.add("is-hover");
+        highlightNodeRoutes(routeIds, nodeEl);
+        showNodeTooltip(nodeId, nodeEl, { focus: true });
+      }
+
+      if (!useClickOnly) {
         targets.forEach(function (el) {
           el.addEventListener("mouseenter", onEnter);
           el.addEventListener("mouseleave", onLeave);
         });
-        return;
       }
 
       targets.forEach(function (el) {
-        el.addEventListener("click", function (event) {
-          event.stopPropagation();
-          var nodeId = nodeEl.getAttribute("data-node-id");
-          if (!nodes[nodeId] && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
-          if (hoverNodeId === nodeId) {
-            clearFocusState();
-            return;
-          }
-          var routeIds = nodes[nodeId] ? (nodes[nodeId].routeIds || []) : [];
-          hoverNodeId = nodeId;
-          clearNodeHover();
-          nodeEl.classList.add("is-hover");
-          if (nodes[nodeId]) {
-            highlightNodeRoutes(routeIds, nodeEl);
-            showNodeTooltip(nodeId, nodeEl);
-          }
-        });
+        el.addEventListener("click", onNodeActivate);
       });
     }
 
@@ -790,6 +898,7 @@
     }
 
     function clearHoverIfBlank(target) {
+      if (pinnedNodeId) return;
       if (isInteractiveTarget(target)) return;
       if (!hoverNodeId && !hoverRouteId && !tooltip.classList.contains("is-visible")) return;
       hoverNodeId = null;
@@ -802,25 +911,136 @@
 
     svg.addEventListener("mousemove", function (event) {
       if (!canHover || isMobileLayout()) return;
+      if (panPointerId != null) return;
       clearHoverIfBlank(event.target);
     });
 
     stage.addEventListener("mouseleave", function () {
       if (!canHover || isMobileLayout()) return;
+      if (panPointerId != null) return;
       clearHoverIfBlank(null);
     });
 
-    svg.addEventListener("click", function (event) {
-      if (canHover && !isMobileLayout()) return;
+    function onBlankActivate(event) {
+      if (gestureConsumedClick()) return;
       var target = event.target;
-      if (
-        target.closest &&
-        target.closest(".node, .node-hit, .legend-hit, .legend-target, [data-trigger-route]")
-      ) {
+      if (isInteractiveTarget(target)) return;
+      if (!pinnedNodeId && !hoverNodeId && !hoverRouteId) return;
+      clearFocusState();
+    }
+
+    svg.addEventListener("click", onBlankActivate);
+    stage.addEventListener("click", function (event) {
+      if (event.target === stage) onBlankActivate(event);
+    });
+
+    function pointerCount() {
+      return Object.keys(activePointers).length;
+    }
+
+    function pointerList() {
+      return Object.keys(activePointers).map(function (id) {
+        return activePointers[id];
+      });
+    }
+
+    function onPointerDown(event) {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      activePointers[event.pointerId] = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+      gestureMoved = false;
+
+      if (pointerCount() === 2) {
+        panPointerId = null;
+        stage.classList.remove("is-panning");
+        var pts = pointerList();
+        var dx = pts[0].x - pts[1].x;
+        var dy = pts[0].y - pts[1].y;
+        pinchStartDist = Math.max(1, Math.hypot(dx, dy));
+        pinchStartScale = viewScale;
+        pinchStartTx = viewTx;
+        pinchStartTy = viewTy;
+        var mid = stagePointFromClient((pts[0].x + pts[1].x) / 2, (pts[0].y + pts[1].y) / 2);
+        pinchCenterX = mid.x;
+        pinchCenterY = mid.y;
         return;
       }
-      clearFocusState();
-    });
+
+      if (isInteractiveTarget(event.target)) return;
+
+      panPointerId = event.pointerId;
+      panLastX = event.clientX;
+      panLastY = event.clientY;
+      stage.classList.add("is-panning");
+      try {
+        stage.setPointerCapture(event.pointerId);
+      } catch (err) {}
+    }
+
+    function onPointerMove(event) {
+      if (!activePointers[event.pointerId]) return;
+      activePointers[event.pointerId] = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+
+      if (pointerCount() >= 2 && pinchStartDist) {
+        var pts = pointerList();
+        if (pts.length < 2) return;
+        var dx = pts[0].x - pts[1].x;
+        var dy = pts[0].y - pts[1].y;
+        var dist = Math.max(1, Math.hypot(dx, dy));
+        var next = pinchStartScale * (dist / pinchStartDist);
+        zoomAt(pinchCenterX, pinchCenterY, next, false);
+        markGestureClickSuppress();
+        return;
+      }
+
+      if (panPointerId !== event.pointerId) return;
+      var mx = event.clientX - panLastX;
+      var my = event.clientY - panLastY;
+      if (!gestureMoved && Math.hypot(mx, my) < 3) return;
+      panLastX = event.clientX;
+      panLastY = event.clientY;
+      viewTx += mx;
+      viewTy += my;
+      applyView(false);
+      markGestureClickSuppress();
+    }
+
+    function onPointerUp(event) {
+      delete activePointers[event.pointerId];
+      if (panPointerId === event.pointerId) {
+        panPointerId = null;
+        stage.classList.remove("is-panning");
+      }
+      if (pointerCount() < 2) {
+        pinchStartDist = 0;
+      }
+      if (pointerCount() === 1) {
+        var only = pointerList()[0];
+        var onlyId = Number(Object.keys(activePointers)[0]);
+        panPointerId = onlyId;
+        panLastX = only.x;
+        panLastY = only.y;
+      }
+    }
+
+    function onWheel(event) {
+      event.preventDefault();
+      var pt = stagePointFromClient(event.clientX, event.clientY);
+      var factor = event.deltaY < 0 ? 1.12 : 1 / 1.12;
+      zoomAt(pt.x, pt.y, viewScale * factor, false);
+    }
+
+    stage.addEventListener("pointerdown", onPointerDown);
+    stage.addEventListener("pointermove", onPointerMove);
+    stage.addEventListener("pointerup", onPointerUp);
+    stage.addEventListener("pointercancel", onPointerUp);
+    stage.addEventListener("wheel", onWheel, { passive: false });
+    applyView(false);
 
     if (panel && isMobileLayout()) {
       resetPanel();
@@ -885,11 +1105,12 @@
           if (searchInput) searchInput.value = "";
           if (nodeEl && nodes[nodeId]) {
             var routeIds = nodes[nodeId].routeIds || [];
+            pinnedNodeId = nodeId;
             hoverNodeId = nodeId;
             clearNodeHover();
             nodeEl.classList.add("is-hover");
             highlightNodeRoutes(routeIds, nodeEl);
-            showNodeTooltip(nodeId, nodeEl);
+            showNodeTooltip(nodeId, nodeEl, { focus: true });
           }
         });
       });
@@ -952,9 +1173,15 @@
         clearSearch();
         hoverNodeId = null;
         hoverRouteId = null;
+        pinnedNodeId = null;
         hideTooltip();
         clearNodeHover();
-        resetSmartZoom(false);
+        resetView(false);
+        stage.removeEventListener("pointerdown", onPointerDown);
+        stage.removeEventListener("pointermove", onPointerMove);
+        stage.removeEventListener("pointerup", onPointerUp);
+        stage.removeEventListener("pointercancel", onPointerUp);
+        stage.removeEventListener("wheel", onWheel);
         if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
         restoreVisual();
         if (panel) {

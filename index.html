@@ -10,9 +10,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>知识路线图</title>
     <link rel="stylesheet" href="./css/fonts.css?v=1" />
-    <link rel="stylesheet" href="./css/node-hover-card.css?v=39" />
+    <link rel="stylesheet" href="./css/node-hover-card.css?v=40" />
     <link rel="stylesheet" href="./css/roadmap-interactions.css?v=50" />
-    <link rel="stylesheet" href="./css/role-select.css?v=59" />
+    <link rel="stylesheet" href="./css/role-select.css?v=60" />
     <style>
       :root {
         color-scheme: light;
@@ -315,7 +315,7 @@
           display: flex;
           flex-direction: column;
           overflow: hidden;
-          touch-action: manipulation;
+          touch-action: none;
         }
 
         #roadmap-stage.svg-hover-stage,
@@ -329,6 +329,7 @@
           max-height: none;
           overflow: hidden;
           background: #fff;
+          touch-action: none;
         }
 
         .svg-hover-stage svg {
@@ -338,7 +339,7 @@
           height: 100%;
           transform-origin: 0 0;
           will-change: transform;
-          touch-action: manipulation;
+          touch-action: none;
         }
 
         .info-panel {
@@ -404,18 +405,18 @@
     </main>
 
     <script src="./js/roadmaps.js?v=25"></script>
-    <script src="./js/node-data.js?v=13"></script>
-    <script src="./js/node-data-network-test.js?v=13"></script>
-    <script src="./js/node-data-diagnostic.js?v=6"></script>
+    <script src="./js/node-data.js?v=14"></script>
+    <script src="./js/node-data-network-test.js?v=14"></script>
+    <script src="./js/node-data-diagnostic.js?v=7"></script>
     <script src="./js/node-data-embedded.js?v=8"></script>
     <script src="./js/node-data-mbse.js?v=3"></script>
     <script src="./js/node-data-soa.js?v=2"></script>
     <script src="./js/node-data-calibration.js?v=2"></script>
     <script src="./js/svg-roadmap-layers.js?v=25"></script>
-    <script src="./js/svg-hover-card.js?v=22"></script>
+    <script src="./js/svg-hover-card.js?v=24"></script>
     <script src="./js/route-presets.js?v=5"></script>
     <script src="./js/svg-roadmap-graph.js?v=52"></script>
-    <script src="./js/svg-roadmap-interactions.js?v=55"></script>
+    <script src="./js/svg-roadmap-interactions.js?v=58"></script>
     <script src="./js/training-events.js?v=4"></script>
     <script src="./js/role-select.js?v=35"></script>
     <script src="./js/app.js?v=44"></script>

@@ -98,6 +98,18 @@
       .replace(/"/g, "&quot;");
   }
 
+  /** 仅悬浮信息标签展示用；兼容旧数据名 */
+  function formatTypeLabel(value) {
+    var raw = String(value || "").trim();
+    var key = raw.replace(/\s+/g, " ");
+    if (key === "OET 课程" || key === "OET") return "公开课";
+    if (key === "CIT 课程" || key === "CIT") return "内训课";
+    if (key === "ELN") return "自学课";
+    if (key === "B站") return "视频课";
+    if (key === "线上课程") return "直播课";
+    return raw;
+  }
+
   function parseMatrix(transform) {
     if (!transform) {
       return { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0, raw: null };
@@ -254,7 +266,7 @@
     }
     badges.innerHTML = types
       .map(function (t) {
-        return '<span class="node-hover-card__badge">' + escapeHtml(t) + "</span>";
+        return '<span class="node-hover-card__badge">' + escapeHtml(formatTypeLabel(t)) + "</span>";
       })
       .join("");
   }

@@ -685,9 +685,9 @@
 
 @media (max-width: 768px) {
   .role-select {
-    --track-block: 112px;
-    --entre-block: 54px;
-    --hero-overlap: 40px;
+    --track-block: 104px;
+    --entre-block: 52px;
+    --hero-overlap: 28px;
     --title-zone-x: max(18px, calc(12px + var(--safe-left)));
     --title-zone-w: min(210px, 52vw);
     --wm-clear-right: max(120px, calc(110px + var(--safe-right)));
@@ -701,17 +701,17 @@
   }
 
   .role-select__logo-mark {
-    width: min(132px, 42vw);
+    width: min(120px, 36vw);
     height: auto;
   }
 
   .role-select__aside {
     left: max(18px, calc(12px + var(--safe-left)));
     right: auto;
-    top: max(18px, calc(12px + var(--safe-top)));
+    top: max(16px, calc(10px + var(--safe-top)));
     transform: none;
     bottom: auto;
-    max-width: calc(100% - 140px);
+    max-width: calc(100% - 128px);
     width: auto;
     margin-left: 0;
     align-items: flex-start;
@@ -719,17 +719,18 @@
   }
 
   .role-select__title {
-    max-width: min(280px, 70vw);
+    max-width: min(300px, 72vw);
   }
 
   .role-select__title-zh {
-    font-size: 17px;
+    font-size: 20px;
+    line-height: 1.25;
     white-space: normal;
   }
 
   .role-select__title-en {
     margin-top: 6px;
-    font-size: 10px;
+    font-size: 11px;
     white-space: normal;
   }
 
@@ -744,13 +745,15 @@
   }
 
   .role-select__main {
-    transform: translateY(-8%);
+    transform: none;
+    bottom: calc(var(--track-block) + var(--entre-block) + max(4px, var(--safe-bottom)));
   }
 
   .role-select__hero-stage {
-    width: min(360px, 78vw);
-    height: min(42vh, calc(100% - 16px));
-    max-height: 42vh;
+    width: min(300px, 68vw);
+    height: min(36vh, calc(100% - 12px));
+    max-height: 36vh;
+    bottom: calc(-1 * var(--hero-overlap));
   }
 
   .role-select__nav {
@@ -770,12 +773,12 @@
 
   .role-select__avatar-viewport {
     width: min(100%, calc(100% - 92px));
-    height: 108px;
+    height: 96px;
   }
 
   .role-select__orbit {
-    width: min(560px, 94vw);
-    height: 56px;
+    width: min(520px, 92vw);
+    height: 52px;
     bottom: 4px;
   }
 
@@ -787,7 +790,8 @@
   }
 
   .role-select__footer {
-    gap: 12px;
+    gap: 8px;
+    padding-bottom: max(10px, var(--safe-bottom));
   }
 
   .role-select__entre {
