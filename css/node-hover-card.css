@@ -16,6 +16,10 @@
   cursor: grabbing;
 }
 
+.svg-hover-stage.is-map-locked {
+  cursor: default;
+}
+
 /*
  * VECTOR 水印：叠在地铁图之上、标题/tooltip 之下；
  * 黑色字形，更高透明度；pointer-events:none 不挡交互。

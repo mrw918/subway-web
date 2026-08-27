@@ -74,13 +74,16 @@
       return window.matchMedia("(max-width: 480px)").matches;
     };
 
-    /* 自由缩放/平移镜头；点节点只对焦，不锁死 */
+    /* 有底部详情面板才可拖/缩；无面板全锁；拖拽有边界
+       用 viewBox 缩放（矢量重绘），避免 CSS transform 栅格化导致文字发糊 */
     var VIEW_MIN = 1;
     var VIEW_MAX = 4;
     var viewScale = 1;
-    var viewTx = 0;
-    var viewTy = 0;
+    var viewX = 0;
+    var viewY = 0;
+    var baseVB = null;
     var viewAnimating = false;
+    var viewAnimToken = 0;
     var gestureMoved = false;
     var suppressClickUntil = 0;
     var activePointers = {};
@@ -89,10 +92,55 @@
     var panLastY = 0;
     var pinchStartDist = 0;
     var pinchStartScale = 1;
-    var pinchStartTx = 0;
-    var pinchStartTy = 0;
     var pinchCenterX = 0;
     var pinchCenterY = 0;
+
+    function readBaseViewBox() {
+      var vb = svg.viewBox && svg.viewBox.baseVal;
+      if (vb && vb.width > 0 && vb.height > 0) {
+        return { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
+      }
+      var attr = String(svg.getAttribute("viewBox") || "")
+        .trim()
+        .split(/[\s,]+/)
+        .map(Number);
+      if (attr.length >= 4 && attr[2] > 0 && attr[3] > 0) {
+        return { x: attr[0], y: attr[1], w: attr[2], h: attr[3] };
+      }
+      return { x: 0, y: 0, w: 1000, h: 1000 };
+    }
+
+    baseVB = readBaseViewBox();
+    viewX = baseVB.x;
+    viewY = baseVB.y;
+
+    /** 清掉 CSS transform，改由 viewBox 控制视野 */
+    function clearCssViewTransform() {
+      svg.style.transform = "";
+      svg.style.transition = "";
+      svg.style.transformOrigin = "";
+    }
+
+    function clientToSvgPoint(clientX, clientY) {
+      try {
+        var ctm = svg.getScreenCTM();
+        if (!ctm) return { x: viewX, y: viewY };
+        var pt = svg.createSVGPoint();
+        pt.x = clientX;
+        pt.y = clientY;
+        var p = pt.matrixTransform(ctm.inverse());
+        return { x: p.x, y: p.y };
+      } catch (err) {
+        return { x: viewX, y: viewY };
+      }
+    }
+
+    function viewSize() {
+      return {
+        w: baseVB.w / viewScale,
+        h: baseVB.h / viewScale,
+      };
+    }
 
     var tooltip = document.createElement("div");
     tooltip.className = "node-tooltip";
@@ -110,33 +158,120 @@
       return Math.max(min, Math.min(max, n));
     }
 
-    function applyView(animate) {
-      viewAnimating = !!animate;
-      svg.style.transition = animate
-        ? "transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)"
-        : "none";
-      svg.style.transformOrigin = "0 0";
-      svg.style.transform =
-        "translate(" +
-        viewTx.toFixed(2) +
-        "px, " +
-        viewTy.toFixed(2) +
-        "px) scale(" +
-        viewScale.toFixed(4) +
-        ")";
-      stage.classList.toggle("is-zoomed", viewScale > 1.02);
-      if (animate) {
-        window.setTimeout(function () {
-          viewAnimating = false;
-          svg.style.transition = "none";
-        }, 400);
+    /** 底部「点击站点」详情面板是否可见（有面板才允许拖/缩） */
+    function isDetailPanelVisible() {
+      if (!panel) return false;
+      try {
+        return window.getComputedStyle(panel).display !== "none";
+      } catch (err) {
+        return false;
       }
+    }
+
+    function canMapGestures() {
+      return isDetailPanelVisible();
+    }
+
+    function syncGestureCursor() {
+      stage.classList.toggle("is-map-locked", !canMapGestures());
+    }
+
+    /** 防止地图被拖出舞台可见范围（viewBox 坐标） */
+    function clampPan() {
+      var size = viewSize();
+      if (viewScale <= 1.001) {
+        viewScale = 1;
+        viewX = baseVB.x;
+        viewY = baseVB.y;
+        return;
+      }
+      var marginX = Math.min(size.w * 0.2, baseVB.w * 0.12);
+      var marginY = Math.min(size.h * 0.2, baseVB.h * 0.12);
+      var minX = baseVB.x - marginX;
+      var maxX = baseVB.x + baseVB.w - size.w + marginX;
+      var minY = baseVB.y - marginY;
+      var maxY = baseVB.y + baseVB.h - size.h + marginY;
+      if (minX > maxX) viewX = baseVB.x + (baseVB.w - size.w) / 2;
+      else viewX = clamp(viewX, minX, maxX);
+      if (minY > maxY) viewY = baseVB.y + (baseVB.h - size.h) / 2;
+      else viewY = clamp(viewY, minY, maxY);
+    }
+
+    function writeViewBox() {
+      var size = viewSize();
+      svg.setAttribute(
+        "viewBox",
+        [
+          Number(viewX.toFixed(3)),
+          Number(viewY.toFixed(3)),
+          Number(size.w.toFixed(3)),
+          Number(size.h.toFixed(3)),
+        ].join(" ")
+      );
+    }
+
+    function applyView(animate) {
+      clearCssViewTransform();
+      clampPan();
+      viewAnimating = !!animate;
+      if (!animate) {
+        viewAnimToken += 1;
+        writeViewBox();
+        stage.classList.toggle("is-zoomed", viewScale > 1.02);
+        syncGestureCursor();
+        viewAnimating = false;
+        return;
+      }
+
+      var token = ++viewAnimToken;
+      var toScale = viewScale;
+      var toX = viewX;
+      var toY = viewY;
+      var fromScale = toScale;
+      var fromX = toX;
+      var fromY = toY;
+      var vbNow = svg.viewBox && svg.viewBox.baseVal;
+      if (vbNow && vbNow.width > 0) {
+        fromX = vbNow.x;
+        fromY = vbNow.y;
+        fromScale = baseVB.w / vbNow.width;
+      }
+      var duration = 380;
+      var start = performance.now();
+
+      function ease(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+
+      function frame(now) {
+        if (token !== viewAnimToken) return;
+        var t = Math.min(1, (now - start) / duration);
+        var e = ease(t);
+        viewScale = fromScale + (toScale - fromScale) * e;
+        viewX = fromX + (toX - fromX) * e;
+        viewY = fromY + (toY - fromY) * e;
+        writeViewBox();
+        stage.classList.toggle("is-zoomed", viewScale > 1.02);
+        if (t < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          viewScale = toScale;
+          viewX = toX;
+          viewY = toY;
+          clampPan();
+          writeViewBox();
+          viewAnimating = false;
+          syncGestureCursor();
+        }
+      }
+      requestAnimationFrame(frame);
+      syncGestureCursor();
     }
 
     function resetView(animate) {
       viewScale = 1;
-      viewTx = 0;
-      viewTy = 0;
+      viewX = baseVB.x;
+      viewY = baseVB.y;
       applyView(animate !== false);
       stage.classList.remove("is-node-focused");
       stage.classList.remove("is-panning");
@@ -152,28 +287,35 @@
     }
 
     function zoomAt(stageX, stageY, nextScale, animate) {
-      var sx = (stageX - viewTx) / viewScale;
-      var sy = (stageY - viewTy) / viewScale;
+      if (!canMapGestures()) return;
+      var stageRect = stage.getBoundingClientRect();
+      var clientX = stageRect.left + stageX;
+      var clientY = stageRect.top + stageY;
+      var pt = clientToSvgPoint(clientX, clientY);
+      var prevSize = viewSize();
+      var fx = prevSize.w > 0 ? (pt.x - viewX) / prevSize.w : 0.5;
+      var fy = prevSize.h > 0 ? (pt.y - viewY) / prevSize.h : 0.5;
       viewScale = clamp(nextScale, VIEW_MIN, VIEW_MAX);
-      viewTx = stageX - sx * viewScale;
-      viewTy = stageY - sy * viewScale;
+      var nextSize = viewSize();
+      viewX = pt.x - fx * nextSize.w;
+      viewY = pt.y - fy * nextSize.h;
       applyView(!!animate);
     }
 
     function focusNode(nodeEl) {
-      if (!nodeEl) return;
-      var stageRect = stage.getBoundingClientRect();
+      if (!nodeEl || !canMapGestures()) return;
       var nodeRect = nodeEl.getBoundingClientRect();
-      var localX = nodeRect.left + nodeRect.width / 2 - stageRect.left;
-      var localY = nodeRect.top + nodeRect.height / 2 - stageRect.top;
-      var svgX = (localX - viewTx) / viewScale;
-      var svgY = (localY - viewTy) / viewScale;
+      var pt = clientToSvgPoint(
+        nodeRect.left + nodeRect.width / 2,
+        nodeRect.top + nodeRect.height / 2
+      );
       var nextScale = isMobileLayout() ? 2.35 : 1.85;
-      var targetX = stageRect.width * 0.5;
-      var targetY = stageRect.height * (isMobileLayout() ? 0.38 : 0.42);
       viewScale = nextScale;
-      viewTx = targetX - svgX * nextScale;
-      viewTy = targetY - svgY * nextScale;
+      var size = viewSize();
+      var targetFx = 0.5;
+      var targetFy = isMobileLayout() ? 0.38 : 0.42;
+      viewX = pt.x - targetFx * size.w;
+      viewY = pt.y - targetFy * size.h;
       applyView(true);
       stage.classList.add("is-node-focused");
     }
@@ -946,6 +1088,10 @@
 
     function onPointerDown(event) {
       if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (!canMapGestures()) {
+        syncGestureCursor();
+        return;
+      }
       activePointers[event.pointerId] = {
         x: event.clientX,
         y: event.clientY,
@@ -960,8 +1106,6 @@
         var dy = pts[0].y - pts[1].y;
         pinchStartDist = Math.max(1, Math.hypot(dx, dy));
         pinchStartScale = viewScale;
-        pinchStartTx = viewTx;
-        pinchStartTy = viewTy;
         var mid = stagePointFromClient((pts[0].x + pts[1].x) / 2, (pts[0].y + pts[1].y) / 2);
         pinchCenterX = mid.x;
         pinchCenterY = mid.y;
@@ -980,6 +1124,7 @@
     }
 
     function onPointerMove(event) {
+      if (!canMapGestures()) return;
       if (!activePointers[event.pointerId]) return;
       activePointers[event.pointerId] = {
         x: event.clientX,
@@ -1004,8 +1149,16 @@
       if (!gestureMoved && Math.hypot(mx, my) < 3) return;
       panLastX = event.clientX;
       panLastY = event.clientY;
-      viewTx += mx;
-      viewTy += my;
+      var ctm = svg.getScreenCTM();
+      if (ctm && ctm.a) {
+        viewX -= mx / ctm.a;
+        viewY -= my / ctm.d;
+      } else {
+        var size = viewSize();
+        var rect = svg.getBoundingClientRect();
+        viewX -= mx * (size.w / (rect.width || 1));
+        viewY -= my * (size.h / (rect.height || 1));
+      }
       applyView(false);
       markGestureClickSuppress();
     }
@@ -1019,7 +1172,7 @@
       if (pointerCount() < 2) {
         pinchStartDist = 0;
       }
-      if (pointerCount() === 1) {
+      if (pointerCount() === 1 && canMapGestures()) {
         var only = pointerList()[0];
         var onlyId = Number(Object.keys(activePointers)[0]);
         panPointerId = onlyId;
@@ -1029,6 +1182,7 @@
     }
 
     function onWheel(event) {
+      if (!canMapGestures()) return;
       event.preventDefault();
       var pt = stagePointFromClient(event.clientX, event.clientY);
       var factor = event.deltaY < 0 ? 1.12 : 1 / 1.12;
@@ -1040,7 +1194,9 @@
     stage.addEventListener("pointerup", onPointerUp);
     stage.addEventListener("pointercancel", onPointerUp);
     stage.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("resize", syncGestureCursor);
     applyView(false);
+    syncGestureCursor();
 
     if (panel && isMobileLayout()) {
       resetPanel();
@@ -1176,12 +1332,14 @@
         pinnedNodeId = null;
         hideTooltip();
         clearNodeHover();
+        viewAnimToken += 1;
         resetView(false);
         stage.removeEventListener("pointerdown", onPointerDown);
         stage.removeEventListener("pointermove", onPointerMove);
         stage.removeEventListener("pointerup", onPointerUp);
         stage.removeEventListener("pointercancel", onPointerUp);
         stage.removeEventListener("wheel", onWheel);
+        window.removeEventListener("resize", syncGestureCursor);
         if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
         restoreVisual();
         if (panel) {
