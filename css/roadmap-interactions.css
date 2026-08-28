@@ -17,6 +17,8 @@ g.labels .legend-hit,
 g.labels .legend-target {
   pointer-events: all;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 g.flow-lines {
@@ -109,6 +111,8 @@ svg.is-route-locked .line-segment.is-active {
 g.labels .node-label {
   pointer-events: all;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .node-ripple {
