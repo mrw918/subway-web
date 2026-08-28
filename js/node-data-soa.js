@@ -5,13 +5,13 @@
 window.NODE_HOVER_DATA_SOA = {
   "ETH底层协议": {
     nodeName: "ETH底层协议",
-    type: [],
+    type: ["视频课", "自学课", "公开课", "内训课", "直播课"],
     match: ["ETH底层协议", "ETH", "底层协议"],
     description: "了解以太网底层协议相关知识",
   },
   "SOME/IP协议": {
     nodeName: "SOME/IP协议",
-    type: [],
+    type: ["内训课"],
     match: ["SOME/IP协议", "SOME/IP"],
     description: "掌握SOME/IP协议相关知识，理解面向服务通信的过程",
   },
@@ -23,13 +23,13 @@ window.NODE_HOVER_DATA_SOA = {
   },
   "ASR": {
     nodeName: "ASR",
-    type: [],
+    type: ["公开课", "内训课", "直播课"],
     match: ["ASR"],
     description: "理解AUTOSAR CP/AP的技术概念与方法论",
   },
   "E/E服务化": {
     nodeName: "E/E服务化",
-    type: [],
+    type: ["自学课"],
     match: ["E/E服务化", "E/E"],
     description: "理解传统的信号通信与服务通信之间的转化与共存方式",
   },
@@ -41,13 +41,13 @@ window.NODE_HOVER_DATA_SOA = {
   },
   "SOA AP": {
     nodeName: "SOA AP",
-    type: [],
+    type: ["自学课"],
     match: ["SOAAP", "SOA AP", "PREEvision.SOA AP", "PREEvision . SOA AP", "PREEvision.SOAAP", "PREEvision . SOAAP"],
     description: "使用PREEvision基于AUTOSAR AP方法论进行SOA设计",
   },
   "SOA CP": {
     nodeName: "SOA CP",
-    type: [],
+    type: ["自学课"],
     match: ["SOACP", "SOA CP", "PREEvision.SOA CP", "PREEvision . SOA CP", "PREEvision.SOACP", "PREEvision . SOACP"],
     description: "使用PREEvision基于AUTOSAR CP方法论进行SOA设计",
   },
@@ -77,13 +77,13 @@ window.NODE_HOVER_DATA_SOA = {
   },
   "MSRA.COM": {
     nodeName: "MSRA.COM",
-    type: [],
+    type: ["内训课"],
     match: ["MSRA.COM", "MSRC.COM"],
     description: "理解AUTOSAR AP通信组件功能及原理，掌握MICROSAR Adaptive通信功能的建模与实现",
   },
   "Proxy & Skeleton": {
     nodeName: "Proxy & Skeleton",
-    type: [],
+    type: ["内训课"],
     match: ["Proxy & Skeleton", "Proxy&Skeleton", "Proxy", "Skeleton"],
     description: "理解Proxy & Skeleton架构，掌握相关接口并实现调用",
   },
@@ -95,7 +95,7 @@ window.NODE_HOVER_DATA_SOA = {
   },
   "PDU & Socket": {
     nodeName: "PDU & Socket",
-    type: [],
+    type: ["内训课"],
     match: ["PDU & Socket", "PDU&Socket", "ASR.PDU & Socket", "ASR.PDU&Socket"],
     description: "掌握AUTOSAR CP对以太网的兼容方式",
   },
@@ -107,13 +107,13 @@ window.NODE_HOVER_DATA_SOA = {
   },
   "MSRC.ETH": {
     nodeName: "MSRC.ETH",
-    type: [],
+    type: ["内训课"],
     match: ["MSRC.ETH", "MSRC. ETH", "SRC.ETH"],
     description: "掌握以太网相关AUTOSAR组件（SoAd、TcpIp、Eth等）的功能及配置方法",
   },
   "MSRC.SomeIP": {
     nodeName: "MSRC.SomeIP",
-    type: [],
+    type: ["内训课"],
     match: ["MSRC.SomeIP", "MSRC. SomeIP", "SomeIP"],
     description: "掌握SomeIP相关AUTOSAR组件（Sd、SomeIpXf）的功能实现及配置方法",
   }
