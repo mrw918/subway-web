@@ -754,6 +754,8 @@
     height: min(52vh, calc(100% - 8px));
     max-height: 52vh;
     bottom: calc(-1 * var(--hero-overlap));
+    pointer-events: auto;
+    touch-action: pan-y;
   }
 
   .role-select__nav {

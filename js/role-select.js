@@ -524,6 +524,39 @@
     nextBtn.addEventListener("click", function () {
       step(1);
     });
+
+    // 手机端人物区左右滑动切换（桌面 hero-stage 仍为 pointer-events: none）
+    var swipeStartX = 0;
+    var swipeStartY = 0;
+    var swipeTracking = false;
+    var SWIPE_MIN_DX = 50;
+
+    function onSwipePointerDown(event) {
+      if (sheetOpen || trainingOpen || animating) return;
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      swipeTracking = true;
+      swipeStartX = event.clientX;
+      swipeStartY = event.clientY;
+    }
+
+    function onSwipePointerUp(event) {
+      if (!swipeTracking) return;
+      swipeTracking = false;
+      if (sheetOpen || trainingOpen || animating) return;
+      var dx = event.clientX - swipeStartX;
+      var dy = event.clientY - swipeStartY;
+      if (Math.abs(dx) < SWIPE_MIN_DX || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+      step(dx < 0 ? 1 : -1);
+    }
+
+    function onSwipePointerCancel() {
+      swipeTracking = false;
+    }
+
+    heroStage.addEventListener("pointerdown", onSwipePointerDown);
+    heroStage.addEventListener("pointerup", onSwipePointerUp);
+    heroStage.addEventListener("pointercancel", onSwipePointerCancel);
+
     entreBtn.addEventListener("click", function () {
       if (animating) return;
       var role = roles[selectedIndex];
@@ -609,6 +642,9 @@
       destroy: function () {
         setTrainingOpen(false);
         setSheetOpen(false);
+        heroStage.removeEventListener("pointerdown", onSwipePointerDown);
+        heroStage.removeEventListener("pointerup", onSwipePointerUp);
+        heroStage.removeEventListener("pointercancel", onSwipePointerCancel);
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("resize", onResize);
       },
