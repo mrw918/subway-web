@@ -1219,14 +1219,23 @@
       showTooltip(route.name, route.desc, [], anchorEl);
     }
 
+    function displayTypesForNode(node) {
+      if (!node) return [];
+      var hasCourseLinks = linkedCourses(normalizeCourses(node.courses || [])).length > 0;
+      var onD1 = (node.routeIds || []).indexOf("D1") !== -1;
+      if (onD1 && hasCourseLinks) return [];
+      return node.type || [];
+    }
+
     function showNodeTooltip(nodeId, anchorEl, opts) {
       var node = nodes[nodeId];
       if (!node) return;
       opts = opts || {};
+      var types = displayTypesForNode(node);
       if (panel && isMobileLayout()) {
-        renderPanel(node.name, node.desc, node.type || [], node.routeIds || [], node.courses || [], false);
+        renderPanel(node.name, node.desc, types, node.routeIds || [], node.courses || [], false);
       } else {
-        showTooltip(node.name, node.desc, node.type || [], anchorEl, node.courses || []);
+        showTooltip(node.name, node.desc, types, anchorEl, node.courses || []);
       }
       if (opts.focus) focusNode(anchorEl);
     }
