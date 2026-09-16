@@ -10,18 +10,49 @@ window.NODE_HOVER_DATA = {
     type: ["视频课", "直播课"],
     match: ["汽车通信概论"],
     description: "为所有网络开发工程的必备内容，在这部分内容中可以让学员从0开始认识网络，包括EE、ECU、MCU、总线等概念，夯实网络开发的基础。",
+    courses: [
+      {
+        name: "汽车通信概论",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/rwVFZEpBnz?origin=lprLink",
+      },
+    ],
   },
   "ASR 通信": {
     nodeName: "ASR通信",
     type: ["视频课", "直播课"],
     match: ["ASR通信", "ASR 通信", "AUTOSAR通信", "AUTOSAR Communication"],
     description: "介绍在AUTOSAR CP架构下使用AUTOSAR组件进行不同应用层通信的机制。",
+    courses: [
+      {
+        name: "AUTOSAR通信培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/7zWp3C4yBA?origin=lprLink",
+      },
+      { name: "AUTOSAR协议", type: "自学课", url: null },
+    ],
   },
   "CAN/CAN FD": {
     nodeName: "CAN/CAN FD",
     type: ["视频课", "直播课", "自学课", "内训课"],
     match: ["CAN&CANFD", "CAN&CAN FD", "CAN/CAN FD", "CAN/CANFD"],
     description: "学习车载网络最核心的 CAN/CAN FD 通信技术，掌握报文传输、仲裁机制、错误处理等关键知识。",
+    courses: [
+      { name: "CAN协议", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD_轻量版", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版", type: "自学课", url: null },
+      { name: "CAN FD协议", type: "自学课", url: null },
+      {
+        name: "CAN协议介绍视频",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1M5411N7Kc/",
+      },
+      {
+        name: "CAN FD协议介绍视频",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1M5411N7Kc/?spm_id_from=333.788.videopod.episodes&vd_source=269a5c2c943070950e9e2f7f2f5599d0&p=2",
+      },
+    ],
   },
   "CAN数据库": {
     nodeName: "CAN数据库",
@@ -34,12 +65,58 @@ window.NODE_HOVER_DATA = {
     type: ["视频课", "直播课", "公开课", "自学课", "内训课"],
     match: ["CANoe.CAN"],
     description: "重点介绍CANoe的分析和仿真功能，通过前面所学的理论与实操相结合，并采用实战演练等方式快速具备分析、调试和开发 CAN 网络的能力。",
+    courses: [
+      {
+        name: "CANoe.CAN 培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/5366/",
+      },
+      {
+        name: "CANoe.CAN 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/5366/",
+      },
+      { name: "CANoe中关于Visual Sequence和Macros功能的应用", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/LIN Replay Block", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD_轻量版", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD测量培训", type: "直播课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD仿真培训", type: "直播课", url: null },
+      {
+        name: "CANoe操作的复制神器",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1hTtgziEHS/",
+      },
+      {
+        name: "CANoe/CANalyzer基础教程视频合集",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1t54y1s7Qo/",
+      },
+    ],
   },
   "CAPL": {
     nodeName: "CAPL",
     type: ["视频课", "直播课", "内训课"],
     match: ["CAPL"],
     description: "系统学习 CAPL 脚本语言的语法、事件机制与报文处理逻辑，掌握 CANoe/CANalyzer 环境下的自动化开发能力。通过实战案例与脚本练习，提升网络仿真、测试与问题定位效率。",
+    courses: [
+      { name: "应用CAPL在两路CAN总线之间创建网关", type: "自学课", url: null },
+      { name: "CANoe.CAN 应用CAPL重置CAN控制器", type: "自学课", url: null },
+      { name: "CANoe.CAN 应用CAPL修改CAN总线波特率", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD_轻量版", type: "自学课", url: null },
+      { name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版", type: "自学课", url: null },
+      { name: "CAPL培训", type: "直播课", url: null },
+      {
+        name: "CAPL培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/10275/",
+      },
+      {
+        name: "CAPL编程技巧之代码加密",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1txuyz2ECY/",
+      },
+    ],
   },
   "IL仿真": {
     nodeName: "交互层仿真",

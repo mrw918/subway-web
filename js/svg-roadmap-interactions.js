@@ -30,7 +30,191 @@
     if (key === "ELN") return "自学课";
     if (key === "B站") return "视频课";
     if (key === "线上课程") return "直播课";
+    if (key === "线上课程") return "直播课";
     return raw;
+  }
+
+  var COURSE_TYPE_RANK = {
+    公开课: 0,
+    直播课: 1,
+    视频课: 2,
+    内训课: 3,
+    自学课: 4,
+  };
+
+  function parseCourseUrl(raw) {
+    if (raw == null) return null;
+    var s = String(raw).trim();
+    if (!s) return null;
+    if (/^https?:\/\//i.test(s)) return s.replace(/[)\]}>,.;]+$/, "");
+    var match = s.match(/https?:\/\/[^\s\u4e00-\u9fff）)]+/i);
+    return match ? match[0].replace(/[)\]}>,.;]+$/, "") : null;
+  }
+
+  function normalizeCourses(raw) {
+    if (!Array.isArray(raw) || !raw.length) return [];
+    return raw
+      .map(function (course) {
+        return {
+          name: String((course && course.name) || "").trim(),
+          type: String((course && course.type) || "").trim(),
+          url:
+            course && course.url != null && course.url !== ""
+              ? String(course.url).trim()
+              : parseCourseUrl(course && course.link),
+        };
+      })
+      .filter(function (course) {
+        return !!course.name;
+      });
+  }
+
+  function linkedCourses(courses) {
+    return courses.filter(function (course) {
+      return !!course.url;
+    });
+  }
+
+  function sortCoursesByType(list) {
+    return list.slice().sort(function (a, b) {
+      var rankA = COURSE_TYPE_RANK[a.type] != null ? COURSE_TYPE_RANK[a.type] : 9;
+      var rankB = COURSE_TYPE_RANK[b.type] != null ? COURSE_TYPE_RANK[b.type] : 9;
+      if (rankA !== rankB) return rankA - rankB;
+      return a.name.localeCompare(b.name, "zh-CN");
+    });
+  }
+
+  function sortTypeLabels(types) {
+    return types.slice().sort(function (a, b) {
+      var rankA = COURSE_TYPE_RANK[a] != null ? COURSE_TYPE_RANK[a] : 9;
+      var rankB = COURSE_TYPE_RANK[b] != null ? COURSE_TYPE_RANK[b] : 9;
+      return rankA - rankB;
+    });
+  }
+
+  function mergeLinkedCourses(list) {
+    var map = {};
+    var order = [];
+    list.forEach(function (course) {
+      var key = course.url + "\0" + course.name;
+      if (!map[key]) {
+        map[key] = { name: course.name, url: course.url, types: [course.type] };
+        order.push(key);
+      } else if (map[key].types.indexOf(course.type) === -1) {
+        map[key].types.push(course.type);
+      }
+    });
+    return order
+      .map(function (key) {
+        var item = map[key];
+        var sortedTypes = sortTypeLabels(item.types);
+        return {
+          name: item.name,
+          url: item.url,
+          type: sortedTypes.map(formatTypeLabel).join(" / "),
+          rank:
+            COURSE_TYPE_RANK[sortedTypes[0]] != null ? COURSE_TYPE_RANK[sortedTypes[0]] : 9,
+        };
+      })
+      .sort(function (a, b) {
+        if (a.rank !== b.rank) return a.rank - b.rank;
+        return a.name.localeCompare(b.name, "zh-CN");
+      });
+  }
+
+  function renderCourseTypeBadge(typeLabel, muted) {
+    return (
+      '<span class="node-courses__badge' +
+      (muted ? " node-courses__badge--muted" : "") +
+      '">' +
+      typeLabel +
+      "</span>"
+    );
+  }
+
+  function renderLinkedCourseRow(course) {
+    var typeLabel = escapeHtml(formatTypeLabel(course.type));
+    var name = escapeHtml(course.name);
+    return (
+      '<li class="node-courses__item">' +
+      '<a class="node-courses__link" href="' +
+      escapeHtml(course.url) +
+      '" target="_blank" rel="noopener noreferrer">' +
+      '<span class="node-courses__dot" aria-hidden="true"></span>' +
+      '<span class="node-courses__name">' +
+      name +
+      "</span>" +
+      renderCourseTypeBadge(typeLabel, false) +
+      '<span class="node-courses__ext" aria-hidden="true">↗</span>' +
+      "</a></li>"
+    );
+  }
+
+  function renderMutedCourseRow(course) {
+    var typeLabel = escapeHtml(formatTypeLabel(course.type));
+    var name = escapeHtml(course.name);
+    return (
+      '<li class="node-courses__item node-courses__item--muted">' +
+      '<span class="node-courses__dot node-courses__dot--muted" aria-hidden="true"></span>' +
+      '<span class="node-courses__name">' +
+      name +
+      "</span>" +
+      renderCourseTypeBadge(typeLabel, true) +
+      '<span class="node-courses__note">暂无链接</span>' +
+      "</li>"
+    );
+  }
+
+  function buildCoursesSection(courses, expanded, showPinHint) {
+    var all = normalizeCourses(courses);
+    var linked = mergeLinkedCourses(linkedCourses(all));
+    if (!linked.length) {
+      return { html: "", hasCourses: false, showToggle: false, all: all };
+    }
+
+    var unlinked = sortCoursesByType(
+      all.filter(function (course) {
+        return !course.url;
+      })
+    );
+    var preview = linked.slice(0, 3);
+    var showToggle = all.length > preview.length;
+    var expandedClass = expanded ? " is-expanded" : "";
+    var listHtml = "";
+
+    if (expanded) {
+      listHtml = linked.map(renderLinkedCourseRow).join("");
+      if (unlinked.length) {
+        listHtml +=
+          '<li class="node-courses__split" aria-hidden="true"><span>以下课程暂无外链</span></li>' +
+          unlinked.map(renderMutedCourseRow).join("");
+      }
+    } else {
+      listHtml = preview.map(renderLinkedCourseRow).join("");
+    }
+
+    var html =
+      '<div class="node-courses' +
+      expandedClass +
+      '">' +
+      '<div class="node-courses__label">推荐课程</div>' +
+      '<ul class="node-courses__list">' +
+      listHtml +
+      "</ul>";
+    if (showToggle) {
+      html +=
+        '<button type="button" class="node-courses__toggle" aria-expanded="' +
+        (expanded ? "true" : "false") +
+        '">' +
+        (expanded ? "收起课程列表" : "+ 查看全部 " + all.length + " 门相关课程") +
+        "</button>";
+    }
+    if (showPinHint) {
+      html +=
+        '<p class="node-courses__pin-hint">点击站点固定窗口，以便打开课程链接</p>';
+    }
+    html += "</div>";
+    return { html: html, hasCourses: true, showToggle: showToggle, all: all };
   }
 
   function mount(options) {
@@ -147,11 +331,56 @@
     tooltip.innerHTML = [
       '<div class="node-tooltip__title"></div>',
       '<div class="node-tooltip__types"></div>',
+      '<div class="node-tooltip__intro-label">站点介绍</div>',
       '<p class="node-tooltip__desc"></p>',
+      '<div class="node-tooltip__courses-wrap"></div>',
     ].join("");
     stage.appendChild(tooltip);
     tooltip.addEventListener("click", function (event) {
       event.stopPropagation();
+    });
+    var tooltipCoursesExpanded = false;
+    var tooltipAnchorEl = null;
+    var tooltipDetailState = null;
+    var tooltipHovering = false;
+    var tooltipLeaveTimer = null;
+
+    function cancelTooltipHide() {
+      if (tooltipLeaveTimer) {
+        clearTimeout(tooltipLeaveTimer);
+        tooltipLeaveTimer = null;
+      }
+    }
+
+    function scheduleTooltipHide() {
+      if (pinnedNodeId || tooltipHovering) return;
+      cancelTooltipHide();
+      tooltipLeaveTimer = setTimeout(function () {
+        tooltipLeaveTimer = null;
+        if (pinnedNodeId || tooltipHovering) return;
+        hoverNodeId = null;
+        hideTooltip();
+        restoreVisual();
+        if (hoverRouteId && routes[hoverRouteId]) {
+          var trigger = svg.querySelector('[data-trigger-route="' + hoverRouteId + '"]');
+          if (trigger) showRouteTooltip(hoverRouteId, trigger);
+        } else if (panel) {
+          resetPanel();
+        }
+        svg.querySelectorAll("g.nodes .node.is-hover").forEach(function (n) {
+          n.classList.remove("is-hover");
+        });
+      }, 120);
+    }
+
+    tooltip.addEventListener("mouseenter", function () {
+      tooltipHovering = true;
+      cancelTooltipHide();
+    });
+    tooltip.addEventListener("mouseleave", function () {
+      tooltipHovering = false;
+      if (pinnedNodeId) return;
+      scheduleTooltipHide();
     });
 
     function clamp(n, min, max) {
@@ -342,7 +571,7 @@
       return "#4b5563";
     }
 
-    function renderPanel(title, desc, types, routeIds) {
+    function renderPanel(title, desc, types, routeIds, courses, expanded) {
       if (!panel) return;
       if (!isMobileLayout()) {
         panel.hidden = true;
@@ -360,7 +589,8 @@
           color: safeCssColor(route.color),
         });
       });
-      var hasContent = !!(title || desc || typeList.length || routeList.length);
+      var courseSection = buildCoursesSection(courses, !!expanded, false);
+      var hasContent = !!(title || desc || typeList.length || routeList.length || courseSection.hasCourses);
       panel.hidden = false;
       panel.innerHTML =
         '<div class="info-panel__header">' +
@@ -397,9 +627,11 @@
                 .join("") +
             "</div>"
           : "") +
+        '<div class="info-panel__intro-label">站点介绍</div>' +
         '<p class="info-panel__desc">' +
           escapeHtml(desc || "选择上方路线图中的站点，查看标签与说明。") +
-        "</p>";
+        "</p>" +
+        courseSection.html;
       var closeEl = panel.querySelector(".info-panel__close");
       if (closeEl) {
         closeEl.addEventListener("click", function (event) {
@@ -407,7 +639,15 @@
           clearFocusState();
         });
       }
+      var toggleEl = panel.querySelector(".node-courses__toggle");
+      if (toggleEl && courseSection.showToggle) {
+        toggleEl.addEventListener("click", function (event) {
+          event.stopPropagation();
+          renderPanel(title, desc, types, routeIds, courses, !expanded);
+        });
+      }
       panel.classList.toggle("is-empty", !hasContent);
+      panel.classList.toggle("has-courses", courseSection.hasCourses);
       panel.scrollTop = 0;
     }
 
@@ -417,7 +657,7 @@
         panel.hidden = true;
         return;
       }
-      renderPanel("", "", []);
+      renderPanel("", "", [], [], [], false);
     }
 
     function clearFocusState() {
@@ -590,7 +830,13 @@
     }
 
     function hideTooltip() {
+      cancelTooltipHide();
       tooltip.classList.remove("is-visible");
+      tooltip.classList.remove("has-courses");
+      tooltipCoursesExpanded = false;
+      tooltipAnchorEl = null;
+      tooltipDetailState = null;
+      tooltipHovering = false;
     }
 
     function positionTooltip(anchorEl) {
@@ -863,11 +1109,7 @@
       tooltip.style.top = best.top + "px";
     }
 
-    function showTooltip(title, desc, types, anchorEl) {
-      if (panel && isMobileLayout()) {
-        renderPanel(title, desc, types);
-        return;
-      }
+    function fillTooltipContent(title, desc, types, courses, expanded) {
       tooltip.querySelector(".node-tooltip__title").textContent = title || "";
       tooltip.querySelector(".node-tooltip__desc").textContent = desc || "";
       var typesEl = tooltip.querySelector(".node-tooltip__types");
@@ -883,6 +1125,55 @@
         typesEl.innerHTML = "";
         typesEl.hidden = true;
       }
+
+      var hasLinkedCourses = linkedCourses(normalizeCourses(courses)).length > 0;
+      var courseSection = buildCoursesSection(
+        courses,
+        !!expanded,
+        hasLinkedCourses && !pinnedNodeId && !isMobileLayout()
+      );
+      var coursesWrap = tooltip.querySelector(".node-tooltip__courses-wrap");
+      coursesWrap.innerHTML = courseSection.html;
+      tooltip.classList.toggle("has-courses", courseSection.hasCourses);
+
+      var toggleEl = coursesWrap.querySelector(".node-courses__toggle");
+      if (toggleEl && courseSection.showToggle && tooltipDetailState) {
+        toggleEl.addEventListener("click", function (event) {
+          event.stopPropagation();
+          tooltipCoursesExpanded = !tooltipCoursesExpanded;
+          tooltipDetailState.expanded = tooltipCoursesExpanded;
+          fillTooltipContent(
+            tooltipDetailState.title,
+            tooltipDetailState.desc,
+            tooltipDetailState.types,
+            tooltipDetailState.courses,
+            tooltipCoursesExpanded
+          );
+          if (tooltipAnchorEl) {
+            positionTooltip(tooltipAnchorEl);
+            requestAnimationFrame(function () {
+              positionTooltip(tooltipAnchorEl);
+            });
+          }
+        });
+      }
+    }
+
+    function showTooltip(title, desc, types, anchorEl, courses) {
+      if (panel && isMobileLayout()) {
+        renderPanel(title, desc, types, [], courses, false);
+        return;
+      }
+      tooltipCoursesExpanded = false;
+      tooltipAnchorEl = anchorEl || null;
+      tooltipDetailState = {
+        title: title,
+        desc: desc,
+        types: types,
+        courses: courses,
+        expanded: false,
+      };
+      fillTooltipContent(title, desc, types, courses, false);
       tooltip.classList.add("is-visible");
       positionTooltip(anchorEl);
       requestAnimationFrame(function () {
@@ -901,9 +1192,9 @@
       if (!node) return;
       opts = opts || {};
       if (panel && isMobileLayout()) {
-        renderPanel(node.name, node.desc, node.type || [], node.routeIds || []);
+        renderPanel(node.name, node.desc, node.type || [], node.routeIds || [], node.courses || [], false);
       } else {
-        showTooltip(node.name, node.desc, node.type || [], anchorEl);
+        showTooltip(node.name, node.desc, node.type || [], anchorEl, node.courses || []);
       }
       if (opts.focus) focusNode(anchorEl);
     }
@@ -919,9 +1210,9 @@
             ""
         ).trim();
         var calibRoutes = routeAttr ? routeAttr.split(/\s+/).filter(Boolean) : [];
-        renderPanel(info.name, info.desc, info.type || [], calibRoutes);
+        renderPanel(info.name, info.desc, info.type || [], calibRoutes, info.courses || [], false);
       } else {
-        showTooltip(info.name, info.desc, info.type || [], anchorEl || nodeEl);
+        showTooltip(info.name, info.desc, info.type || [], anchorEl || nodeEl, info.courses || []);
       }
       if (opts.focus) focusNode(anchorEl || nodeEl);
       return true;
@@ -990,6 +1281,7 @@
 
       function onEnter() {
         if (pinnedNodeId) return;
+        cancelTooltipHide();
         var nodeId = nodeEl.getAttribute("data-node-id");
         var hasNode = !!nodes[nodeId];
         if (!hasNode && !(roadmapId === "calibration" && showCalibrationFallback(nodeEl, nodeEl))) return;
@@ -1006,6 +1298,7 @@
       function onLeave(event) {
         if (pinnedNodeId) return;
         var related = event && event.relatedTarget;
+        if (related && (related === tooltip || tooltip.contains(related))) return;
         if (related && nodeEl.contains(related)) return;
         if (
           related &&
@@ -1016,15 +1309,7 @@
           return;
         }
         nodeEl.classList.remove("is-hover");
-        hoverNodeId = null;
-        hideTooltip();
-        restoreVisual();
-        if (hoverRouteId && routes[hoverRouteId]) {
-          var trigger = svg.querySelector('[data-trigger-route="' + hoverRouteId + '"]');
-          if (trigger) showRouteTooltip(hoverRouteId, trigger);
-        } else if (panel) {
-          resetPanel();
-        }
+        scheduleTooltipHide();
       }
 
       function onNodeActivate(event) {

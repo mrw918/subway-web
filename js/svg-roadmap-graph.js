@@ -1166,6 +1166,7 @@
         routeIds: routeIds,
         desc: desc,
         type: info.type || [],
+        courses: info.courses || [],
         match: info.match || [],
         el: station.el,
         isJunction: !!station.isJunction,
