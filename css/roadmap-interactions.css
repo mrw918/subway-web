@@ -295,9 +295,9 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
 .node-tooltip {
   position: fixed;
   z-index: 120;
-  width: min(440px, calc(100vw - 24px));
+  width: min(520px, calc(100vw - 24px));
   max-width: calc(100vw - 24px);
-  padding: 20px 22px 22px;
+  padding: 22px 24px 24px;
   box-sizing: border-box;
   background: #ffffff;
   border: 1px solid rgba(28, 37, 92, 0.14);
@@ -316,6 +316,7 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .node-tooltip__title {
@@ -415,6 +416,17 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   transition: background 0.16s ease;
 }
 
+button.node-courses__link {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
 .node-courses__link:hover {
   background: rgba(75, 103, 175, 0.08);
 }
@@ -438,15 +450,28 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
 .node-courses__name {
   flex: 1;
   min-width: 0;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.45;
   color: #1f2937;
+}
+
+.node-courses__name--muted {
+  color: #9ca3af;
 }
 
 .node-courses:not(.is-expanded) .node-courses__name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.node-courses.is-expanded .node-courses__name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .node-courses__badge {
@@ -473,6 +498,163 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   font-size: 12px;
   line-height: 1;
   color: #9aa3b2;
+}
+
+.node-courses__item--linked {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.node-courses__item--linked .node-courses__link {
+  flex: 1;
+  min-width: 0;
+}
+
+.course-detail-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.course-detail-modal[hidden] {
+  display: none !important;
+}
+
+.course-detail-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.course-detail-modal__dialog {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(600px, 100%);
+  max-height: min(78vh, 680px);
+  padding: 22px 24px 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.22);
+  overflow: hidden;
+}
+
+.course-detail-modal__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+
+.course-detail-modal__title {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #141b45;
+}
+
+.course-detail-modal__close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.16);
+  color: #64748b;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.course-detail-modal__body {
+  flex: 0 1 auto;
+  max-height: min(52vh, 480px);
+  font-size: 15px;
+  line-height: 1.65;
+  color: #334155;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  word-wrap: break-word;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(75, 85, 99, 0.45) rgba(17, 24, 39, 0.06);
+}
+
+.course-detail-modal__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.course-detail-modal__body::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.06);
+  border-radius: 999px;
+}
+
+.course-detail-modal__body::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.4);
+  border-radius: 999px;
+}
+
+.course-detail-modal__body p {
+  margin: 0 0 10px;
+}
+
+.course-detail-modal__body p:last-child {
+  margin-bottom: 0;
+}
+
+.course-detail-modal__body a,
+.course-detail-modal__inline-link {
+  color: #4b67af;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.course-detail-modal__body a:hover,
+.course-detail-modal__inline-link:hover {
+  color: #e10600;
+}
+
+.course-detail-modal__empty {
+  color: #94a3b8;
+}
+
+.course-detail-modal__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #4b67af;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.course-detail-modal__action[hidden] {
+  display: none !important;
+}
+
+.course-detail-modal__action:hover {
+  background: #3f5898;
+}
+
+body.course-detail-open {
+  overflow: hidden;
 }
 
 .node-courses__item--muted .node-courses__name {
@@ -529,10 +711,45 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
 }
 
 .node-tooltip.has-courses.is-visible {
-  pointer-events: auto;
-  max-height: min(70vh, 560px);
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  max-height: min(75vh, 640px);
+  overflow: hidden;
+}
+
+.node-tooltip__body {
+  flex-shrink: 0;
+}
+
+.node-tooltip.has-courses .node-tooltip__courses-wrap:has(.node-courses.is-expanded) {
+  min-height: min(240px, 40vh);
+}
+
+.node-tooltip.has-courses .node-tooltip__courses-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(75, 85, 99, 0.45) rgba(17, 24, 39, 0.06);
+  margin-right: -4px;
+  padding-right: 4px;
+}
+
+.node-tooltip.has-courses .node-tooltip__courses-wrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.node-tooltip.has-courses .node-tooltip__courses-wrap::-webkit-scrollbar-track {
+  background: rgba(17, 24, 39, 0.06);
+  border-radius: 999px;
+}
+
+.node-tooltip.has-courses .node-tooltip__courses-wrap::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.4);
+  border-radius: 999px;
 }
 
 .info-panel.has-courses .node-courses {
@@ -733,8 +950,8 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
     max-width: none;
     border-left: 0;
     border-top: 1px solid rgba(28, 37, 92, 0.1);
-    max-height: 34dvh;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    max-height: 48dvh;
+    padding: 14px 16px calc(16px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -780,11 +997,11 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
     flex: 0 0 auto;
     width: 100%;
     max-width: none;
-    max-height: 34vh;
+    max-height: 48vh;
     height: auto;
     border-left: 0;
     border-top: 1px solid rgba(28, 37, 92, 0.1);
-    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+    padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
@@ -806,7 +1023,7 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   }
 
   .info-panel[hidden] {
-    display: flex !important;
+    display: none !important;
   }
 
   .info-panel__header {
@@ -865,7 +1082,7 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   }
 
   .info-panel {
-    max-height: 34vh;
+    max-height: 48vh;
   }
 
   .node-tooltip {

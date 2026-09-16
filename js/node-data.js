@@ -4,6 +4,45 @@
  * type: 学习资源文字标签
  * match: SVG 命中关键词
  */
+var D1_PDF_QINGLIANG =
+  "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY";
+var D1_PDF_TRAININGCAR =
+  "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK";
+var D1_ATALENT_REGISTER = "https://cloud.atalent.com/vector/learn/#/Register";
+var D1_ATALENT_AUTOSAR =
+  "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003440/latestversion";
+var D1_ATALENT_CAN =
+  "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003420/latestversion";
+var D1_ATALENT_CANFD =
+  "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003520/latestversion";
+var D1_PAID_ELN_TAIL =
+  "单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com";
+var D1_DETAIL_AUTOSAR =
+  "本课程为免费在线自学课。AUTOSAR（AUTomotive Open System ARchitecture，汽车开放系统架构）成立于2003年秋天，是由汽车行业主要整车厂和供应商组成的标准化联盟。该联盟旨在为ECU软件制定参考架构，以解决现代车辆中软件日益复杂的问题。\n本课程面向希望初步了解AUTOSAR的所有人员。除AUTOSAR基础概念外，本课程还讨论方法和典型的移植方案。\n本课程也适用于计划参加AUTOSAR主题培训的客户。在AUTOSAR主题培训中，我们将更深入地探讨相关主题，并通过实践示例加深理解。\n报名方式：请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。";
+var D1_DETAIL_CAN =
+  "本课程为免费在线自学课。CAN（Controller Area Network，控制器局域网）是一种串行通信技术，专门用于在汽车电子控制单元（ECU）之间实现可靠的数据交换。\n该在线学习课程适用于所有希望更好地了解CAN通信技术的人员。\n该在线学习课程还适用于所有计划参加Vector培训课程的人员。在对数据通信有一定程度的了解之后，您将更容易接受绝大多数Vector培训课程。\n报名方式：请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。";
+var D1_DETAIL_CANFD =
+  "本课程为免费在线自学课，适用于所有希望更好地了解CAN FD通信技术的人员。 该在线学习模块还适用于所有计划参加Vector培训课程的人员。在对数据通信有一定程度的了解之后，您将更容易接受绝大多数Vector培训课程。\n请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。";
+var D1_DETAIL_PDF_QINGLIANG =
+  "本课程为付费自学课\n" + D1_PAID_ELN_TAIL;
+var D1_DETAIL_PDF_TRAININGCAR =
+  "本课程为付费自学课\n" + D1_PAID_ELN_TAIL;
+var D1_DETAIL_VISUAL_SEQUENCE =
+  "本课程为付费自学课，在汽车测试中我们常常使用雷同的基础测试方法和步骤来对不同测试对象或同一测试对象多次进行测试，在使用CANoe的时候，若每次都需要对测试方法和步骤进行单独的配置将大大的影响到我们测试的效率。因此，我们需要一种相对自动化的测试流程，而使用Capl又需要一定的编程语言基础。为了方便简单的自动化操作，CANoe提供了一种自动化的序列功能（Automation Sequences），该功能的优势是操作简便且可视化。\n" +
+  D1_PAID_ELN_TAIL;
+var D1_DETAIL_LIN_REPLAY =
+  "本课程为付费自学课，您可以通过本课程了解到：在CANoe/CANalyzer中，如何将记录文件中的总线数据发送到真实总线或仿真总线上。\n" +
+  D1_PAID_ELN_TAIL;
+var D1_DETAIL_CAPL_GATEWAY =
+  "本课程为付费自学课，在CANoe中，通过CAPL编程，可以在多路CAN总线之间创建网关。本课程将以两路CAN网络为例，介绍如何在CANoe中创建网关。\n" +
+  D1_PAID_ELN_TAIL;
+var D1_DETAIL_CAPL_RESET =
+  "本课程为付费自学课，将介绍如何应用CAPL函数修改CAN、CAN FD总线波特率。\n学习时长：25分钟\n" +
+  D1_PAID_ELN_TAIL;
+var D1_DETAIL_CAPL_BAUD =
+  "本课程为付费自学课，通过本课程，您将学习如何应用CAPL函数修改CAN、CAN FD总线波特率。\n" +
+  D1_PAID_ELN_TAIL;
+
 window.NODE_HOVER_DATA = {
   "汽车通信概论": {
     nodeName: "汽车通信概论",
@@ -29,7 +68,12 @@ window.NODE_HOVER_DATA = {
         type: "直播课",
         url: "https://forms.cloud.microsoft/e/7zWp3C4yBA?origin=lprLink",
       },
-      { name: "AUTOSAR协议", type: "自学课", url: null },
+      {
+        name: "AUTOSAR协议",
+        type: "自学课",
+        url: D1_ATALENT_AUTOSAR,
+        detail: D1_DETAIL_AUTOSAR,
+      },
     ],
   },
   "CAN/CAN FD": {
@@ -38,10 +82,32 @@ window.NODE_HOVER_DATA = {
     match: ["CAN&CANFD", "CAN&CAN FD", "CAN/CAN FD", "CAN/CANFD"],
     description: "学习车载网络最核心的 CAN/CAN FD 通信技术，掌握报文传输、仲裁机制、错误处理等关键知识。",
     courses: [
-      { name: "CAN协议", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD_轻量版", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版", type: "自学课", url: null },
-      { name: "CAN FD协议", type: "自学课", url: null },
+      {
+        name: "CAN协议",
+        type: "自学课",
+        url: D1_ATALENT_CAN,
+        detail: D1_DETAIL_CAN,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        linkKind: "pdf",
+        detail: D1_DETAIL_PDF_QINGLIANG,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        linkKind: "pdf",
+        detail: D1_DETAIL_PDF_TRAININGCAR,
+      },
+      {
+        name: "CAN FD协议",
+        type: "自学课",
+        url: D1_ATALENT_CANFD,
+        detail: D1_DETAIL_CANFD,
+      },
       {
         name: "CAN协议介绍视频",
         type: "视频课",
@@ -76,12 +142,40 @@ window.NODE_HOVER_DATA = {
         type: "内训课",
         url: "https://academy.vector.com/cn/zh/courses/detail/5366/",
       },
-      { name: "CANoe中关于Visual Sequence和Macros功能的应用", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/LIN Replay Block", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD_轻量版", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD测量培训", type: "直播课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD仿真培训", type: "直播课", url: null },
+      {
+        name: "CANoe中关于Visual Sequence和Macros功能的应用",
+        type: "自学课",
+        detail: D1_DETAIL_VISUAL_SEQUENCE,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/LIN Replay Block",
+        type: "自学课",
+        detail: D1_DETAIL_LIN_REPLAY,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        linkKind: "pdf",
+        detail: D1_DETAIL_PDF_QINGLIANG,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        linkKind: "pdf",
+        detail: D1_DETAIL_PDF_TRAININGCAR,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD测量培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/6H1V2R1P78?origin=lprLink",
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD仿真培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/QMa3u0BpN3?origin=lprLink",
+      },
       {
         name: "CANoe操作的复制神器",
         type: "视频课",
@@ -100,12 +194,40 @@ window.NODE_HOVER_DATA = {
     match: ["CAPL"],
     description: "系统学习 CAPL 脚本语言的语法、事件机制与报文处理逻辑，掌握 CANoe/CANalyzer 环境下的自动化开发能力。通过实战案例与脚本练习，提升网络仿真、测试与问题定位效率。",
     courses: [
-      { name: "应用CAPL在两路CAN总线之间创建网关", type: "自学课", url: null },
-      { name: "CANoe.CAN 应用CAPL重置CAN控制器", type: "自学课", url: null },
-      { name: "CANoe.CAN 应用CAPL修改CAN总线波特率", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD_轻量版", type: "自学课", url: null },
-      { name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版", type: "自学课", url: null },
-      { name: "CAPL培训", type: "直播课", url: null },
+      {
+        name: "应用CAPL在两路CAN总线之间创建网关",
+        type: "自学课",
+        detail: D1_DETAIL_CAPL_GATEWAY,
+      },
+      {
+        name: "CANoe.CAN 应用CAPL重置CAN控制器",
+        type: "自学课",
+        detail: D1_DETAIL_CAPL_RESET,
+      },
+      {
+        name: "CANoe.CAN 应用CAPL修改CAN总线波特率",
+        type: "自学课",
+        detail: D1_DETAIL_CAPL_BAUD,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        linkKind: "pdf",
+        detail: D1_DETAIL_PDF_QINGLIANG,
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        linkKind: "pdf",
+        detail: D1_DETAIL_PDF_TRAININGCAR,
+      },
+      {
+        name: "CAPL培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/7g4QAm4Rk2?origin=lprLink",
+      },
       {
         name: "CAPL培训",
         type: "公开课",
