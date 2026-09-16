@@ -747,6 +747,8 @@
   .role-select__main {
     transform: none;
     bottom: calc(var(--track-block) + var(--entre-block) + max(4px, var(--safe-bottom)));
+    pointer-events: auto;
+    touch-action: pan-y;
   }
 
   .role-select__hero-stage {

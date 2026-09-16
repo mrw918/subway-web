@@ -196,6 +196,7 @@
       skills: root.querySelectorAll('[data-detail="skills"]'),
       mission: root.querySelectorAll('[data-detail="mission"]'),
     };
+    var mainEl = root.querySelector(".role-select__main");
     var heroStage = root.querySelector(".role-select__hero-stage");
     var avatarViewport = root.querySelector(".role-select__avatar-viewport");
     var avatarList = root.querySelector(".role-select__avatars");
@@ -525,37 +526,60 @@
       step(1);
     });
 
-    // 手机端人物区左右滑动切换（桌面 hero-stage 仍为 pointer-events: none）
+    // 手机端人物主区左右滑动切换（桌面 main 仍为 pointer-events: none）
     var swipeStartX = 0;
     var swipeStartY = 0;
     var swipeTracking = false;
-    var SWIPE_MIN_DX = 50;
+    var swipePointerId = null;
+    var SWIPE_MIN_DX = 36;
+
+    function isMobileSwipeViewport() {
+      return window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function resetSwipeTracking() {
+      swipeTracking = false;
+      swipePointerId = null;
+    }
 
     function onSwipePointerDown(event) {
+      if (!isMobileSwipeViewport()) return;
       if (sheetOpen || trainingOpen || animating) return;
       if (event.pointerType === "mouse" && event.button !== 0) return;
       swipeTracking = true;
+      swipePointerId = event.pointerId;
       swipeStartX = event.clientX;
       swipeStartY = event.clientY;
+      if (mainEl && mainEl.setPointerCapture) {
+        try {
+          mainEl.setPointerCapture(event.pointerId);
+        } catch (err) {
+          /* ignore */
+        }
+      }
     }
 
     function onSwipePointerUp(event) {
       if (!swipeTracking) return;
-      swipeTracking = false;
+      if (swipePointerId != null && event.pointerId !== swipePointerId) return;
+      resetSwipeTracking();
       if (sheetOpen || trainingOpen || animating) return;
       var dx = event.clientX - swipeStartX;
       var dy = event.clientY - swipeStartY;
-      if (Math.abs(dx) < SWIPE_MIN_DX || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+      if (Math.abs(dx) < SWIPE_MIN_DX || Math.abs(dx) < Math.abs(dy) * 0.75) return;
       step(dx < 0 ? 1 : -1);
     }
 
-    function onSwipePointerCancel() {
-      swipeTracking = false;
+    function onSwipePointerCancel(event) {
+      if (swipePointerId != null && event.pointerId !== swipePointerId) return;
+      resetSwipeTracking();
     }
 
-    heroStage.addEventListener("pointerdown", onSwipePointerDown);
-    heroStage.addEventListener("pointerup", onSwipePointerUp);
-    heroStage.addEventListener("pointercancel", onSwipePointerCancel);
+    if (mainEl) {
+      mainEl.addEventListener("pointerdown", onSwipePointerDown);
+      mainEl.addEventListener("pointerup", onSwipePointerUp);
+      mainEl.addEventListener("pointercancel", onSwipePointerCancel);
+    }
 
     entreBtn.addEventListener("click", function () {
       if (animating) return;
@@ -642,9 +666,11 @@
       destroy: function () {
         setTrainingOpen(false);
         setSheetOpen(false);
-        heroStage.removeEventListener("pointerdown", onSwipePointerDown);
-        heroStage.removeEventListener("pointerup", onSwipePointerUp);
-        heroStage.removeEventListener("pointercancel", onSwipePointerCancel);
+        if (mainEl) {
+          mainEl.removeEventListener("pointerdown", onSwipePointerDown);
+          mainEl.removeEventListener("pointerup", onSwipePointerUp);
+          mainEl.removeEventListener("pointercancel", onSwipePointerCancel);
+        }
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("resize", onResize);
       },

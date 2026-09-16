@@ -307,7 +307,7 @@
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 327.3393 128.4228)" class="st74 st75">应用软件集成</text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 373.4629 50.4485)" class="st73 st75">最小系统</text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 431.3339 50.5557)" class="st57 st75">MSRC.OS</text>
-	<text transform="matrix(0.711 -0.7032 0.7032 0.711 486.3796 51.0315)" class="st74 st75">状态管理</text>
+	<text transform="matrix(0.711 -0.7032 0.7032 0.711 476.3796 51.0315)"><tspan x="0" y="0" class="st57 st75">ECU</tspan><tspan x="20.5" y="0" class="st74 st75">状态管理</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 545.188 50.6715)"><tspan x="0" y="0" class="st57 st75">BSW</tspan><tspan x="20.5" y="0" class="st74 st75">调度</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 602.7554 50.2027)" class="st74 st75">多核</text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 353.7761 366.2151)" class="st74 st75">存储技术</text>
