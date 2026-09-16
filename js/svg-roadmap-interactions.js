@@ -631,7 +631,9 @@
         '<p class="info-panel__desc">' +
           escapeHtml(desc || "选择上方路线图中的站点，查看标签与说明。") +
         "</p>" +
-        courseSection.html;
+        '<div class="info-panel__courses-wrap">' +
+        courseSection.html +
+        "</div>";
       var closeEl = panel.querySelector(".info-panel__close");
       if (closeEl) {
         closeEl.addEventListener("click", function (event) {
@@ -643,12 +645,29 @@
       if (toggleEl && courseSection.showToggle) {
         toggleEl.addEventListener("click", function (event) {
           event.stopPropagation();
-          renderPanel(title, desc, types, routeIds, courses, !expanded);
+          updatePanelCoursesSection(courses, !expanded);
         });
       }
       panel.classList.toggle("is-empty", !hasContent);
       panel.classList.toggle("has-courses", courseSection.hasCourses);
       panel.scrollTop = 0;
+    }
+
+    function updatePanelCoursesSection(courses, expanded) {
+      if (!panel) return;
+      var scrollTop = panel.scrollTop;
+      var courseSection = buildCoursesSection(courses, !!expanded, false);
+      var wrap = panel.querySelector(".info-panel__courses-wrap");
+      if (wrap) wrap.innerHTML = courseSection.html;
+      panel.classList.toggle("has-courses", courseSection.hasCourses);
+      var toggleEl = panel.querySelector(".node-courses__toggle");
+      if (toggleEl && courseSection.showToggle) {
+        toggleEl.addEventListener("click", function (event) {
+          event.stopPropagation();
+          updatePanelCoursesSection(courses, !expanded);
+        });
+      }
+      panel.scrollTop = scrollTop;
     }
 
     function resetPanel() {
@@ -1109,7 +1128,31 @@
       tooltip.style.top = best.top + "px";
     }
 
-    function fillTooltipContent(title, desc, types, courses, expanded) {
+    function updateTooltipCoursesSection(expanded) {
+      if (!tooltipDetailState) return;
+      var scrollTop = tooltip.scrollTop;
+      tooltipCoursesExpanded = !!expanded;
+      tooltipDetailState.expanded = tooltipCoursesExpanded;
+      var hasLinkedCourses = linkedCourses(normalizeCourses(tooltipDetailState.courses)).length > 0;
+      var courseSection = buildCoursesSection(
+        tooltipDetailState.courses,
+        tooltipCoursesExpanded,
+        hasLinkedCourses && !pinnedNodeId && !isMobileLayout()
+      );
+      var coursesWrap = tooltip.querySelector(".node-tooltip__courses-wrap");
+      coursesWrap.innerHTML = courseSection.html;
+      tooltip.classList.toggle("has-courses", courseSection.hasCourses);
+      var toggleEl = coursesWrap.querySelector(".node-courses__toggle");
+      if (toggleEl && courseSection.showToggle) {
+        toggleEl.addEventListener("click", function (event) {
+          event.stopPropagation();
+          updateTooltipCoursesSection(!tooltipCoursesExpanded);
+        });
+      }
+      tooltip.scrollTop = scrollTop;
+    }
+
+    function fillTooltipContent(title, desc, types, courses, expanded, resetScroll) {
       tooltip.querySelector(".node-tooltip__title").textContent = title || "";
       tooltip.querySelector(".node-tooltip__desc").textContent = desc || "";
       var typesEl = tooltip.querySelector(".node-tooltip__types");
@@ -1140,22 +1183,11 @@
       if (toggleEl && courseSection.showToggle && tooltipDetailState) {
         toggleEl.addEventListener("click", function (event) {
           event.stopPropagation();
-          tooltipCoursesExpanded = !tooltipCoursesExpanded;
-          tooltipDetailState.expanded = tooltipCoursesExpanded;
-          fillTooltipContent(
-            tooltipDetailState.title,
-            tooltipDetailState.desc,
-            tooltipDetailState.types,
-            tooltipDetailState.courses,
-            tooltipCoursesExpanded
-          );
-          if (tooltipAnchorEl) {
-            positionTooltip(tooltipAnchorEl);
-            requestAnimationFrame(function () {
-              positionTooltip(tooltipAnchorEl);
-            });
-          }
+          updateTooltipCoursesSection(!tooltipCoursesExpanded);
         });
+      }
+      if (resetScroll !== false) {
+        tooltip.scrollTop = 0;
       }
     }
 
