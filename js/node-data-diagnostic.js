@@ -109,7 +109,7 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     nodeName: "Bootloader原理",
     type: ["直播课"],
     match: ["Bootloader原理", "Bootloader"],
-    description: "在此站点，您将了解Bootloader原理。",
+    description: "Bootloader存储在ECU内存的受保护区域中，并在复位后作为首个软件实例启动。会检查是否存在Flash请求或是否有有效的应用程序可用。若需重新编程，Bootloader将启动该过程，验证访问权限，并在必要时从总线系统将Flash驱动程序加载到ECU的RAM中。随后，擦除现有软件，并使用通过总线接收的新数据对Flash进行编程。数据传输完成后，Bootloader将验证ECU软件。如果Flash过程被中断，可以随时重新启动。在此站点，您将了解Bootloader原理。",
   },
   "刷写流程": {
     nodeName: "刷写流程",

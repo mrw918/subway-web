@@ -394,7 +394,7 @@ window.NODE_HOVER_DATA = {
     nodeName: "TSN协议",
     type: ["自学课"],
     match: ["TSN协议", "TSN协议组", "TSN"],
-    description: "TSN是一个庞大的协议组，在此站点，您将学习gPTP协议、AVTP协议。",
+    description: "在车辆中，实时功能对于某些应用至关重要。 为确保这些实时功能可用，必须在以太网控制器中设置具有直接访问硬件资源的机制。TSN使构建可扩展的以太网网络成为可能。TSN是一个庞大的协议组，在此站点，您将学习gPTP协议、AVTP协议。",
   },
   "AVB IL": {
     nodeName: "AVB IL",

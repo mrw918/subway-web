@@ -21,6 +21,59 @@
       .replace(/>/g, "&gt;");
   }
 
+  /** 简介 + 冒号后条目列表（黑点）；无结构化内容时保持段落 */
+  function formatDescHtml(desc) {
+    var text = String(desc || "").replace(/\r\n/g, "\n").trim();
+    if (!text) return "";
+
+    var intro = text;
+    var body = "";
+    var marker = "本站点包含以下内容";
+    var markerAt = text.indexOf(marker);
+    if (markerAt >= 0) {
+      var colonAt = text.indexOf("：", markerAt);
+      if (colonAt < 0) colonAt = text.indexOf(":", markerAt);
+      if (colonAt >= 0) {
+        intro = text.slice(0, colonAt + 1).trim();
+        body = text.slice(colonAt + 1).trim();
+      }
+    } else if (text.indexOf("\n") >= 0) {
+      var blocks = text.split(/\n\s*\n/);
+      if (blocks.length > 1) {
+        intro = blocks[0].trim();
+        body = blocks.slice(1).join("\n").trim();
+      } else {
+        var allLines = text.split("\n");
+        intro = allLines[0].trim();
+        body = allLines.slice(1).join("\n").trim();
+      }
+    }
+
+    var html = '<p class="node-desc__lead">' + escapeHtml(intro) + "</p>";
+    if (!body) return html;
+
+    var items = body
+      .split("\n")
+      .map(function (line) {
+        return String(line || "").trim();
+      })
+      .filter(Boolean);
+    if (!items.length) return html;
+
+    html += '<ul class="node-desc__list">';
+    items.forEach(function (item) {
+      var isSection = /[：:]\s*$/.test(item);
+      html +=
+        '<li class="' +
+        (isSection ? "node-desc__section" : "node-desc__item") +
+        '">' +
+        escapeHtml(item) +
+        "</li>";
+    });
+    html += "</ul>";
+    return html;
+  }
+
   /** 仅悬浮信息标签展示用；兼容旧数据名 */
   function formatTypeLabel(value) {
     var raw = String(value || "").trim();
@@ -601,8 +654,7 @@
       '<div class="node-tooltip__body">',
       '<div class="node-tooltip__title"></div>',
       '<div class="node-tooltip__types"></div>',
-      '<div class="node-tooltip__intro-label">站点介绍</div>',
-      '<p class="node-tooltip__desc"></p>',
+      '<div class="node-tooltip__desc"></div>',
       "</div>",
       '<div class="node-tooltip__courses-wrap"></div>',
     ].join("");
@@ -906,10 +958,9 @@
                 .join("") +
             "</div>"
           : "") +
-        '<div class="info-panel__intro-label">站点介绍</div>' +
-        '<p class="info-panel__desc">' +
-          escapeHtml(desc || "选择上方路线图中的站点，查看标签与说明。") +
-        "</p>" +
+        '<div class="info-panel__desc">' +
+          formatDescHtml(desc || "选择上方路线图中的站点，查看标签与说明。") +
+        "</div>" +
         '<div class="info-panel__courses-wrap">' +
         courseSection.html +
         "</div>";
@@ -1441,7 +1492,7 @@
 
     function fillTooltipContent(title, desc, types, courses, expanded, resetScroll) {
       tooltip.querySelector(".node-tooltip__title").textContent = title || "";
-      tooltip.querySelector(".node-tooltip__desc").textContent = desc || "";
+      tooltip.querySelector(".node-tooltip__desc").innerHTML = formatDescHtml(desc || "");
       var typesEl = tooltip.querySelector(".node-tooltip__types");
       var typeList = types && types.length ? types : [];
       if (typeList.length) {

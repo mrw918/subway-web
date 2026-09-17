@@ -284,8 +284,48 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
 .info-panel__desc {
   margin: 0;
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.55;
   color: #4b5563;
+}
+
+.node-tooltip__desc {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: #3f4654;
+}
+
+.node-desc__lead {
+  margin: 0;
+}
+
+.node-desc__list {
+  margin: 8px 0 0;
+  padding: 0 0 0 1.15em;
+  list-style: disc;
+  list-style-position: outside;
+}
+
+.node-desc__list > li {
+  margin: 2px 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.node-desc__list > .node-desc__item {
+  color: #3f4654;
+}
+
+.node-desc__list > .node-desc__section {
+  list-style: none;
+  margin: 8px 0 2px;
+  margin-left: -1.15em;
+  font-weight: 650;
+  color: #1f2937;
+}
+
+.node-desc__list > .node-desc__section:first-child {
+  margin-top: 2px;
 }
 
 .info-panel__title:first-child {
@@ -347,13 +387,6 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
   background: rgba(75, 103, 175, 0.1);
   color: #4b67af;
   border: 1px solid rgba(75, 103, 175, 0.2);
-}
-
-.node-tooltip__desc {
-  margin: 0;
-  font-size: 17px;
-  line-height: 1.65;
-  color: #3f4654;
 }
 
 .node-tooltip__intro-label,

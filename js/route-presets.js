@@ -80,4 +80,61 @@ window.ROUTE_PRESETS = {
     DG5: { title: "面向服务的车辆诊断", description: "面向服务的车辆诊断学习路线。" },
     DG6: { title: "诊断安全", description: "诊断安全相关学习路线。" },
   },
+  embedded: {
+    E1: {
+      title: "理论基础与工具链",
+      description:
+        "从ECU软件概论出发，逐步理解AUTOSAR CP、工具链、CANoe、MICROSAR SIP以及DaVinci基础配置，建立完整的软件工程视角。",
+    },
+    E2: {
+      title: "ECU最小系统开发",
+      description:
+        "从ECU最小系统出发，逐步理解MSRC.OS、ECU状态管理、BSW调度以及多核，建立Runtime视角下的最小系统开发能力。",
+    },
+    E3: {
+      title: "应用软件集成",
+      description:
+        "从应用软件集成出发，逐步理解Task Mapping、Data Mapping、Service Mapping以及DaVinci进阶配置，掌握应用软件集成方法。",
+    },
+    E4: {
+      title: "通信功能开发",
+      description:
+        "从AUTOSAR通信出发，逐步理解MSRC.COM、MSRC.ComM以及CAN、LIN、FlexRay、J1939，建立通信功能开发能力。",
+    },
+    E5: {
+      title: "诊断功能开发",
+      description:
+        "从UDS协议出发，逐步理解诊断数据库与MSRC.Diag，建立诊断功能开发能力。",
+    },
+    E6: {
+      title: "以太网功能开发",
+      description:
+        "从ETH底层协议出发，逐步理解PDU & Socket、MSRC.ETH、DoIP以及SOME/IP相关组件，建立以太网功能开发能力。",
+    },
+    E7: {
+      title: "标定功能开发",
+      description:
+        "从XCP协议出发，逐步理解测量与标定工具以及MSRC.XCP，建立标定功能开发能力。",
+    },
+    E8: {
+      title: "存储功能开发",
+      description:
+        "从存储技术出发，逐步理解MSRC.NvM、MSRC.Ea、MSRC.Fee以及MSRC.MemAcc，建立存储功能开发能力。",
+    },
+    E9: {
+      title: "I/O与CDD功能开发",
+      description:
+        "从I/O与CDD出发，逐步理解I/O MCAL，建立I/O与CDD功能开发能力。",
+    },
+    E10: {
+      title: "信息安全开发",
+      description:
+        "从密码学出发，逐步理解信息安全设计、MSRC.Security以及MSRC.veHSM，建立信息安全开发能力。",
+    },
+    E11: {
+      title: "功能安全开发",
+      description:
+        "从功能安全出发，逐步理解MSRC.Safety，建立功能安全开发能力。",
+    },
+  },
 };

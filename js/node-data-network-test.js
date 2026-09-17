@@ -61,7 +61,7 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     nodeName: "DevOps工作流",
     type: ["视频课"],
     match: ["DevOps工作流", "DevOps"],
-    description: "在此站点，您将了解DevOps工作流及其具体流程，并于CANoe工作流进行对比。",
+    description: "DevOps工作流基于无图形界面的执行模式，特别适合自动化测试和持续集成场景。在此站点，您将了解DevOps工作流及其具体流程，并于CANoe工作流进行对比。",
   },
   "CANoe服务器版": {
     nodeName: "CANoe服务器版",
@@ -73,13 +73,13 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     nodeName: "vTESTstudio",
     type: ["直播课", "视频课", "公开课", "自学课", "内训课"],
     match: ["vTESTstudio"],
-    description: "在此站点，您将学习应用vTESTstudio进行测试开发。",
+    description: "在此站点，您将学习应用vTESTstudio进行测试开发，包括Test Table、Test Parameter、Variant、Sequence Diagram等。",
   },
   "VT/VIO System": {
     nodeName: "VT/VIO System",
     type: ["视频课"],
     match: ["VT/VIO System", "VT/VIOSystem", "VT System"],
-    description: "在此站点，您将了解VT System概况。",
+    description: "在HIL测试中，VT System将所有必要的测试组件集成到一个模块化系统中，从而简化HIL测试系统的设置。在此站点，您将了解VT System概况。",
   },
   "VT System配置": {
     nodeName: "VT System配置",
