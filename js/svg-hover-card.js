@@ -15,7 +15,7 @@
       '  <h3 class="node-hover-card__title"></h3>',
       '  <div class="node-hover-card__badges"></div>',
       "</div>",
-      '<p class="node-hover-card__desc"></p>',
+      '<div class="node-hover-card__desc"></div>',
     ].join("");
     return card;
   }
@@ -251,7 +251,15 @@
 
   function fillCard(card, info) {
     card.querySelector(".node-hover-card__title").textContent = info.nodeName || "";
-    card.querySelector(".node-hover-card__desc").textContent = info.description || "";
+    var descEl = card.querySelector(".node-hover-card__desc");
+    var desc = info.description || "";
+    var formatDescHtml =
+      global.SvgRoadmapInteractions && global.SvgRoadmapInteractions.formatDescHtml;
+    if (formatDescHtml) {
+      descEl.innerHTML = formatDescHtml(desc);
+    } else {
+      descEl.textContent = desc;
+    }
 
     var badges = card.querySelector(".node-hover-card__badges");
     var types = [];

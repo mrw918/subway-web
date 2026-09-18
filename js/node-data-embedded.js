@@ -56,7 +56,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     type: ["公开课", "内训课", "直播课"],
     match: ["DaVinci基础配置", "DaVinci"],
     description:
-      "学习并掌握DaVinci工具的基本功能，实现项目配置与SWC设计。本站点包含以下内容：\n\nDaVinci Configurator Classic 6：\n命令行工具及使用技巧\n创建工程、工程目录结构\n导入ECUEX文件/传统文件\nUI工具使用介绍\n\nDaVinci Developer Classic：\n创建工程、工程目录结构\n导入与导出\nSWC设计及Port设计\n手动/自动为SWC添加Port并创建连接关系\nSWC实例化与嵌套Composition管理\n\nDaVinci Configurator Classic 6与DaVinci Developer Classic之间的工程关联",
+      "学习并掌握DaVinci工具的基本功能，实现项目配置与SWC设计。本站点包含以下内容：\n\nDaVinci Configurator Classic 6：\n命令行工具及使用技巧\n创建工程、工程目录结构\n导入ECUEX文件/传统文件\nUI工具使用介绍\n\nDaVinci Developer Classic：\n创建工程、工程目录结构\n导入与导出\nSWC设计及Port设计\n手动/自动为SWC添加Port并创建连接关系\nSWC实例化与嵌套Composition管理\n\nDaVinci Configurator Classic 6与DaVinci Developer Classic之间的工程关联：",
     svgIndex: 0,
   },
   "ECU最小系统": {
@@ -98,7 +98,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     type: ["自学课"],
     match: ["应用软件集成", "进阶配置应用软件集成"],
     description:
-      "理解应用软件集成涉及的内容。本站点包含以下内容：\n\n应用软件集成概述\nRTE的功能与实现：\nRTE对Runnable Trigger的实现\nRTE对Port的实现，RTE接口\n应用软件头文件及模板文件生成",
+      "理解应用软件集成涉及的内容。本站点包含以下内容：\n\n应用软件集成概述\nRTE的功能与实现：\nRTE对Runnable Trigger的实现\nRTE对Port的实现，RTE接口。\n\n应用软件头文件及模板文件生成",
   },
   "Task Mapping": {
     nodeName: "Task Mapping",
@@ -126,7 +126,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     type: ["自学课"],
     match: ["DaVinci进阶", "DaVinci进阶配置", "进阶配置"],
     description:
-      "掌握应用软件集成相关的其他DaVinci配置项及其作用。本站点包含以下内容：\n\n通过指针访问接口\n最小触发间隔\n获取触发原因\n临界区功能\nIRV功能\n标定量管理\n使用模式机制：\n请求或收发模式信息\n通过模式禁用触发\n使用模式切换作为触发条件\n使用NvBlockSWC\n生成间接接口\n发送结果确认",
+      "掌握应用软件集成相关的其他DaVinci配置项及其作用。本站点包含以下内容：\n\n通过指针访问接口\n最小触发间隔\n获取触发原因\n临界区功能\nIRV功能\n标定量管理\n使用模式机制：\n请求或收发模式信息\n通过模式禁用触发\n使用模式切换作为触发条件\n\n使用NvBlockSWC\n生成间接接口\n发送结果确认",
   },
   "AUTOSAR通信": {
     nodeName: "ASR通信",
@@ -228,7 +228,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     type: ["内训课"],
     match: ["MSRC.DoIP", "MSRC.DoIPETH"],
     description:
-      "掌握DoIP组件功能实现及配置方法。本站点包含以下内容：\n\n网关节点的转发场景\nDoIPInt\nDoIP报文收发配置示例\n后续进阶方向",
+      "掌握DoIP组件功能实现及配置方法。本站点包含以下内容：\n\n网关节点的转发场景\nDoIPInt\nDoIP报文收发配置示例",
   },
   "SOME/IP协议": {
     nodeName: "SOME/IP协议",

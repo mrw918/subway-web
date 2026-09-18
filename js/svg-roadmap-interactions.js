@@ -21,7 +21,11 @@
       .replace(/>/g, "&gt;");
   }
 
-  /** 简介 + 冒号后条目列表（黑点）；无结构化内容时保持段落 */
+  function isSectionHeading(line) {
+    return /[：:]\s*$/.test(String(line || "").trim());
+  }
+
+  /** 简介 + 列表；以「：」结尾且后跟子行的条目渲染为二级列表 */
   function formatDescHtml(desc) {
     var text = String(desc || "").replace(/\r\n/g, "\n").trim();
     if (!text) return "";
@@ -52,24 +56,62 @@
     var html = '<p class="node-desc__lead">' + escapeHtml(intro) + "</p>";
     if (!body) return html;
 
-    var items = body
-      .split("\n")
-      .map(function (line) {
-        return String(line || "").trim();
-      })
-      .filter(Boolean);
-    if (!items.length) return html;
+    var rawLines = body.split("\n");
+    if (!rawLines.some(function (line) { return String(line || "").trim(); })) return html;
 
     html += '<ul class="node-desc__list">';
-    items.forEach(function (item) {
-      var isSection = /[：:]\s*$/.test(item);
-      html +=
-        '<li class="' +
-        (isSection ? "node-desc__section" : "node-desc__item") +
-        '">' +
-        escapeHtml(item) +
-        "</li>";
-    });
+    var i = 0;
+    var isFirst = true;
+    var prevWasBlank = true;
+    while (i < rawLines.length) {
+      var line = String(rawLines[i] || "").trim();
+      i += 1;
+      if (!line) {
+        prevWasBlank = true;
+        continue;
+      }
+
+      if (isSectionHeading(line)) {
+        var children = [];
+        var endedOnBlank = false;
+        while (i < rawLines.length) {
+          var peek = String(rawLines[i] || "").trim();
+          if (!peek) {
+            i += 1;
+            endedOnBlank = true;
+            break;
+          }
+          if (isSectionHeading(peek)) break;
+          children.push(peek);
+          i += 1;
+        }
+        var isMajor = prevWasBlank || isFirst;
+        var itemClass;
+        if (isMajor) {
+          itemClass = children.length ? "node-desc__title node-desc__title--branch" : "node-desc__title";
+        } else if (children.length) {
+          itemClass = "node-desc__item node-desc__item--branch";
+        } else {
+          itemClass = "node-desc__item";
+        }
+        html += '<li class="' + itemClass + '">' + escapeHtml(line);
+        if (children.length) {
+          html += '<ul class="node-desc__sublist">';
+          children.forEach(function (child) {
+            html += '<li class="node-desc__subitem">' + escapeHtml(child) + "</li>";
+          });
+          html += "</ul>";
+        }
+        html += "</li>";
+        prevWasBlank = endedOnBlank;
+        isFirst = false;
+        continue;
+      }
+
+      html += '<li class="node-desc__item">' + escapeHtml(line) + "</li>";
+      prevWasBlank = false;
+      isFirst = false;
+    }
     html += "</ul>";
     return html;
   }
@@ -2072,5 +2114,5 @@
     };
   }
 
-  global.SvgRoadmapInteractions = { mount: mount };
+  global.SvgRoadmapInteractions = { mount: mount, formatDescHtml: formatDescHtml };
 })(window);
