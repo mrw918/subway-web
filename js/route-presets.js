@@ -5,31 +5,49 @@ window.ROUTE_PRESETS = {
   soa: {
     S1: {
       description:
-        "涵盖以太网底层协议、SOME/IP、DDS、AUTOSAR 及 S2S 与 E/E 服务化等 SOA 系统设计基础能力。",
+        "从 AUTOSAR CP/AP、SOME/IP、DDS 及 E/E 服务化出发，掌握 PREEvision SOA 建模与设计方法。",
     },
     S2: {
       description:
-        "了解软件定义汽车（SDV）概念，理解软件平台、软件工厂在 SDV 语境下的应用。",
+        "从 SDV 概念出发，理解软件平台与软件工厂的发展方向。",
     },
     S3: {
       description:
-        "掌握 AUTOSAR AP 通信组件（MSRA.COM）、Proxy & Skeleton 架构及 SOA AP 开发与测试。",
+        "从 SOA 建模到 Adaptive 通信组件实现，掌握 Proxy/Skeleton 开发模式。",
     },
     S4: {
       description:
-        "掌握信号-服务转化（S2S）设计，以及 MSRA.S2S、MSRC.ETH、MSRC.SomeIP 等 CP 侧实现。",
+        "围绕 S2S 建模与 CP/AP 通信组件实现开展学习。",
     },
     S5: {
       description:
-        "使用 PREEvision 基于 AUTOSAR CP/AP 方法论进行 SOA 系统设计（SOA 概论、AP、CP）。",
+        "从 PREEvision SOA 设计到以太网与 SomeIP 实现，完成 CP 平台 SOA 开发。",
     },
   },
   mbse: {
-    M1: { color: "#d82a36", description: "MBSE 方法论与系统工程基础，建立模型驱动设计思维。" },
-    M2: { color: "#89b33d", colors: ["#89b43b"], description: "需求与功能建模，掌握用例、活动与状态等核心模型元素。" },
-    M3: { color: "#eb5e42", description: "架构与接口设计，完成系统分层与模块划分。" },
-    M4: { color: "#50b5ca", description: "仿真、验证与 V 模型闭环，保障设计可追溯。" },
-    M5: { color: "#e5a025", description: "工具链与协同开发，支撑 MBSE 落地与团队协作。" },
+    M1: {
+      color: "#d82a36",
+      description:
+        "从系统工程理论出发，逐步学习 V 模型、ASPICE、RFLP 方法论、SysML 建模语言以及 PREEvision 需求、功能、逻辑设计能力，建立完整的 MBSE 开发基础。",
+    },
+    M2: {
+      color: "#89b33d",
+      colors: ["#89b43b"],
+      description:
+        "围绕软件需求分解、AUTOSAR CP/AP 架构设计以及 SOA 建模展开学习。",
+    },
+    M3: {
+      color: "#eb5e42",
+      description: "从硬件需求分析出发，完成硬件架构与设计建模。",
+    },
+    M4: {
+      color: "#50b5ca",
+      description: "围绕版本、基线、生命周期、变型以及追溯性管理展开学习。",
+    },
+    M5: {
+      color: "#e5a025",
+      description: "从需求管理到测试管理，建立面向 V 模型的验证体系。",
+    },
   },
   calibration: {
     C1: { color: "#ee373b" },
@@ -84,57 +102,52 @@ window.ROUTE_PRESETS = {
     E1: {
       title: "理论基础与工具链",
       description:
-        "从ECU软件概论出发，逐步理解AUTOSAR CP、工具链、CANoe、MICROSAR SIP以及DaVinci基础配置，建立完整的软件工程视角。",
+        "从 ECU 软件概论出发，逐步理解 AUTOSAR CP、工具链、CANoe、MICROSAR SIP 以及 DaVinci 基础配置，建立完整的软件工程视角。",
     },
     E2: {
       title: "ECU最小系统开发",
       description:
-        "从ECU最小系统出发，逐步理解MSRC.OS、ECU状态管理、BSW调度以及多核，建立Runtime视角下的最小系统开发能力。",
+        "从 ECU 最小系统出发，学习 OS、EcuM、BswM、调度及多核机制。",
     },
     E3: {
       title: "应用软件集成",
       description:
-        "从应用软件集成出发，逐步理解Task Mapping、Data Mapping、Service Mapping以及DaVinci进阶配置，掌握应用软件集成方法。",
+        "围绕 Task Mapping、Data Mapping、Service Mapping 以及 DaVinci 高级配置开展学习。",
     },
     E4: {
       title: "通信功能开发",
       description:
-        "从AUTOSAR通信出发，逐步理解MSRC.COM、MSRC.ComM以及CAN、LIN、FlexRay、J1939，建立通信功能开发能力。",
+        "从 AUTOSAR 通信链路切入，学习 COM、ComM 及 CAN/LIN/FlexRay/J1939。",
     },
     E5: {
       title: "诊断功能开发",
       description:
-        "从UDS协议出发，逐步理解诊断数据库与MSRC.Diag，建立诊断功能开发能力。",
+        "从 UDS 协议、诊断数据库开始，扩展到 AUTOSAR 诊断栈与 DoIP。",
     },
     E6: {
       title: "以太网功能开发",
       description:
-        "从ETH底层协议出发，逐步理解PDU & Socket、MSRC.ETH、DoIP以及SOME/IP相关组件，建立以太网功能开发能力。",
+        "学习以太网协议栈、AUTOSAR Ethernet 架构与 SOME/IP 服务通信。",
     },
     E7: {
       title: "标定功能开发",
-      description:
-        "从XCP协议出发，逐步理解测量与标定工具以及MSRC.XCP，建立标定功能开发能力。",
+      description: "从 XCP 协议到 CANape 等测量标定工具。",
     },
     E8: {
       title: "存储功能开发",
-      description:
-        "从存储技术出发，逐步理解MSRC.NvM、MSRC.Ea、MSRC.Fee以及MSRC.MemAcc，建立存储功能开发能力。",
+      description: "从 Flash/EEPROM 技术到 NvM、Fee、Ea 高级应用。",
     },
     E9: {
       title: "I/O与CDD功能开发",
-      description:
-        "从I/O与CDD出发，逐步理解I/O MCAL，建立I/O与CDD功能开发能力。",
+      description: "围绕 CDD 模式与 MCAL 进行学习。",
     },
     E10: {
       title: "信息安全开发",
-      description:
-        "从密码学出发，逐步理解信息安全设计、MSRC.Security以及MSRC.veHSM，建立信息安全开发能力。",
+      description: "从过程合规、密码学到 HSM 与 AUTOSAR 安全组件。",
     },
     E11: {
       title: "功能安全开发",
-      description:
-        "从功能安全出发，逐步理解MSRC.Safety，建立功能安全开发能力。",
+      description: "从过程体系到功能安全设计与实现。",
     },
   },
 };

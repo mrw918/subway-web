@@ -914,11 +914,13 @@
       if (routes[badge.id]) {
         var rematch = nearestLabel(badge, fragments, usedFrag);
         var existingName = String(routes[badge.id].name || "").trim();
+        var presetDesc = preset.desc || preset.description;
+        // 第二次出现的 S1–S5 等 badge 仍须保留 preset 描述，勿被兜底文案覆盖
+        if (presetDesc) {
+          routes[badge.id].desc = presetDesc;
+        }
         if (preset.title || preset.name) {
           routes[badge.id].name = preset.title || preset.name;
-          if (preset.desc || preset.description) {
-            routes[badge.id].desc = preset.desc || preset.description;
-          }
         } else if (rematch) {
           var nextTitle = String(rematch.frag.title || "").trim();
           if (
@@ -929,8 +931,10 @@
           ) {
             usedFrag[rematch.index] = true;
             routes[badge.id].name = nextTitle;
-            routes[badge.id].desc =
-              "本路线涵盖「" + nextTitle + "」相关知识站点。";
+            if (!presetDesc) {
+              routes[badge.id].desc =
+                "本路线涵盖「" + nextTitle + "」相关知识站点。";
+            }
           }
         }
         return;

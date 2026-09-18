@@ -115,6 +115,10 @@ g.labels .node-label {
   tap-highlight-color: transparent;
 }
 
+.node-ripple-anchor {
+  pointer-events: none;
+}
+
 .node-ripple {
   pointer-events: none;
   transform-origin: center;

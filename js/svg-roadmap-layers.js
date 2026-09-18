@@ -102,16 +102,23 @@
   }
 
   function addRipple(wrap, geo, delayClass) {
+    // 涟漪放在独立 translate 组内，避免高立柱换乘站整组 bbox 导致 CSS scale 原点偏移
+    var anchor = document.createElementNS(SVG_NS, "g");
+    anchor.setAttribute("class", "node-ripple-anchor");
+    anchor.setAttribute("transform", "translate(" + geo.x + " " + geo.y + ")");
+    anchor.setAttribute("pointer-events", "none");
+
     var ripple = document.createElementNS(SVG_NS, "circle");
     ripple.setAttribute("class", "node-ripple" + (delayClass ? " " + delayClass : ""));
-    ripple.setAttribute("cx", String(geo.x));
-    ripple.setAttribute("cy", String(geo.y));
+    ripple.setAttribute("cx", "0");
+    ripple.setAttribute("cy", "0");
     ripple.setAttribute("r", String(Math.max(5.5, geo.r)));
     ripple.setAttribute("fill", "none");
     ripple.setAttribute("stroke", "#4b67af");
     ripple.setAttribute("stroke-width", "1.2");
     ripple.setAttribute("opacity", "0");
-    wrap.appendChild(ripple);
+    anchor.appendChild(ripple);
+    wrap.appendChild(anchor);
     return ripple;
   }
 

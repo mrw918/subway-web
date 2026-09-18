@@ -76,7 +76,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   "ECU状态管理": {
     nodeName: "ECU状态管理",
     type: ["公开课", "内训课"],
-    match: ["ECU状态管理", "状态管理"],
+    match: ["ECU状态管理", "ECU 状态管理", "状态管理"],
     description:
       "掌握ECU运行的各个阶段，掌握EcuM与BswM对ECU状态的管理及分工，以及配置方法。本站点包含以下内容：\n\nEcuM与BswM的分工\nECU启动流程\nECU下电流程\nECU休眠流程\nECU唤醒流程\nECU运行阶段的管理\n模式管理的机制",
   },
