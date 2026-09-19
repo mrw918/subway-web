@@ -20,156 +20,421 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     type: [],
     match: ["ETH基础协议", "ETH 基础协议"],
     description: "了解车载以太网基础协议与通信概念，为 DoIP 等诊断传输方式打基础。",
+  
+    courses: [
+      {
+        name: "Ethernet基础协议培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/Ac1j7sZsDL?origin=lprLink"
+      },
+      {
+        name: "Ethernet基础协议介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，将向您介绍以太网基础协议的内容，内容包括以太网物理层、数据链路层（MAC地址和VLAN）、网络层（IPv4/IPv6）和传输层(TCP/UDP)。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+      {
+        name: "车载以太网",
+        type: "自学课"
+      },
+    ],
   },
   "DoIP协议": {
     nodeName: "DoIP协议",
     type: [],
     match: ["DoIP协议", "DoIP"],
     description: "了解基于 IP 的诊断通信（DoIP）协议与应用场景。",
+  
+    courses: [
+      {
+        name: "CANoe DoIP专题培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/pMS3z9gdsY?origin=lprLink"
+      },
+      {
+        name: "DoIP协议培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3234/"
+      },
+      {
+        name: "Ethernet高层协议介绍",
+        type: "自学课"
+      },
+      {
+        name: "DoIP培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3234/"
+      },
+    ],
   },
   "CAN协议": {
     nodeName: "CAN协议",
     type: ["视频课", "自学课", "直播课"],
     match: ["CAN协议"],
     description: "在此站点，您将学习CAN协议，并理解CAN总线寻址方式、总线访问机制和CAN报文结构。",
+  
+    courses: [
+      {
+        name: "CAN协议介绍视频",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1M5411N7Kc/"
+      },
+      {
+        name: "CAN协议",
+        type: "自学课"
+      },
+    ],
   },
   "CAN TP": {
     nodeName: "CAN TP",
     type: ["自学课", "直播课", "内训课"],
     match: ["CAN TP"],
     description: "诊断场景中，经常需要传输“大包“数据，CAN TP（即CAN传输协议）能够实现“大包“数据的拆包和组包。在此站点，您将学习CAN TP协议中的帧类型及其格式。",
+  
+    courses: [
+      {
+        name: "CANoe诊断测试培训",
+        type: "直播课"
+      },
+    ],
   },
   "UDS协议": {
     nodeName: "UDS协议",
     type: ["视频课", "公开课", "直播课"],
     match: ["UDS协议"],
     description: "根据ISO 14229标准，统一诊断服务（UDS）是诊断系统与汽车ECU之间的通信协议，用于诊断故障和刷写ECU。在此站点，您将学习车辆诊断背景知识，USD协议中常用的诊断服务。",
+  
+    courses: [
+      {
+        name: "UDS协议培训",
+        type: "公开课"
+      },
+      {
+        name: "UDS培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3238/"
+      },
+    ],
   },
   "OBDonUDS/ZEVonUDS": {
     nodeName: "OBDonUDS/ZEVonUDS",
     type: ["公开课"],
     match: ["OBDonUDS/ZEVonUDS", "OBDOnUDS/ZEVonUDS", "OBDonUDS", "OBDOnUDS", "ZEVonUDS"],
     description: "SAE J1979-2标准（OBDonUDS）要求使用UDS读取OBD诊断数据。SAE J1979-3定义了诊断仪获取新能源汽车动力系统数据的通信规则。在此站点，您将了解相关标准。",
+  
+    courses: [
+      {
+        name: "OBDonUDS协议培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/11776/"
+      },
+    ],
   },
   "MICROSAR.DIAG": {
     nodeName: "MICROSAR.DIAG",
     type: ["自学课"],
     match: ["MICROSAR.DIAG", "MICROSAR.DIA"],
     description: "在此站点，您将了解AUTOSAR诊断相关的基础软件： DCM（诊断通信管理器）、 DEM（诊断事件管理器）和FIM（功能抑制管理器）。",
+  
+    courses: [
+      {
+        name: "AUTOSAR协议",
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003440/latestversion",
+        detail: "本课程为免费在线自学课。AUTOSAR（AUTomotive Open System ARchitecture，汽车开放系统架构）成立于2003年秋天，是由汽车行业主要整车厂和供应商组成的标准化联盟。该联盟旨在为ECU软件制定参考架构，以解决现代车辆中软件日益复杂的问题。\n本课程面向希望初步了解AUTOSAR的所有人员。除AUTOSAR基础概念外，本课程还讨论方法和典型的移植方案。\n本课程也适用于计划参加AUTOSAR主题培训的客户。在AUTOSAR主题培训中，我们将更深入地探讨相关主题，并通过实践示例加深理解。\n报名方式：请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。"
+      },
+    ],
   },
   "诊断工具链": {
     nodeName: "诊断工具链",
     type: ["公开课"],
     match: ["诊断工具链", "Vector诊断工具链"],
     description: "在诊断开发过程中，Vector提供了功能强大的软件工具，适用于整个车辆诊断开发过程的每个阶段。在此站点，您将整体了解Vector诊断工具链，包括CANdelaStudio、ODXStudio、CANoe.DiVa、Indigo及vFlash。",
+  
+    courses: [
+      {
+        name: "诊断工具链培训",
+        type: "公开课"
+      },
+      {
+        name: "Diagnostic Tools (CANdelaStudio+ODXStudio+CANoe.DiVa+vFlash)",
+        type: "自学课"
+      },
+    ],
   },
   "CDD": {
     nodeName: "CDD",
     type: ["自学课", "公开课", "直播课"],
     match: ["CDD"],
     description: "CDD用于描述ECU支持的诊断服务、DID和通信规则等。在此站点，您将了解CDD文件。",
+  
+    courses: [
+      {
+        name: "CANdelaStudio培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，课程将介绍车辆诊断\n-介绍诊断协议\n-基于CAN总线的诊断\n-介绍CANTP\n-介绍CANdelaStudio\n-介绍如何使用CANdelaStudio\n-介绍ODX\n-介绍Vector诊断工具链\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "ODX/PDX": {
     nodeName: "ODX/PDX",
     type: ["自学课", "公开课", "直播课"],
     match: ["ODX/PDX", "ODX/P"],
     description: "ODX是一种标准化的XML格式，用于统一描述诊断数据，PDX是其打包形式。在此站点，您将了解ODX/PDX文件。",
+  
+    courses: [
+      {
+        name: "CANdelaStudio培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，课程将介绍车辆诊断\n-介绍诊断协议\n-基于CAN总线的诊断\n-介绍CANTP\n-介绍CANdelaStudio\n-介绍如何使用CANdelaStudio\n-介绍ODX\n-介绍Vector诊断工具链\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "诊断规范": {
     nodeName: "诊断规范",
     type: ["自学课", "公开课", "直播课"],
     match: ["诊断规范"],
     description: "OEM通常会定义统一的诊断规范，在此站点，您将了解诊断规范的概念。",
+  
+    courses: [
+      {
+        name: "CANdelaStudio培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，课程将介绍车辆诊断\n-介绍诊断协议\n-基于CAN总线的诊断\n-介绍CANTP\n-介绍CANdelaStudio\n-介绍如何使用CANdelaStudio\n-介绍ODX\n-介绍Vector诊断工具链\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "刷写规范": {
     nodeName: "刷写规范",
     type: ["自学课", "公开课", "直播课"],
     match: ["刷写规范"],
     description: "刷写规范定义了软件升级的标准流程和要求，例如安全机制、流程顺序、错误处理等。在此站点，您将了解刷写规范的概念。",
+  
+    courses: [
+      {
+        name: "CANdelaStudio培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，课程将介绍车辆诊断\n-介绍诊断协议\n-基于CAN总线的诊断\n-介绍CANTP\n-介绍CANdelaStudio\n-介绍如何使用CANdelaStudio\n-介绍ODX\n-介绍Vector诊断工具链\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "CANdelaStudio": {
     nodeName: "CANdelaStudio",
     type: ["视频课", "自学课", "公开课", "直播课"],
     match: ["CANdelaStudio"],
     description: "CANdelaStudio支持用户轻松、高效地创建和编辑正式的ECU诊断规范。在此站点，您将学习应用CANdelaStudio编辑诊断服务、编辑诊断和传输层通信参数、编辑CDDT/CDD等。",
+  
+    courses: [
+      {
+        name: "CANdelaStudio教程合集（免费）",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1Q3411q7qy/"
+      },
+      {
+        name: "CANdelaStudio培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，课程将介绍车辆诊断\n-介绍诊断协议\n-基于CAN总线的诊断\n-介绍CANTP\n-介绍CANdelaStudio\n-介绍如何使用CANdelaStudio\n-介绍ODX\n-介绍Vector诊断工具链\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "ISO 22901-1": {
     nodeName: "ISO 22901-1",
     type: ["自学课", "直播课"],
     match: ["ISO 22901-1", "22901-1"],
     description: "ODX是基于XML的ASAM标准，用于描述诊断相关的ECU数据。ODX于2008年正式成为ISO标准（ISO 22901-1）。在此站点，您将了解相关标准。",
+  
+    courses: [
+      {
+        name: "ODXStudio培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，将介绍以下内容：\n介绍ODX\n介绍ODX的结构和不同层级\n介绍ODX文件中诊断服务的定义\n介绍ODXStudio\n介绍ODXStudio中ODX数据的读取和编辑\n介绍ODX协议中Checker Rules\n介绍ODXStudio中的导入特性\n介绍Vector关于ODX数据的诊断工具\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "ODXStudio": {
     nodeName: "ODXStudio",
     type: ["自学课", "直播课"],
     match: ["ODXStudio"],
     description: "ODXStudio是一款面向用户的ODX格式诊断数据编辑工具。在此站点，您将学习应用ODXStudio编辑ODX-D文件数据（如DID、DTC、DOP等），编辑ODX-C、ODX-V、ODX-E、ODX-F文件等。",
+  
+    courses: [
+      {
+        name: "ODXStudio培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，将介绍以下内容：\n介绍ODX\n介绍ODX的结构和不同层级\n介绍ODX文件中诊断服务的定义\n介绍ODXStudio\n介绍ODXStudio中ODX数据的读取和编辑\n介绍ODX协议中Checker Rules\n介绍ODXStudio中的导入特性\n介绍Vector关于ODX数据的诊断工具\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "Bootloader原理": {
     nodeName: "Bootloader原理",
     type: ["直播课"],
     match: ["Bootloader原理", "Bootloader"],
     description: "Bootloader存储在ECU内存的受保护区域中，并在复位后作为首个软件实例启动。会检查是否存在Flash请求或是否有有效的应用程序可用。若需重新编程，Bootloader将启动该过程，验证访问权限，并在必要时从总线系统将Flash驱动程序加载到ECU的RAM中。随后，擦除现有软件，并使用通过总线接收的新数据对Flash进行编程。数据传输完成后，Bootloader将验证ECU软件。如果Flash过程被中断，可以随时重新启动。在此站点，您将了解Bootloader原理。",
+  
+    courses: [
+      {
+        name: "vFlash培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，您将了解以下内容：\n介绍vFlash\n介绍如何使用vFlash, vFlash Station\n介绍通过CANoe.DiVa测试Bootloader\n如果客户有真实ECU，可以建立刷写工程\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "刷写流程": {
     nodeName: "刷写流程",
     type: ["自学课", "公开课", "直播课"],
     match: ["刷写流程"],
     description: "典型刷写流程包括进入特定会话、安全解锁、下载数据、数据传输和校验等步骤。在此站点，您将了解刷写流程。",
+  
+    courses: [
+      {
+        name: "vFlash培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，您将了解以下内容：\n介绍vFlash\n介绍如何使用vFlash, vFlash Station\n介绍通过CANoe.DiVa测试Bootloader\n如果客户有真实ECU，可以建立刷写工程\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "刷写服务": {
     nodeName: "刷写服务",
     type: ["自学课", "公开课", "直播课"],
     match: ["刷写服务"],
     description: "刷写依赖UDS中的特定服务，如34服务、36服务、37服务等，在此站点，您将了解刷写相关的UDS服务。",
+  
+    courses: [
+      {
+        name: "vFlash培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，您将了解以下内容：\n介绍vFlash\n介绍如何使用vFlash, vFlash Station\n介绍通过CANoe.DiVa测试Bootloader\n如果客户有真实ECU，可以建立刷写工程\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "S19/HEX/bin文件": {
     nodeName: "S19/HEX/bin文件",
     type: ["自学课", "公开课", "直播课"],
     match: ["S19/HEX/bin文件", "S19/HEX", "bin文件"],
     description: "S19 / HEX / bin文件是ECU软件的不同格式表示。您将了解这三种文件及其特点。",
+  
+    courses: [
+      {
+        name: "vFlash培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，您将了解以下内容：\n介绍vFlash\n介绍如何使用vFlash, vFlash Station\n介绍通过CANoe.DiVa测试Bootloader\n如果客户有真实ECU，可以建立刷写工程\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "vFlash": {
     nodeName: "vFlash",
     type: ["自学课", "公开课", "直播课"],
     match: ["vFlash"],
     description: "vFlash是一款非常简单易用的工具，可通过诊断（如UDS）对ECU进行刷写。在此站点，您将学习如何应用vFlash对ECU进行刷写。",
+  
+    courses: [
+      {
+        name: "CANoe.DiVa&vFlash如何实现对Bootloader的刷写测试（免费）",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV13B4y1N7NQ/"
+      },
+      {
+        name: "刷写工具-vFlash（免费）",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1GX4y1c764/"
+      },
+      {
+        name: "vFlash培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，您将了解以下内容：\n介绍vFlash\n介绍如何使用vFlash, vFlash Station\n介绍通过CANoe.DiVa测试Bootloader\n如果客户有真实ECU，可以建立刷写工程\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "产线刷写": {
     nodeName: "产线刷写",
     type: ["自学课", "公开课", "直播课"],
     match: ["产线刷写"],
     description: "在生产线上，ECU软件需要批量刷写。vFlash Station可通过独立的CAN/CAN FD、LIN、FlexRay或以太网（DoIP）通道对多达10个ECU进行并行刷写。vFlash Station提供GUI界面在电脑上使用，也提供简单的C/C# API，用于创建您自己的应用程序，执行不同的自动化任务。在此站点，您将了解到vFlash Station的应用。",
+  
+    courses: [
+      {
+        name: "vFlash培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，您将了解以下内容：\n介绍vFlash\n介绍如何使用vFlash, vFlash Station\n介绍通过CANoe.DiVa测试Bootloader\n如果客户有真实ECU，可以建立刷写工程\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "售后升级": {
     nodeName: "售后升级",
     type: ["自学课", "公开课", "直播课"],
     match: ["售后升级"],
     description: "vFlash System Update可以按照客户定义的刷写顺序，通过单个通道更新一组ECU。在此站点，您将了解到vFlash System Update的应用。 vService轻松实现车辆持续更新/升级。vService为制造整车厂提供完全由整车厂控制的售后诊断、软件更新和车队监控的全面解决方案。vService将OTA和售后应用整合在一个完整的解决方案中，从而节省时间和金钱。",
+  
+    courses: [
+      {
+        name: "vFlash培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，您将了解以下内容：\n介绍vFlash\n介绍如何使用vFlash, vFlash Station\n介绍通过CANoe.DiVa测试Bootloader\n如果客户有真实ECU，可以建立刷写工程\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "CANoe桌面版": {
     nodeName: "CANoe桌面版",
     type: ["视频课", "自学课", "公开课", "直播课", "内训课"],
     match: ["CANoe桌面版"],
     description: "CANoe桌面版（即CANoe DE）支持众多总线系统，支持残余总线仿真、总线数据分析、测试开发及执行等功能。在此站点，您将学习CANoe的基础操作。",
+  
+    courses: [
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
+        type: "自学课",
+        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK",
+        detail: "单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY",
+        detail: "单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+    ],
   },
   "CANoe.DiVa": {
     nodeName: "CANoe.DiVa",
     type: ["自学课", "公开课", "直播课"],
     match: ["CANoe.DiVa", "DiVa"],
     description: "DiVa是CANoe的一个扩展功能，用于自动化测试和验证ECU中诊断软件的实现，可根据CDD或ODX格式的ECU诊断描述生成可重复的测试用例。在此站点，您将学习CANoe.DiVa的使用方法。",
+  
+    courses: [
+      {
+        name: "CANoe.DiVa培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，课程将介绍：\n-诊断数据库文件CDD、ODX\n-介绍CANoe.DiVa的配置\n-介绍CANoe.DiVa测试协议\n-介绍CANoe.DiVa对DTC和Bootloader的测试\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "Indigo": {
     nodeName: "Indigo",
     type: ["公开课", "直播课"],
     match: ["Indigo"],
     description: "Indigo是一款易于使用且直观的诊断仪，适用于所有诊断任务，既可用于开发阶段，也可用于车间工作或生产售后。在此站点，您将了解工具Indigo。",
+  
+    courses: [
+      {
+        name: "Indigo培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，通过该课程，您将了解如下内容：\n介绍诊断数据库文件CDD、ODX\n介绍Indigo功能的细节\n介绍使用Indigo的功能\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\"\"\""
+      },
+    ],
   },
   "SOVD": {
     nodeName: "SOVD",
     type: ["直播课"],
     match: ["SOVD"],
     description: "SOVD以http REST为基础技术，可为远程、近场或车载诊断等各种应用场景提供智能访问通道。在此站点，您将学习SOVD标准。",
+  
+    courses: [
+      {
+        name: "SOVD培训",
+        type: "公开课"
+      },
+    ],
   },
   "SOVD Explorer": {
     nodeName: "SOVD Explorer",
@@ -182,6 +447,13 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     type: ["自学课"],
     match: ["Securitv概论", "Security概论", "Security 概论"],
     description: "在此站点，您将学习哈希算法、对称密钥、非对称密钥、MAC消息验证码、数字签名、证书、Diffie-Hellman密钥交换等密码技术，这是了解上层协议的基础。",
+  
+    courses: [
+      {
+        name: "Security概论",
+        type: "自学课"
+      },
+    ],
   },
   "UDS 0x27服务": {
     nodeName: "UDS 0x27服务",

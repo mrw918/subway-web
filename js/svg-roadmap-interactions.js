@@ -25,6 +25,11 @@
     return /[：:]\s*$/.test(String(line || "").trim());
   }
 
+  /** 无冒号的独立大节标题（如 DaVinci 基础配置末尾工程关联说明） */
+  function isStandaloneTitleLine(line) {
+    return /之间的工程关联$/.test(String(line || "").trim());
+  }
+
   /** 简介 + 列表；以「：」结尾且后跟子行的条目渲染为二级列表 */
   function formatDescHtml(desc) {
     var text = String(desc || "").replace(/\r\n/g, "\n").trim();
@@ -108,7 +113,9 @@
         continue;
       }
 
-      html += '<li class="node-desc__item">' + escapeHtml(line) + "</li>";
+      var plainClass =
+        prevWasBlank && isStandaloneTitleLine(line) ? "node-desc__title" : "node-desc__item";
+      html += '<li class="' + plainClass + '">' + escapeHtml(line) + "</li>";
       prevWasBlank = false;
       isFirst = false;
     }

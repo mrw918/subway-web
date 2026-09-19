@@ -49,11 +49,12 @@ window.NODE_HOVER_DATA = {
     type: ["视频课", "直播课"],
     match: ["汽车通信概论"],
     description: "为所有网络开发工程的必备内容，在这部分内容中可以让学员从0开始认识网络，包括EE、ECU、MCU、总线等概念，夯实网络开发的基础。",
+  
     courses: [
       {
         name: "汽车通信概论",
         type: "直播课",
-        url: "https://forms.cloud.microsoft/e/rwVFZEpBnz?origin=lprLink",
+        url: "https://forms.cloud.microsoft/e/rwVFZEpBnz?origin=lprLink"
       },
     ],
   },
@@ -62,17 +63,18 @@ window.NODE_HOVER_DATA = {
     type: ["视频课", "直播课"],
     match: ["ASR通信", "ASR 通信", "AUTOSAR通信", "AUTOSAR Communication"],
     description: "介绍在AUTOSAR CP架构下使用AUTOSAR组件进行不同应用层通信的机制。",
+  
     courses: [
       {
         name: "AUTOSAR通信培训",
         type: "直播课",
-        url: "https://forms.cloud.microsoft/e/7zWp3C4yBA?origin=lprLink",
+        url: "https://forms.cloud.microsoft/e/7zWp3C4yBA?origin=lprLink"
       },
       {
         name: "AUTOSAR协议",
         type: "自学课",
         url: D1_ATALENT_AUTOSAR,
-        detail: D1_DETAIL_AUTOSAR,
+        detail: D1_DETAIL_AUTOSAR
       },
     ],
   },
@@ -81,42 +83,43 @@ window.NODE_HOVER_DATA = {
     type: ["视频课", "直播课", "自学课", "内训课"],
     match: ["CAN&CANFD", "CAN&CAN FD", "CAN/CAN FD", "CAN/CANFD"],
     description: "学习车载网络最核心的 CAN/CAN FD 通信技术，掌握报文传输、仲裁机制、错误处理等关键知识。",
+  
     courses: [
       {
-        name: "CAN协议",
-        type: "自学课",
-        url: D1_ATALENT_CAN,
-        detail: D1_DETAIL_CAN,
+        name: "CAN FD协议介绍视频",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1M5411N7Kc/?spm_id_from=333.788.videopod.episodes&vd_source=269a5c2c943070950e9e2f7f2f5599d0&p=2"
       },
       {
-        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
-        type: "自学课",
-        url: D1_PDF_QINGLIANG,
-        linkKind: "pdf",
-        detail: D1_DETAIL_PDF_QINGLIANG,
-      },
-      {
-        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
-        type: "自学课",
-        url: D1_PDF_TRAININGCAR,
-        linkKind: "pdf",
-        detail: D1_DETAIL_PDF_TRAININGCAR,
+        name: "CAN协议介绍视频",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1M5411N7Kc/"
       },
       {
         name: "CAN FD协议",
         type: "自学课",
         url: D1_ATALENT_CANFD,
-        detail: D1_DETAIL_CANFD,
+        detail: D1_DETAIL_CANFD
       },
       {
-        name: "CAN协议介绍视频",
-        type: "视频课",
-        url: "https://www.bilibili.com/video/BV1M5411N7Kc/",
+        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        detail: D1_DETAIL_PDF_TRAININGCAR,
+        linkKind: "pdf"
       },
       {
-        name: "CAN FD协议介绍视频",
-        type: "视频课",
-        url: "https://www.bilibili.com/video/BV1M5411N7Kc/?spm_id_from=333.788.videopod.episodes&vd_source=269a5c2c943070950e9e2f7f2f5599d0&p=2",
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: D1_DETAIL_PDF_QINGLIANG,
+        linkKind: "pdf"
+      },
+      {
+        name: "CAN协议",
+        type: "自学课",
+        url: D1_ATALENT_CAN,
+        detail: D1_DETAIL_CAN
       },
     ],
   },
@@ -125,66 +128,93 @@ window.NODE_HOVER_DATA = {
     type: ["直播课", "内训课"],
     match: ["CAN数据库"],
     description: "涵盖多种工具处理和浏览不同类型数据库的功能、包括arxml、dbc等等",
+  
+    courses: [
+      {
+        name: "CANdb++ Editor编辑&设计DBC介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍CANdb++ Editor工具，包括如何查看&新建DBC数据库文件，如何通过CANdb++ Editor编辑DBC数据库文件，及Value Table表和Attribute属性介绍。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        detail: D1_DETAIL_PDF_TRAININGCAR,
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: D1_DETAIL_PDF_QINGLIANG,
+        linkKind: "pdf"
+      },
+      {
+        name: "如何使用CANoe自带工具查看和编辑Arxml",
+        type: "自学课",
+        url: D1_ATALENT_CANFD,
+        detail: "本课程为免费在线自学课，适用于所有希望更好地了解CAN FD通信技术的人员。 该在线学习模块还适用于所有计划参加Vector培训课程的人员。在对数据通信有一定程度的了解之后，您将更容易接受绝大多数Vector培训课程。\n请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。"
+      },
+    ],
   },
   "CANoe.CAN": {
     nodeName: "CANoe.CAN",
     type: ["视频课", "直播课", "公开课", "自学课", "内训课"],
     match: ["CANoe.CAN"],
     description: "重点介绍CANoe的分析和仿真功能，通过前面所学的理论与实操相结合，并采用实战演练等方式快速具备分析、调试和开发 CAN 网络的能力。",
+  
     courses: [
+      {
+        name: "CANoe/CANalyzer基础教程视频合集",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1t54y1s7Qo/"
+      },
+      {
+        name: "CANoe操作的复制神器",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1hTtgziEHS/"
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD仿真培训",
+        type: "直播课"
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD测量培训",
+        type: "直播课"
+      },
       {
         name: "CANoe.CAN 培训",
         type: "公开课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/5366/",
-      },
-      {
-        name: "CANoe.CAN 培训",
-        type: "内训课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/5366/",
-      },
-      {
-        name: "CANoe中关于Visual Sequence和Macros功能的应用",
-        type: "自学课",
-        detail: D1_DETAIL_VISUAL_SEQUENCE,
-      },
-      {
-        name: "CANoe/CANalyzer.CAN/LIN Replay Block",
-        type: "自学课",
-        detail: D1_DETAIL_LIN_REPLAY,
-      },
-      {
-        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
-        type: "自学课",
-        url: D1_PDF_QINGLIANG,
-        linkKind: "pdf",
-        detail: D1_DETAIL_PDF_QINGLIANG,
+        url: "https://academy.vector.com/cn/zh/courses/detail/5366/"
       },
       {
         name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
         type: "自学课",
         url: D1_PDF_TRAININGCAR,
-        linkKind: "pdf",
         detail: D1_DETAIL_PDF_TRAININGCAR,
+        linkKind: "pdf"
       },
       {
-        name: "CANoe/CANalyzer.CAN/CAN FD测量培训",
-        type: "直播课",
-        url: "https://forms.cloud.microsoft/e/6H1V2R1P78?origin=lprLink",
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: D1_DETAIL_PDF_QINGLIANG,
+        linkKind: "pdf"
       },
       {
-        name: "CANoe/CANalyzer.CAN/CAN FD仿真培训",
-        type: "直播课",
-        url: "https://forms.cloud.microsoft/e/QMa3u0BpN3?origin=lprLink",
+        name: "CANoe/CANalyzer.CAN/LIN Replay Block",
+        type: "自学课",
+        detail: "本课程为付费自学课，您可以通过本课程了解到：在CANoe/CANalyzer中，如何将记录文件中的总线数据发送到真实总线或仿真总线上。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
-        name: "CANoe操作的复制神器",
-        type: "视频课",
-        url: "https://www.bilibili.com/video/BV1hTtgziEHS/",
+        name: "CANoe中关于Visual Sequence和Macros功能的应用",
+        type: "自学课",
+        detail: "本课程为付费自学课，在汽车测试中我们常常使用雷同的基础测试方法和步骤来对不同测试对象或同一测试对象多次进行测试，在使用CANoe的时候，若每次都需要对测试方法和步骤进行单独的配置将大大的影响到我们测试的效率。因此，我们需要一种相对自动化的测试流程，而使用Capl又需要一定的编程语言基础。为了方便简单的自动化操作，CANoe提供了一种自动化的序列功能（Automation Sequences），该功能的优势是操作简便且可视化。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
-        name: "CANoe/CANalyzer基础教程视频合集",
-        type: "视频课",
-        url: "https://www.bilibili.com/video/BV1t54y1s7Qo/",
+        name: "CANoe.CAN 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/5366/"
       },
     ],
   },
@@ -193,50 +223,51 @@ window.NODE_HOVER_DATA = {
     type: ["视频课", "直播课", "内训课"],
     match: ["CAPL"],
     description: "系统学习 CAPL 脚本语言的语法、事件机制与报文处理逻辑，掌握 CANoe/CANalyzer 环境下的自动化开发能力。通过实战案例与脚本练习，提升网络仿真、测试与问题定位效率。",
+  
     courses: [
       {
-        name: "应用CAPL在两路CAN总线之间创建网关",
-        type: "自学课",
-        detail: D1_DETAIL_CAPL_GATEWAY,
+        name: "CAPL编程技巧之代码加密",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1txuyz2ECY/"
       },
       {
-        name: "CANoe.CAN 应用CAPL重置CAN控制器",
-        type: "自学课",
-        detail: D1_DETAIL_CAPL_RESET,
+        name: "CAPL培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/7g4QAm4Rk2?origin=lprLink"
+      },
+      {
+        name: "CAPL培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/10275/"
       },
       {
         name: "CANoe.CAN 应用CAPL修改CAN总线波特率",
         type: "自学课",
-        detail: D1_DETAIL_CAPL_BAUD,
+        detail: "本课程为付费自学课，通过本课程，您将学习如何应用CAPL函数修改CAN、CAN FD总线波特率。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
-        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        name: "CANoe.CAN 应用CAPL重置CAN控制器",
         type: "自学课",
-        url: D1_PDF_QINGLIANG,
-        linkKind: "pdf",
-        detail: D1_DETAIL_PDF_QINGLIANG,
+        detail: "本课程为付费自学课，当CAN控制器进入bus-off状态后，将无法参与总线通信。通过本课程，您将学习如何应用CAPL重置CAN控制器使其进入主动错误状态。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
         type: "自学课",
         url: D1_PDF_TRAININGCAR,
-        linkKind: "pdf",
         detail: D1_DETAIL_PDF_TRAININGCAR,
+        linkKind: "pdf"
       },
       {
-        name: "CAPL培训",
-        type: "直播课",
-        url: "https://forms.cloud.microsoft/e/7g4QAm4Rk2?origin=lprLink",
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: D1_DETAIL_PDF_QINGLIANG,
+        linkKind: "pdf"
       },
       {
-        name: "CAPL培训",
-        type: "公开课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/10275/",
-      },
-      {
-        name: "CAPL编程技巧之代码加密",
-        type: "视频课",
-        url: "https://www.bilibili.com/video/BV1txuyz2ECY/",
+        name: "应用CAPL在两路CAN总线之间创建网关",
+        type: "自学课",
+        detail: "本课程为付费自学课，在CANoe中，通过CAPL编程，可以在多路CAN总线之间创建网关。本课程将以两路CAN网络为例，介绍如何在CANoe中创建网关。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -245,54 +276,226 @@ window.NODE_HOVER_DATA = {
     type: [],
     match: ["交互层仿真", "交互层Addon", "IL仿真", "IL Addon", "ILAddon"],
     description: "学习 CAN 交互层（Interaction Layer）仿真与 Addon 配置，掌握信号级通信仿真与残余总线搭建方法。",
+  
+    courses: [
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        detail: D1_DETAIL_PDF_TRAININGCAR,
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: D1_DETAIL_PDF_QINGLIANG,
+        linkKind: "pdf"
+      },
+    ],
   },
   "NM协议": {
     nodeName: "NM协议",
     type: [],
     match: ["NM协议"],
     description: "学习网络管理（Network Management）协议原理，掌握休眠/唤醒、节点监控与网络状态管理机制。",
+  
+    courses: [
+      {
+        name: "CANoe.CAN AUTOSAR网络管理介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍AUTOSAR CAN网络管理，内容包括AUTOSAR CAN网络管理状态介绍，CANoe.CAN AsrNM建模实现，CANoe.CAN AsrNM模型观测分析及Partial Network Cluster介绍。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+      {
+        name: "CANoe.CAN OSEK网络管理介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍OSEK网络管理，内容包括OSEK NM类型、网络节点状态、OSEK NM工作机制及基于CANoe.CAN的OSEK NM实现。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "NM仿真": {
     nodeName: "NM仿真",
     type: [],
     match: ["NM仿真"],
     description: "在 CANoe 中实现 NM 网络管理仿真，掌握节点休眠唤醒流程验证与网络管理行为分析。",
+  
+    courses: [
+      {
+        name: "CANoe.CAN AUTOSAR网络管理介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍AUTOSAR CAN网络管理，内容包括AUTOSAR CAN网络管理状态介绍，CANoe.CAN AsrNM建模实现，CANoe.CAN AsrNM模型观测分析及Partial Network Cluster介绍。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+      {
+        name: "CANoe.CAN OSEK网络管理介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍OSEK网络管理，内容包括OSEK NM类型、网络节点状态、OSEK NM工作机制及基于CANoe.CAN的OSEK NM实现。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "CAN 传输协议": {
     nodeName: "CAN传输协议",
     type: [],
     match: ["CAN传输协议", "CAN 传输协议", "CAN TP", "CANTP"],
     description: "学习 CAN 传输层协议（ISO-TP），掌握多帧分段传输、流控与数据重组，为诊断通信打下基础。",
+  
+    courses: [
+      {
+        name: "CANoe诊断测试培训",
+        type: "直播课"
+      },
+      {
+        name: "应用OSEKTP.dll 传输CAN FD报文",
+        type: "自学课"
+      },
+    ],
   },
   "CAN诊断": {
     nodeName: "CAN诊断",
     type: [],
     match: ["CAN诊断"],
     description: "学习基于 CAN 的诊断通信，掌握 UDS 诊断服务流程、报文分析与常见诊断问题定位方法。",
+  
+    courses: [
+      {
+        name: "CANoe诊断测试培训",
+        type: "直播课"
+      },
+      {
+        name: "CANoe诊断功能应用",
+        type: "自学课",
+        detail: "本课程为付费自学课，诊断应用于汽车生命周期的多个阶段，如设计、生产以及售后等。诊断可以实现对ECU的配置、维护、维修和控制。\nCANoe是一款功能强大的工具，其主要功能包括分析、仿真、测试和诊断。本课程将介绍CANoe诊断功能的应用方法。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "LIN协议": {
     nodeName: "LIN协议",
     type: ["视频课", "直播课", "自学课"],
     match: ["LIN协议"],
     description: "系统学习LIN（Local Interconnect Network）通信协议，掌握LIN网络架构、主从通信机制、帧结构、调度表以及节点管理等核心知识，理解LIN总线在车身电子控制系统中的应用场景。",
+  
+    courses: [
+      {
+        name: "LIN协议介绍视频",
+        type: "视频课"
+      },
+      {
+        name: "CANoe/CANalyzer.LIN_TrainingDemo版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe/CANalyzer.LIN_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "LIN协议",
+        type: "自学课"
+      },
+      {
+        name: "CANoe.LIN 培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，通过该课程，您将了解如下内容：\n1. LIN协议介绍\n2. 物理层\n3. LIN协议\n4. CANoe介绍\n5. CANoe配置\n6. 报文发送\n7. 测量及分析\n8. 创建Panels\n9. CAPL介绍\n10. LIN相关CAPL函数\n11. LIN Stress 和 LIN Disturbance\n12. LIN从节点一致性测试\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场30,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "LDF Explorer": {
     nodeName: "LDF Explorer",
     type: ["自学课"],
     match: ["LDFExplorer", "LDF Explorer", "LDF Explorer"],
     description: "重点介绍LIN Description File（LDF）文件的结构与配置方法，学习节点定义、信号描述、帧配置以及调度表管理等内容，掌握LIN网络数据库的创建、维护与工程化管理能力。",
+  
+    courses: [
+      {
+        name: "CANoe/CANalyzer.LIN_TrainingDemo版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe/CANalyzer.LIN_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe.LIN 培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，通过该课程，您将了解如下内容：\n1. LIN协议介绍\n2. 物理层\n3. LIN协议\n4. CANoe介绍\n5. CANoe配置\n6. 报文发送\n7. 测量及分析\n8. 创建Panels\n9. CAPL介绍\n10. LIN相关CAPL函数\n11. LIN Stress 和 LIN Disturbance\n12. LIN从节点一致性测试\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场30,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "CANoe.LIN": {
     nodeName: "CANoe.LIN",
     type: ["视频课", "直播课", "公开课", "自学课", "内训课"],
     match: ["CANoe.LIN", "CAN.LIN"],
     description: "重点介绍CANoe平台中LIN网络的分析与仿真功能，通过理论结合实践的方式，掌握LIN网络搭建、报文监测、节点仿真、故障注入及通信分析等核心技能，快速具备LIN网络开发与调试能力。",
+  
+    courses: [
+      {
+        name: "CANoe/CANalyzer.CAN/LIN Replay Block",
+        type: "自学课",
+        detail: "本课程为付费自学课，您可以通过本课程了解到：在CANoe/CANalyzer中，如何将记录文件中的总线数据发送到真实总线或仿真总线上。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+      {
+        name: "CANoe/CANalyzer.LIN_TrainingDemo版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe/CANalyzer.LIN_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe.LIN 培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，通过该课程，您将了解如下内容：\n1. LIN协议介绍\n2. 物理层\n3. LIN协议\n4. CANoe介绍\n5. CANoe配置\n6. 报文发送\n7. 测量及分析\n8. 创建Panels\n9. CAPL介绍\n10. LIN相关CAPL函数\n11. LIN Stress 和 LIN Disturbance\n12. LIN从节点一致性测试\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场30,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "LIN CAPL": {
     nodeName: "LIN CAPL",
     type: ["公开课", "自学课"],
     match: ["LINCAPL", "LIN CAPL"],
     description: "系统学习基于LIN网络的CAPL脚本开发技术，掌握事件机制、报文处理、节点模拟及自动化测试方法。通过实际案例训练，提升LIN网络仿真、自动化验证与问题定位效率。",
+  
+    courses: [
+      {
+        name: "CAPL编程技巧之代码加密",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1txuyz2ECY/"
+      },
+      {
+        name: "CANoe/CANalyzer.LIN_TrainingDemo版",
+        type: "自学课",
+        url: D1_PDF_TRAININGCAR,
+        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe/CANalyzer.LIN_轻量版",
+        type: "自学课",
+        url: D1_PDF_QINGLIANG,
+        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
+        linkKind: "pdf"
+      },
+      {
+        name: "CANoe.LIN 培训",
+        type: "内训课",
+        detail: "本课程为付费内训课，通过该课程，您将了解如下内容：\n1. LIN协议介绍\n2. 物理层\n3. LIN协议\n4. CANoe介绍\n5. CANoe配置\n6. 报文发送\n7. 测量及分析\n8. 创建Panels\n9. CAPL介绍\n10. LIN相关CAPL函数\n11. LIN Stress 和 LIN Disturbance\n12. LIN从节点一致性测试\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场30,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com\""
+      },
+    ],
   },
   "LIN传输协议": {
     nodeName: "LIN传输协议",
@@ -311,6 +514,18 @@ window.NODE_HOVER_DATA = {
     type: ["视频课", "直播课", "自学课"],
     match: ["J1939协议"],
     description: "系统学习SAE J1939协议体系，掌握PGN、SPN、地址声明、请求响应机制、传输协议（TP）以及网络管理等核心内容，理解商用车网络通信架构与运行原理。",
+  
+    courses: [
+      {
+        name: "J1939协议介绍视频",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1M5411N7Kc/?spm_id_from=333.1387.upload.video_card.click&vd_source=269a5c2c943070950e9e2f7f2f5599d0"
+      },
+      {
+        name: "J1939协议",
+        type: "自学课"
+      },
+    ],
   },
   "J1939数据库": {
     nodeName: "J1939数据库",
@@ -341,54 +556,206 @@ window.NODE_HOVER_DATA = {
     type: ["直播课", "自学课"],
     match: ["ETH基础协议", "Ethernet基础协议"],
     description: "在此站点，您将学习以太网基础协议的内容，内容包括以太网物理层、数据链路层（MAC地址和VLAN）、网络层（IPv4/IPv6）和传输层(TCP/UDP)。",
+  
+    courses: [
+      {
+        name: "Ethernet基础协议培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/Ac1j7sZsDL?origin=lprLink"
+      },
+      {
+        name: "Ethernet基础协议介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，将向您介绍以太网基础协议的内容，内容包括以太网物理层、数据链路层（MAC地址和VLAN）、网络层（IPv4/IPv6）和传输层(TCP/UDP)。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+      {
+        name: "车载以太网",
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003442/latestversion",
+        detail: "本课程为免费在线自学课，基于以太网和IP的通信已在汽车行业中使用多年，如今这种通信技术越来越多地用于车内的数据传输。\n该程适用于所有希望更好地了解以太网和IP通信技术的人员。\n该课程还适用于所有计划参加Vector以太网和IP主题培训课程的人员。您可以在参加培训之前先了解基于以太网和IP的通信的基础知识。这样就能更轻松地进行培训，因为在培训期间会重温某些内容，并进行更深入的讲解。\n请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "ETH数据库": {
     nodeName: "ETH数据库",
     type: ["自学课"],
     match: ["ETH数据库", "Ethernet数据库"],
     description: "在测量分析以太网通信及搭建以太网残余总线仿真环境时，数据库是基础。在此站点，您将了解ARXML和FIBEX两种文件类型以及ARXML文件查看工具AUTOSAR Viewer。",
+  
+    courses: [
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "VN硬件配置": {
     nodeName: "VN硬件配置",
     type: ["公开课", "自学课"],
     match: ["VN硬件配置"],
     description: "Vector Hardware Manager是Vector 的硬件配置工具。在此站点，您将学习VN5000系列硬件接口卡的配置，包括TAP、DC、Switch等。",
+  
+    courses: [
+      {
+        name: "CANoe.Ethernet培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/nK1t6kauww?origin=lprLink"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "CANoe.ETH": {
     nodeName: "CANoe.ETH",
     type: ["公开课", "自学课", "内训课"],
     match: ["CANoe.ETH", "CANoe.Ethernet"],
     description: "在此站点，您将学习在CANoe中搭建以太网工程，包括添加数据库、配置TCP/IP Stack、发送以太网数据包等。此外，您还将了解以太网相关的分析窗口如Protocol Monitor。",
+  
+    courses: [
+      {
+        name: "CANoe.Ethernet培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/nK1t6kauww?origin=lprLink"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "Ethernet CAPL": {
     nodeName: "ETH CAPL",
     type: ["公开课", "自学课", "内训课"],
     match: ["ETHCAPL", "ETH CAPL", "Ethernet CAPL", "EthernetCAPL"],
     description: "在此站点，您将学习以太网相关的CAPL，包括发送/访问以太网数据包、TCP Socket 编程以及UDP Socket 编程等。",
+  
+    courses: [
+      {
+        name: "CAPL编程技巧之代码加密",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1txuyz2ECY/"
+      },
+      {
+        name: "CANoe.Ethernet培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/nK1t6kauww?origin=lprLink"
+      },
+      {
+        name: "以太网CAPL编程培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/AqnYvcNCuy?origin=lprLink"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+      {
+        name: "以太网CAPL编程培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/10272/"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "PduMux": {
     nodeName: "PduMux",
     type: ["自学课"],
     match: ["PduMux", "PDU Multiplexing", "PDUMultiplexing"],
     description: "在此站点，您将学习PDU的概念及结构以及Container PDU的概念。",
+  
+    courses: [
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "ETH IL": {
     nodeName: "ETH IL",
     type: ["自学课"],
     match: ["ETHIL", "ETH IL", "ETHIL"],
     description: "在此站点，您将学习应用CANoeILNL_AUTOSAR_ETH.DLL及AsrPDUIL2.DLL在以太网中实现基于信号的通信，并对通信数据进行分析。",
+  
+    courses: [
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "SOME/IP协议": {
     nodeName: "SOME/IP协议",
     type: ["直播课", "公开课", "自学课", "内训课"],
     match: ["SOME/IP协议"],
     description: "SOME/IP通信协议允许以多种方式交换复杂的数据类型，例如RPC、Notification Event和Field。SOME/IP-SD协议用来建立通信。在此站点，您将学习SOME/IP和SOME/IP-SD协议。",
+  
+    courses: [
+      {
+        name: "Ethernet高层协议介绍",
+        type: "自学课"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "SOME/IP仿真": {
     nodeName: "SOME/IP仿真",
     type: ["直播课", "公开课", "自学课", "内训课"],
     match: ["SOME/IP仿真"],
     description: "CANoe中SOME/IP的仿真功能基于SomeIP_IL.dll以及CANoeILNL_AUTOSAR_ETH.DLL实现。在此站点，你将学习如何应用上述DLL实现SOME/IP仿真。",
+  
+    courses: [
+      {
+        name: "CANoe SOME/IP仿真培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/jKpnkjpg4q?origin=lprLink"
+      },
+      {
+        name: "CANoe.Ethernet培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/nK1t6kauww?origin=lprLink"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "TSN协议组": {
     nodeName: "TSN协议",
@@ -407,18 +774,74 @@ window.NODE_HOVER_DATA = {
     type: ["直播课", "自学课", "内训课"],
     match: ["DoIP协议"],
     description: "在此站点，您将学习DoIP协议，包括DoIP诊断的流程和DoIP报文格式。",
+  
+    courses: [
+      {
+        name: "CANoe DoIP专题培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/pMS3z9gdsY?origin=lprLink"
+      },
+      {
+        name: "DoIP协议培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3234/"
+      },
+      {
+        name: "Ethernet高层协议介绍",
+        type: "自学课"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+      {
+        name: "DoIP培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3234/"
+      },
+    ],
   },
   "DoIP配置": {
     nodeName: "DoIP配置",
     type: ["直播课", "自学课", "内训课"],
     match: ["DolP配置", "DoIP配置"],
     description: "在此站点，您将学习如何正确配置 CANoe 以实现 DoIP 通信。",
+  
+    courses: [
+      {
+        name: "CANoe DoIP专题培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/pMS3z9gdsY?origin=lprLink"
+      },
+      {
+        name: "CANoe中基于TLS的DoIP通信配置",
+        type: "自学课"
+      },
+      {
+        name: "CANoe进行DoIP通信的配置介绍",
+        type: "自学课",
+        detail: "本课程为付费自学课，将演示如何进行DoIP通信的基础通信配置。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
+      },
+      {
+        name: "CANoe.Ethernet 培训",
+        type: "内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4851/"
+      },
+    ],
   },
   "Security概论": {
     nodeName: "Security概论",
     type: ["直播课"],
     match: ["Securitv概论", "Security概论"],
     description: "在此站点，您将学习哈希算法、对称密钥、非对称密钥、MAC消息验证码、数字签名、证书、Diffie-Hellman密钥交换等密码技术，这是了解上层协议的基础。",
+  
+    courses: [
+      {
+        name: "Security概论",
+        type: "自学课"
+      },
+    ],
   },
   "Security协议": {
     nodeName: "Security协议",

@@ -29,6 +29,19 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["ASR", "AUTOSAR"],
     description:
       "理解 AUTOSAR CP/AP 的技术概念与方法论。本站点包含以下内容：\n\nAUTOSAR 架构\nAUTOSAR Applications\nAUTOSAR RTE\nAUTOSAR BSW\nAUTOSAR 方法论\nAUTOSAR Adaptive SWC\nAUTOSAR AP 中间件\nPDU 与 Socket 的对接\nAUTOSAR CP 下的以太网使用模式",
+  
+    courses: [
+      {
+        name: "AUTOSAR CP 理论基础",
+        type: "自学课",
+        detail: "本课程为付费自学课，在本课程中，您将学习到有关 AUTOSAR Classic Platform (CP) 的方法论、技术概念以及 RTE 和基础软件组件的相关知识。\n课程内容：\n1. AUTOSAR Introduction\n- Overview and Objectives\n- Partnership and Timeline\n- AUTOSAR Classic Architecture\n2. AUTOSAR Application\n- Basic principles and technical concepts\n- SWC (software components)\n- Ports\n- Runnables\n3. AUTOSAR RTE (Runtime Environment)\n- RTE as a Communication Interface\n- RTE as a Runtime Environment for Runnables\n4. AUTOSAR BSW\n- Explanation of the most important BSW (basic software) concepts (Communication, Mode Management, Watchdog, Memory Services, Diagnostics, Hardware I/O, Operating System (OS))\n5. Methodology of AUTOSAR\n- Overview and data exchange formats (ECU Extract, ECUC,…)\n- Methodology between OEM and supplier\n6. MICROSAR Tool Chain\n- Introduction of Vector Tools throughout the whole development process\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com\""
+      },
+      {
+        name: "AUTOSAR AP 培训",
+        type: "内训课",
+        detail: "本课程为付费内训课。\n在第一部分，你将学习有关AUTOSAR自适应平台（AP）的方法论、技术概念以及基本软件组件的操作。第二部分的培训则将理论与实践结合在一起。所有重要的ECU开发领域都将在理论单元中覆盖。通过使用Vector的MICROSAR配置和生成工具，你将能够在一个实际示例中应用这些知识。\n培训详细内容：\n1. AUTOSAR Introduction\n- Overview and Objectives\n- AUTOSAR Adaptive Architecture\n2. Methodology\n- General Workflow from Model to Application\n- Data exchange formats\n3. AUTOSAR Adaptive Application\n- Basic principles and technical concepts\n- AUTOSAR design elements\n4. Execution Managements\n- AUTOSAR Adaptive startup behavior\n- Function groups and the machine states\n5. Exercise 1\n- Model a first application with DaVinci Developer Adaptive\n- Make use of adaptive libraries in source code\n- Build and run the application\n6. Service Oriented Communication (with SomeIP)\n- Service oriented communication principles\n- Service Discovery\n7. Communication Management\n- Architecture\n8. Manifest\n- Methodology workflow\n- AUTOSAR Manifest file types\n9. Exercise 2\n- Model a Service Provider and Consumer Application\n- Implement Service and offer it at the Provider\n- Make use of the Service at the Consumer\n10. Persistency\n- Key value storage\n- File storage\n11. Excerise 3\n- Model a file and key value storage for an application\n- Store data in source code\n12. Security\n- Secure communication\n- Cryptography\n13. Functional Safety\n- General introduction\n- Safety concepts and features\n14. Diagnostics Management\n- Unified Diagnostic Services\n- From Diagnostic Extract to Diagnostic Services.\n- Diagnostic Event Management\n15. Exercise 4\n- Model the Diagnostic Manager\n- Add a Diagnostic Service to an application.\n16. Update and Config Management\n- Software Package\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场100,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "E/E服务化": {
     nodeName: "E/E服务化",
@@ -36,6 +49,13 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["E/E服务化", "E/E", "S2S与E/E服务化", "S2S 与 E/E 服务化"],
     description:
       "理解传统的信号通信与服务通信之间的转化与共存方式。本站点包含以下内容：\n\n哪些功能适合服务化\n传统系统与服务架构的衔接\n分层服务模型\n架构落地与部署\n工具链与协同开发",
+  
+    courses: [
+      {
+        name: "汽车电子电气系统服务化转型",
+        type: "自学课"
+      },
+    ],
   },
   "PREEvision.SOA": {
     nodeName: "PREEvision.SOA",
@@ -50,6 +70,13 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["SOAAP", "SOA AP", "PREEvision.SOA AP", "PREEvision . SOA AP", "PREEvision.SOAAP", "PREEvision . SOAAP"],
     description:
       "使用 PREEvision 基于 AUTOSAR AP 方法论进行 SOA 设计。本站点包含以下内容：\n\n服务在 AP 架构中的部署\n使用 PREEvision EXPRESS 快捷创建 SOA 模型",
+  
+    courses: [
+      {
+        name: "PREEvision进阶内容 - SOA AP设计",
+        type: "自学课"
+      },
+    ],
   },
   "SOA CP": {
     nodeName: "SOA CP",
@@ -57,6 +84,13 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["SOACP", "SOA CP", "PREEvision.SOA CP", "PREEvision . SOA CP", "PREEvision.SOACP", "PREEvision . SOACP"],
     description:
       "使用 PREEvision 基于 AUTOSAR CP 方法论进行 SOA 设计。本站点包含以下内容：\n\n服务在 CP 架构中的部署\n使用 PREEvision EXPRESS 快捷创建 SOA 模型",
+  
+    courses: [
+      {
+        name: "PREEvision进阶内容 - SOA CP设计",
+        type: "自学课"
+      },
+    ],
   },
   "S2S": {
     nodeName: "S2S",
@@ -64,6 +98,13 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["S2S"],
     description:
       "使用 PREEvision 进行信号-服务的转化设计。本站点包含以下内容：\n\nPDU-based ETH 设计\nS2S 设计",
+  
+    courses: [
+      {
+        name: "PREEvision进阶内容 - S2S设计",
+        type: "自学课"
+      },
+    ],
   },
   "SDV概论": {
     nodeName: "SDV概论",
@@ -89,6 +130,14 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["MSRA.COM", "MSRC.COM"],
     description:
       "理解 AUTOSAR AP 通信组件功能及原理，掌握 MICROSAR Adaptive 通信功能的建模与实现。本站点包含以下内容：\n\nMethod、Event、Field 的实现机制",
+  
+    courses: [
+      {
+        name: "AUTOSAR AP 培训",
+        type: "内训课",
+        detail: "本课程为付费内训课。\n在第一部分，你将学习有关AUTOSAR自适应平台（AP）的方法论、技术概念以及基本软件组件的操作。第二部分的培训则将理论与实践结合在一起。所有重要的ECU开发领域都将在理论单元中覆盖。通过使用Vector的MICROSAR配置和生成工具，你将能够在一个实际示例中应用这些知识。\n培训详细内容：\n1. AUTOSAR Introduction\n- Overview and Objectives\n- AUTOSAR Adaptive Architecture\n2. Methodology\n- General Workflow from Model to Application\n- Data exchange formats\n3. AUTOSAR Adaptive Application\n- Basic principles and technical concepts\n- AUTOSAR design elements\n4. Execution Managements\n- AUTOSAR Adaptive startup behavior\n- Function groups and the machine states\n5. Exercise 1\n- Model a first application with DaVinci Developer Adaptive\n- Make use of adaptive libraries in source code\n- Build and run the application\n6. Service Oriented Communication (with SomeIP)\n- Service oriented communication principles\n- Service Discovery\n7. Communication Management\n- Architecture\n8. Manifest\n- Methodology workflow\n- AUTOSAR Manifest file types\n9. Exercise 2\n- Model a Service Provider and Consumer Application\n- Implement Service and offer it at the Provider\n- Make use of the Service at the Consumer\n10. Persistency\n- Key value storage\n- File storage\n11. Excerise 3\n- Model a file and key value storage for an application\n- Store data in source code\n12. Security\n- Secure communication\n- Cryptography\n13. Functional Safety\n- General introduction\n- Safety concepts and features\n14. Diagnostics Management\n- Unified Diagnostic Services\n- From Diagnostic Extract to Diagnostic Services.\n- Diagnostic Event Management\n15. Exercise 4\n- Model the Diagnostic Manager\n- Add a Diagnostic Service to an application.\n16. Update and Config Management\n- Software Package\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场100,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "Proxy & Skeleton": {
     nodeName: "Proxy & Skeleton",
@@ -96,6 +145,14 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["Proxy & Skeleton", "Proxy&Skeleton", "Proxy & Skeleton ", "Proxy", "Skeleton"],
     description:
       "理解 Proxy & Skeleton 架构，掌握相关接口并实现调用。本站点包含以下内容：\n\nProxy 相关接口与使用方法\nProxy 回调机制\nSkeleton 相关接口与使用方法\nSkeleton 处理模式",
+  
+    courses: [
+      {
+        name: "AUTOSAR AP 培训",
+        type: "内训课",
+        detail: "本课程为付费内训课。\n在第一部分，你将学习有关AUTOSAR自适应平台（AP）的方法论、技术概念以及基本软件组件的操作。第二部分的培训则将理论与实践结合在一起。所有重要的ECU开发领域都将在理论单元中覆盖。通过使用Vector的MICROSAR配置和生成工具，你将能够在一个实际示例中应用这些知识。\n培训详细内容：\n1. AUTOSAR Introduction\n- Overview and Objectives\n- AUTOSAR Adaptive Architecture\n2. Methodology\n- General Workflow from Model to Application\n- Data exchange formats\n3. AUTOSAR Adaptive Application\n- Basic principles and technical concepts\n- AUTOSAR design elements\n4. Execution Managements\n- AUTOSAR Adaptive startup behavior\n- Function groups and the machine states\n5. Exercise 1\n- Model a first application with DaVinci Developer Adaptive\n- Make use of adaptive libraries in source code\n- Build and run the application\n6. Service Oriented Communication (with SomeIP)\n- Service oriented communication principles\n- Service Discovery\n7. Communication Management\n- Architecture\n8. Manifest\n- Methodology workflow\n- AUTOSAR Manifest file types\n9. Exercise 2\n- Model a Service Provider and Consumer Application\n- Implement Service and offer it at the Provider\n- Make use of the Service at the Consumer\n10. Persistency\n- Key value storage\n- File storage\n11. Excerise 3\n- Model a file and key value storage for an application\n- Store data in source code\n12. Security\n- Secure communication\n- Cryptography\n13. Functional Safety\n- General introduction\n- Safety concepts and features\n14. Diagnostics Management\n- Unified Diagnostic Services\n- From Diagnostic Extract to Diagnostic Services.\n- Diagnostic Event Management\n15. Exercise 4\n- Model the Diagnostic Manager\n- Add a Diagnostic Service to an application.\n16. Update and Config Management\n- Software Package\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场100,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
+      },
+    ],
   },
   "SOA测试概论": {
     nodeName: "SOA测试概论",
