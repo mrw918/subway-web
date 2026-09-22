@@ -94,7 +94,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   },
   "MICROSAR SIP": {
     nodeName: "MICROSAR SIP",
-    type: ["公开课", "内训课", "直播课"],
+    type: ["视频课", "公开课", "直播课"],
     match: ["MICROSAR SIP", "MICROSARSIP"],
     description:
       "MICROSAR SIP即MICROSAR软件集成包，是Vector嵌入式代码产品的主要交付物。本站点包含以下内容：\n\nAUTOSAR与MICROSAR及DaVinci的关系\nSIP交付形式\nSIP目录结构",
@@ -102,19 +102,19 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   
     courses: [
       {
-        name: "DaVinci基础配置(CFG6)",
+        name: "AUTOSAR CP 入门",
+        type: "视频课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/6160/autosar-cp%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE-microsar-sip/"
+      },
+      {
+        name: "DEXTRO 详细配置 (CP08)",
         type: "直播课",
-        url: "https://forms.cloud.microsoft/e/5hZjQ2SNQE?origin=lprLink"
+        url: "https://forms.cloud.microsoft/e/4d8r-r016d9?origin=lprLink"
       },
       {
-        name: "AUTOSAR CP 培训",
+        name: "AUTOSAR CP 入门",
         type: "公开课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/9180/"
-      },
-      {
-        name: "AUTOSAR CP 培训",
-        type: "内训课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/9180/"
+        url: "https://academy.vector.com/cn/zh/courses/detail/6160/autosar-cp%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE-microsar-sip/"
       },
     ],
   },

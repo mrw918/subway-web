@@ -923,7 +923,6 @@
         panel.hidden = true;
         return;
       }
-      var typeList = types && types.length ? types : [];
       var routeList = [];
       (routeIds || []).forEach(function (rid) {
         var route = routes[rid];
@@ -936,7 +935,7 @@
         });
       });
       var courseSection = buildCoursesSection(courses, !!expanded, false);
-      var hasContent = !!(title || desc || typeList.length || routeList.length || courseSection.hasCourses);
+      var hasContent = !!(title || desc || routeList.length || courseSection.hasCourses);
       if (!hasContent) {
         panel.hidden = true;
         return;
@@ -958,19 +957,6 @@
                     r.color +
                     '">' +
                     escapeHtml(r.name) +
-                    "</span>"
-                  );
-                })
-                .join("") +
-            "</div>"
-          : "") +
-        (typeList.length
-          ? '<div class="info-panel__types">' +
-              typeList
-                .map(function (t) {
-                  return (
-                    '<span class="info-panel__type">' +
-                    escapeHtml(formatTypeLabel(t)) +
                     "</span>"
                   );
                 })
@@ -1559,18 +1545,8 @@
       tooltip.querySelector(".node-tooltip__title").textContent = title || "";
       tooltip.querySelector(".node-tooltip__desc").innerHTML = formatDescHtml(desc || "");
       var typesEl = tooltip.querySelector(".node-tooltip__types");
-      var typeList = types && types.length ? types : [];
-      if (typeList.length) {
-        typesEl.innerHTML = typeList
-          .map(function (t) {
-            return '<span class="node-tooltip__type">' + escapeHtml(formatTypeLabel(t)) + "</span>";
-          })
-          .join("");
-        typesEl.hidden = false;
-      } else {
-        typesEl.innerHTML = "";
-        typesEl.hidden = true;
-      }
+      typesEl.innerHTML = "";
+      typesEl.hidden = true;
 
       var courseSection = buildCoursesSection(courses, !!expanded, false);
       var coursesWrap = tooltip.querySelector(".node-tooltip__courses-wrap");
