@@ -347,7 +347,7 @@
 	<text transform="matrix(0.7032 0.711 -0.711 0.7032 663.3804 237.3747)"><tspan x="0" y="0" class="st66 st70">UDS</tspan><tspan x="21.1" y="0" class="st74 st70">协议</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 594.0439 292.5966)"><tspan x="0" y="0" class="st66 st70">Security</tspan><tspan x="39" y="0" class="st74 st70">概论</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 615.6879 313.3856)"><tspan x="0" y="0" class="st66 st70">Security</tspan><tspan x="39" y="0" class="st74 st70">协议</tspan></text>
-	<text transform="matrix(0.711 -0.7032 0.7032 0.711 623.1879 344.3954)" class="st66 st70">CANoe.Security</text>
+	<text transform="matrix(0.711 -0.7032 0.7032 0.711 623.1879 344.3954)"><tspan x="0" y="0" class="st66 st70">Security</tspan><tspan x="0" y="10.8" class="st66 st70">Manager</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 656.1262 355.9969)" class="st74 st70">网络安全测试</text>
 </g>
 <g id="路线序号">

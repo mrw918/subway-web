@@ -7,10 +7,11 @@ import re
 import sys
 import zipfile
 import xml.etree.ElementTree as ET
+from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-XLSX = Path("/Users/maruowen/Desktop/副本Training_加课程链接.xlsx")
+XLSX = Path("/Users/maruowen/Desktop/副本Training_反向对应_5728 (4).xlsx")
 JS_DIR = ROOT / "js"
 
 ROUTE_MAP = {
@@ -164,6 +165,67 @@ def extract_url(text: str) -> str | None:
     return matched.group(0) if matched else None
 
 
+def is_link_fragment(link: str) -> bool:
+    if not link.strip():
+        return False
+    if link.strip().startswith("暂无") or "不展示" in link:
+        return False
+    if extract_url(link):
+        return False
+    if "插入链接" in link or "本课程为" in link:
+        return False
+    if "课程大纲" in link or "同公开课" in link:
+        return False
+    return True
+
+
+def is_price_only_fragment(link: str) -> bool:
+    text = link.strip()
+    if not text or extract_url(text) or "本课程为" in text:
+        return False
+    if len(text) >= 80:
+        return False
+    if "元+VAT" in text or text.startswith("单人价格") or text.startswith("如您有意向"):
+        return True
+    return False
+
+
+def build_id_link_fallback(rows: list[list[str]]) -> dict[str, str]:
+    grouped: dict[str, list[str]] = defaultdict(list)
+    for row in rows:
+        grouped[row[0]].append(row[5] if len(row) > 5 else "")
+
+    fallback: dict[str, str] = {}
+    for row_id, links in grouped.items():
+        chosen = None
+        for link in links:
+            if extract_url(link):
+                chosen = link
+                break
+        if not chosen:
+            for link in links:
+                if "本课程为" in link and len(link.strip()) > 80:
+                    chosen = link
+                    break
+        if chosen:
+            fallback[row_id] = chosen
+    return fallback
+
+
+def is_can_fd_pdf_course(course_name: str, link: str) -> bool:
+    if "LIN" in course_name:
+        return False
+    if "CAN/CAN FD" not in course_name and "CAN FD" not in course_name:
+        return False
+    if "课程大纲" in link:
+        return True
+    if "轻量版" in course_name and "付费" in link:
+        return True
+    if "TrainingCar" in course_name and "付费" in link:
+        return True
+    return False
+
+
 def course_key(course: dict) -> tuple[str, str]:
     return (course["name"], course["type"])
 
@@ -181,7 +243,69 @@ def dedupe_courses(courses: list[dict]) -> list[dict]:
     return result
 
 
+def parse_link_to_course(link: str, course_name: str, public_urls: dict[tuple[str, str], str]) -> dict | None:
+    if "不展示" in link:
+        return None
+    if link.strip() in ("暂无", "暂无。", "暂无链接") or link.strip().startswith("暂无，"):
+        return None
+
+    course: dict = {}
+
+    if not link.strip():
+        return course
+
+    if "同公开课" in link and "http" not in link:
+        url = public_urls.get((course_name, "公开课"))
+        if url:
+            course["url"] = url
+        return course
+
+    url = extract_url(link)
+    if url and (
+        "合并" in link[: link.find(url)]
+        or link.strip().startswith("和")
+        or link.strip().startswith("与")
+        or link.strip().startswith("http")
+    ):
+        course["url"] = url
+        if "点击此处" in link and "插入链接" in link:
+            detail = clean_detail(link)
+            if detail:
+                course["detail"] = detail
+        return course
+
+    if "插入链接" in link:
+        if url:
+            course["url"] = url
+            detail = clean_detail(link)
+            if detail:
+                course["detail"] = detail
+        return course
+
+    if is_can_fd_pdf_course(course_name, link):
+        if "轻量版" in course_name:
+            course["url"] = PDF_Q_URL
+            course["linkKind"] = "pdf"
+        elif "TrainingCar" in course_name:
+            course["url"] = PDF_T_URL
+            course["linkKind"] = "pdf"
+        detail = clean_detail(link)
+        course["detail"] = detail or ("本课程为付费自学课\n" + PAID_TAIL)
+        return course
+
+    if url:
+        course["url"] = url
+        return course
+
+    detail = clean_detail(link)
+    if detail:
+        course["detail"] = detail
+    return course
+
+
 def build_courses(rows: list[list[str]], nodes_by_route: dict[str, list[dict]]) -> dict[str, dict[str, list[dict]]]:
+    id_fallback = build_id_link_fallback(rows)
+
     public_urls: dict[tuple[str, str], str] = {}
     for row in rows:
         if row[1] == "公开课":
@@ -198,6 +322,12 @@ def build_courses(rows: list[list[str]], nodes_by_route: dict[str, list[dict]]) 
         station = row[4]
         link = (row[5] if len(row) > 5 else "") or ""
 
+        if is_link_fragment(link):
+            link = id_fallback.get(row[0], link)
+
+        if is_price_only_fragment(link):
+            continue
+
         parsed = parse_station(station)
         if not parsed:
             unresolved.append(("station", station, course_name))
@@ -208,77 +338,22 @@ def build_courses(rows: list[list[str]], nodes_by_route: dict[str, list[dict]]) 
             unresolved.append(("node", station, course_name))
             continue
 
+        fields = parse_link_to_course(link, course_name, public_urls)
+        if fields is None:
+            continue
+
         filename = ROUTE_MAP[route]
         bucket = courses_by_file[filename].setdefault(node_key, [])
 
-        if "不展示" in link:
-            continue
-        if link.strip() in ("暂无", "暂无。", "暂无链接") or link.strip().startswith("暂无，"):
-            continue
-
         course: dict = {"name": course_name, "type": course_type}
+        course.update(fields)
 
-        if not link.strip():
-            bucket.append(course)
-            continue
+        if "同公开课" in (row[5] or "") and "http" not in (row[5] or "") and not course.get("url"):
+            unresolved.append(("same_public", station, course_name))
 
-        if "同公开课" in link and "http" not in link:
-            url = public_urls.get((course_name, "公开课"))
-            if url:
-                course["url"] = url
-            else:
-                unresolved.append(("same_public", station, course_name))
-            bucket.append(course)
-            continue
+        if "插入链接" in (row[5] or "") and not course.get("url"):
+            unresolved.append(("atalent", station, course_name))
 
-        url = extract_url(link)
-        if url and (
-            "合并" in link[: link.find(url)]
-            or link.strip().startswith("和")
-            or link.strip().startswith("与")
-            or link.strip().startswith("http")
-        ):
-            course["url"] = url
-            if "点击此处" in link and "插入链接" in link:
-                detail = clean_detail(link)
-                if detail:
-                    course["detail"] = detail
-            bucket.append(course)
-            continue
-
-        if "插入链接" in link:
-            if not url:
-                unresolved.append(("atalent", station, course_name))
-            else:
-                course["url"] = url
-                detail = clean_detail(link)
-                if detail:
-                    course["detail"] = detail
-            bucket.append(course)
-            continue
-
-        if "课程大纲" in link or (
-            ("轻量版" in course_name or "Training" in course_name) and "付费" in link
-        ):
-            if "轻量版" in course_name:
-                course["url"] = PDF_Q_URL
-                course["linkKind"] = "pdf"
-            elif "Training" in course_name:
-                course["url"] = PDF_T_URL
-                course["linkKind"] = "pdf"
-            detail = clean_detail(link)
-            course["detail"] = detail or ("本课程为付费自学课\n" + PAID_TAIL)
-            bucket.append(course)
-            continue
-
-        if url:
-            course["url"] = url
-            bucket.append(course)
-            continue
-
-        detail = clean_detail(link)
-        if detail:
-            course["detail"] = detail
         bucket.append(course)
 
     if unresolved:
@@ -379,11 +454,10 @@ def patch_node_data_file(filename: str, courses_map: dict[str, list[dict]]) -> N
 
         obj_text = re.sub(r"\n\s*courses:\s*\[[\s\S]*?\],", "", obj_text)
         courses_block = render_courses_block(courses, use_d1_constants)
-        if not courses_block:
-            continue
+        if courses_block:
+            insertion = "\n" + courses_block.rstrip("\n")
+            obj_text = obj_text[:-1] + insertion + "\n  }"
 
-        insertion = "\n" + courses_block.rstrip("\n")
-        obj_text = obj_text[:-1] + insertion + "\n  }"
         text = text[:obj_start] + obj_text + text[obj_end + 1 :]
 
     path.write_text(text, encoding="utf-8")
@@ -392,25 +466,26 @@ def patch_node_data_file(filename: str, courses_map: dict[str, list[dict]]) -> N
 def patch_match_aliases() -> None:
     path = JS_DIR / "node-data-network-test.js"
     text = path.read_text(encoding="utf-8")
-    text = text.replace(
-        'match: ["CANoe.DiVa", "DiVa"],',
-        'match: ["CANoe.DiVa", "CANoe.Diva", "DiVa"],',
-        1,
-    )
-    path.write_text(text, encoding="utf-8")
+    if "CANoe.Diva" not in text:
+        text = text.replace(
+            'match: ["CANoe.DiVa", "DiVa"],',
+            'match: ["CANoe.DiVa", "CANoe.Diva", "DiVa"],',
+            1,
+        )
+        path.write_text(text, encoding="utf-8")
 
 
 def bump_index_versions() -> None:
     path = ROOT / "index.html"
     text = path.read_text(encoding="utf-8")
     bumps = {
-        "node-data.js": 21,
-        "node-data-network-test.js": 15,
-        "node-data-diagnostic.js": 8,
-        "node-data-embedded.js": 18,
-        "node-data-mbse.js": 6,
-        "node-data-soa.js": 5,
-        "node-data-calibration.js": 4,
+        "node-data.js": 22,
+        "node-data-network-test.js": 16,
+        "node-data-diagnostic.js": 9,
+        "node-data-embedded.js": 19,
+        "node-data-mbse.js": 7,
+        "node-data-soa.js": 6,
+        "node-data-calibration.js": 5,
     }
     for filename, version in bumps.items():
         text = re.sub(

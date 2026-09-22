@@ -19,7 +19,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
       {
         name: "ECU软件概论",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，系统讲述了 ECU 软件从单功能控制、到多 ECU 协同、再到通过 AUTOSAR 实现架构化的软件演进过程，并结合硬件视角说明了 ECU 软件的实际运行与实现机制。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -69,12 +70,9 @@ window.NODE_HOVER_DATA_EMBEDDED = {
         url: "https://forms.cloud.microsoft/e/TkfBSVRcwP?origin=lprLink"
       },
       {
-        name: "CAN通信系统设计工具链培训",
-        type: "直播课"
-      },
-      {
         name: "PREEvision to DaVinci to CANoe - CAN通信系统设计工具链",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，面向汽车电子电气系统开发场景，介绍由 PREEvision、DaVinci Tools 与 CANoe 构成的完整工具链，并从系统设计、软件开发、通信配置、仿真测试及变更管理等维度展示其整体协同能力。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -151,7 +149,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
       {
         name: "DaVinci Configurator Classic 6 - 创建工程",
-        type: "自学课"
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000005701/latestversion"
       },
     ],
   },
@@ -165,7 +164,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     courses: [
       {
         name: "ECU最小系统",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，从Runtime视角下的ECU最小系统出发，系统梳理AUTOSAR ECU启动所需的最小模块集合及其职责，并结合DaVinci配置流程与仿真验证，帮助学员建立从架构理解到工程落地的完整认知。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -258,7 +258,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
       {
         name: "DaVinci - 应用软件集成",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，基于DaVinci Configurator Classic 6.3.1版本和DaVinci Developer Classic 4.18版本，介绍CFG6中应用软件集成的方法。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -357,43 +358,53 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
       {
         name: "DaVinci中的Client-Server Port - 同步调用与异步调用",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，《AUTOSAR_SWS_RTE》标准文档中提到，SWC 之间通过 Port 进行通信，Port 可以定义为 Sender-Receiver 类型或者 Client-Server 类型，而配置 Client-Server Port 时又可以进一步定义使用同步调用或者异步调用。本课程通过 DaVinci 工具，创建示例工程，结合 MICROSAR 的代码实现，对 Client-Server Port 的配置与实现进行深入详解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Port接口配置 - 生成间接接口",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，在使用 DaVinci Developer Classic 工具配置 Port 时，有“Port API Options”选项。勾选其中的“Enable indirect API”可以额外提供间接的接口调用方式。本课程通过 DaVinci 工具，创建示例工程，结合 MICROSAR 的代码实现，对该功能的配置与实现进行深入详解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Port接口配置 - 通过指针访问接口",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，在使用 DaVinci Developer Classic 工具配置 Port 时，有“Port API Options”选项。勾选其中的“Enable API usage by address”可以强制通过函数定义的方式实现接口，以便于通过指针访问接口。\n本课程通过 DaVinci 工具，创建示例工程，结合 MICROSAR 的代码实现，对该功能的配置与实现进行深入详解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Port通信配置 - 发送结果确认",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Runnable配置 - 最小触发间隔",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，在使用 DaVinci Developer Classic 工具配置 Runnable 时，可以进一步配置“Activation Reasons”选项，以便在实现 Runnable 代码时区分不同的触发原因。本课程通过 DaVinci 工具，创建示例工程，结合 MICROSAR 的代码实现，对该功能的配置与实现进行深入详解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Runnable配置 - 获取触发原因",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，在使用 DaVinci Developer Classic 工具配置 Runnable 时，可以进一步配置“Activation Reasons”选项，以便在实现 Runnable 代码时区分不同的触发原因。本课程通过 DaVinci 工具，创建示例工程，结合 MICROSAR 的代码实现，对该功能的配置与实现进行深入详解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Runnable配置 - 通过模式禁用触发",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，在使用 DaVinci Developer Classic 工具配置 Runnable 时，可以进一步配置“Mode Disabling”选项，以在特定的模式下禁用 Runnable 的某些触发条件。本课程通过 DaVinci 工具，创建示例工程，结合 MICROSAR 的代码实现，对该功能的配置与实现进行深入详解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Sender-Receiver Port - 对异常值的处理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，《AUTOSAR_SWS_RTE》标准文档中提到，对于 Sender-Receiver Port 这一类接口的数据传递，有显式/隐式（explicit/implicit）之分。本课程通过Vector DaVinci工具，创建示例工程，结合MICROSAR的代码实现，对其进行深入详解。\n学习时长：1小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Sender-Receiver Port - 显式通信与隐式通信",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，《AUTOSAR_SWS_RTE》标准文档中提到，对于 Sender-Receiver Port 这一类接口的数据传递，可以选择配置为队列通信。本课程通过DaVinci工具，创建示例工程，结合 MICROSAR的代码实现，对其进行深入详解。\n学习时长：1小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DaVinci中的Sender-Receiver Port - 队列通信",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，在配置 Sender-Receiver Port 时，如果选择非队列形式进行数据传递，可以进一步进行异常值的处理配置。本课程通过Vector DaVinci工具，创建示例工程，结合MICROSAR的代码实现，对其进行深入详解。\n学习时长：0.5小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -659,7 +670,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
       {
         name: "车载嵌入式存储技术基础",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，从 ECU 的数据存储需求出发，介绍 RAM、EEPROM 和 Flash 三种典型存储技术的工作原理、技术特点及工程应用，并进一步说明存储技术如何影响软件架构设计。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "AUTOSAR CP 培训",
@@ -777,7 +789,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     courses: [
       {
         name: "开发合规与过程管理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在帮助学员了解ECU软件开发中除功能实现之外的关键工程约束，建立对开发合规性、功能安全与信息安全三大领域的整体认知，从而了解现代汽车软件开发的工程本质。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -815,7 +828,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
       {
         name: "汽车网络安全ISO/SAE 21434及网络安全工程培训-二级",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3231/"
       },
       {
         name: "MICROSAR 信息安全培训",
@@ -867,7 +881,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     courses: [
       {
         name: "TÜV认证汽车功能安全ISO 26262及功能安全工程培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/9422/"
       },
     ],
   },

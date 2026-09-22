@@ -192,10 +192,10 @@ window.NODE_HOVER_DATA_CALIBRATION = {
     description: "A2L文件的打开、创建、更新及差异报告相关能力",
   },
   "vCDMStudio": {
-    nodeName: "vCDM Studio",
+    nodeName: "vCDMstudio",
     type: ["ELN", "B站", "OET", "CIT", "线上课程"],
-    match: ["vCDMStudio", "vCDM Studio"],
-    description: "学习使用vCDM Studio管理和维护标定数据",
+    match: ["vCDMStudio", "vCDMstudio", "vCDM Studio"],
+    description: "学习使用 vCDMstudio 管理和维护标定数据",
   },
   "vCDM": {
     nodeName: "vCDM",
@@ -204,10 +204,10 @@ window.NODE_HOVER_DATA_CALIBRATION = {
     description: "学习 vCDM 标定数据管理平台的基本概念与使用方法",
   },
   "vCDMToolSet": {
-    nodeName: "vCDM Tool Set",
+    nodeName: "vCDM Tool-Set",
     type: [],
-    match: ["vCDMToolSet", "vCDM Tool Set", "VCDMToolSet", "vCDMTool Set"],
-    description: "学习使用vCDM Tool Set完成标定数据处理及工程任务",
+    match: ["vCDMToolSet", "vCDM Tool-Set", "vCDM Tool Set", "VCDMToolSet", "vCDMTool Set"],
+    description: "学习使用 vCDM Tool-Set 完成标定数据处理及工程任务",
   },
   "标定数据质量及流程": {
     nodeName: "标定数据质量及流程",

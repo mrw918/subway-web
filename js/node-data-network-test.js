@@ -43,7 +43,9 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       },
       {
         name: "CAN协议",
-        type: "自学课"
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003420/latestversion",
+        detail: "本课程为免费在线自学课。CAN（Controller Area Network，控制器局域网）是一种串行通信技术，专门用于在汽车电子控制单元（ECU）之间实现可靠的数据交换。\n该在线学习课程适用于所有希望更好地了解CAN通信技术的人员。\n该在线学习课程还适用于所有计划参加Vector培训课程的人员。在对数据通信有一定程度的了解之后，您将更容易接受绝大多数Vector培训课程。\n报名方式：请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。"
       },
     ],
   },
@@ -112,11 +114,13 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       },
       {
         name: "CAPL测试",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，通过本课程了解CAPL Test for CANoe功能，内容包括CANoe Test Module创建及基础配置、CAPL Test Module结构介绍、基于CAPL编写测试用例及Test Service Library-checks介绍。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "应用VS Code进行测试开发",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，测试（如SIL测试、HIL测试、整车测试）是汽车产品开发过程中一系列非常重要的活动，目标是发现产品缺陷并评估产品质量。Vector提供了测试工具链帮助工程师高效地进行测试活动。其中，在测试开发过程中，需根据测试规范、测试需求等输入编写测试用例。本课程将介绍应用VS Code进行测试开发。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -210,19 +214,23 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       },
       {
         name: "vTESTstudio图形化测试设计培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4847/"
       },
       {
         name: "vTESTstudio培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/4847/"
       },
       {
         name: "vTESTstudio",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，您将使用 vTESTstudio 及其集成测试设计编辑器开发测试项目。其中特别涉及测试项目组织管理和高效测试的方法。\n 课程内容：\n1. Introduction to vTESTstudio\n- vTESTstudio concepts and features\n- Test configuration in vTESTstudio\n- Test execution in CANoe\n2. Test Table\n- Fundamentals\n- Test commands\n- Test functions\n3. Efficient Tests\n- Parameter definition\n- Parameter types and usage\n- Stimulation Curve\n- Variants\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "应用vTESTstudio&CANoe进行Fuzz Testing",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍了如何使用CANoe和vTESTstudio进行模糊测试。\n学习时长：0.5小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "vTESTstudio培训",
@@ -253,7 +261,8 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     courses: [
       {
         name: "SIL测试",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍SIL测试的基本概念，帮助学员了解 SIL Kit 开源库的主要特性及配置方法，掌握基于 vCDL 的建模，并通过实践熟悉应用CANoe进行 SIL 测试的完整过程，实现 SIL 测试的快速上手。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -266,7 +275,8 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     courses: [
       {
         name: "SIL测试",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍SIL测试的基本概念，帮助学员了解 SIL Kit 开源库的主要特性及配置方法，掌握基于 vCDL 的建模，并通过实践熟悉应用CANoe进行 SIL 测试的完整过程，实现 SIL 测试的快速上手。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -331,20 +341,17 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       {
         name: "CANoe/CANalyzer.LIN_TrainingDemo版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK",
-        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
-        linkKind: "pdf"
+        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "CANoe/CANalyzer.LIN_轻量版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY",
-        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
-        linkKind: "pdf"
+        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "LIN协议",
-        type: "自学课"
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003421/latestversion"
       },
       {
         name: "CANoe.LIN 培训",
@@ -368,16 +375,12 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       {
         name: "CANoe/CANalyzer.LIN_TrainingDemo版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK",
-        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
-        linkKind: "pdf"
+        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "CANoe/CANalyzer.LIN_轻量版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY",
-        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
-        linkKind: "pdf"
+        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "CANoe.LIN 培训",
@@ -401,16 +404,12 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       {
         name: "CANoe/CANalyzer.LIN_TrainingDemo版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK",
-        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
-        linkKind: "pdf"
+        detail: "本课程为付费自学课，在本课程中，您将学习到：LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信以及应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "CANoe/CANalyzer.LIN_轻量版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY",
-        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
-        linkKind: "pdf"
+        detail: "本课程为付费自学课，您将学习到LIN总线协议、应用CANoe/CANalyzer测量分析LIN总线通信、应用CANoe和CAPL编程语言对LIN总线节点进行仿真。课程agenda请见下方。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "CANoe.LIN 培训",
@@ -438,7 +437,9 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       },
       {
         name: "车载以太网",
-        type: "自学课"
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003442/latestversion",
+        detail: "本课程为免费在线自学课，基于以太网和IP的通信已在汽车行业中使用多年，如今这种通信技术越来越多地用于车内的数据传输。\n该程适用于所有希望更好地了解以太网和IP通信技术的人员。\n该课程还适用于所有计划参加Vector以太网和IP主题培训课程的人员。您可以在参加培训之前先了解基于以太网和IP的通信的基础知识。这样就能更轻松地进行培训，因为在培训期间会重温某些内容，并进行更深入的讲解。\n请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。"
       },
       {
         name: "CANoe.Ethernet 培训",
@@ -456,7 +457,8 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     courses: [
       {
         name: "Ethernet高层协议介绍",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，将向您介绍以太网高层协议的内容，内容分为SOME/IP和DoIP，SOME/IP包括服务类型介绍、SOME/IP-SD服务发现过程和SOME/IP帧格式定义，DoIP包括DoIP诊断的工作流程，DoIP帧格式定义。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "CANoe.Ethernet 培训",
@@ -504,7 +506,8 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       },
       {
         name: "J1939协议",
-        type: "自学课"
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003422/latestversion"
       },
     ],
   },
@@ -543,7 +546,8 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     courses: [
       {
         name: "UDS协议培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3238/"
       },
       {
         name: "UDS培训",
@@ -588,7 +592,8 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     courses: [
       {
         name: "Security概论",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍对称密码、非对称密码、哈希算法、MAC、数字签名和证书等密码技术，为后续学习SecOC、TLS、UDS Security以及Security配置等打下基础。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -598,10 +603,10 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     match: ["Security协议"],
     description: "在此站点，您将学习SecOC、TLS等协议以及诊断安全相关的UDS服务。",
   },
-  "CANoe.Security": {
-    nodeName: "CANoe.Security",
+  "Security Manager": {
+    nodeName: "Security Manager",
     type: ["自学课"],
-    match: ["CANoe.Security"],
+    match: ["Security Manager", "CANoe.Security"],
     description: "Vector工具集成Security Manager插件，方便实现与OEM安全设施之间的链接。针对不同ECU的安全通信技术，均可通过通用化配置实现快速配置。在此站点，您将学习Security的相关配置。",
   },
   "网络安全测试": {

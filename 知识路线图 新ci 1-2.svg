@@ -206,9 +206,9 @@
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 191.0168 370.4326)" class="st74 st75">标定数据库</text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 321.3703 379.3096)"><tspan x="0" y="0" class="st57 st75">CANape</tspan><tspan x="47.2" y="0" class="st74 st75">基础</tspan><tspan x="71.2" y="0" class="st60 st75"> </tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 459.3822 377.9958)" class="st74 st75">标定数据管理</text>
-	<text transform="matrix(0.711 -0.7032 0.7032 0.711 628.7092 344.5927)"><tspan x="0" y="0" class="st57 st76">vCDM </tspan><tspan x="-6.5" y="10.8" class="st57 st76">Tool Set</tspan></text>
+	<text transform="matrix(0.711 -0.7032 0.7032 0.711 628.7092 344.5927)"><tspan x="0" y="0" class="st57 st76">vCDM </tspan><tspan x="-6.5" y="10.8" class="st57 st76">Tool-Set</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 329.9439 241.1589)"><tspan x="0" y="0" class="st57 st76">A2L</tspan><tspan x="16.8" y="0" class="st74 st76">文件</tspan><tspan x="34.8" y="0" class="st74 st76 st77">​</tspan></text>
-	<text transform="matrix(0.711 -0.7032 0.7032 0.711 572.8766 257.4785)"><tspan x="0" y="0" class="st57 st76">vCDM </tspan><tspan x="0" y="10.8" class="st57 st76">Studio</tspan></text>
+	<text transform="matrix(0.711 -0.7032 0.7032 0.711 572.8766 257.4785)" class="st57 st76">vCDMstudio</text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 633.6249 256.1377)"><tspan x="0" y="0" class="st74 st76">标定数据</tspan><tspan x="0" y="10.8" class="st74 st76">质量及流程</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 701.1225 265.0577)" class="st74 st76">标定参数处理</text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 566.14 346.9014)" class="st57 st76">vCDM</text>

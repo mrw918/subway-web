@@ -53,7 +53,8 @@ window.NODE_HOVER_DATA_SOA = {
     courses: [
       {
         name: "汽车电子电气系统服务化转型",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，围绕汽车电子电气系统从“信号驱动”向“服务驱动”的演进，系统讲解从功能建模到服务设计，再到架构落地与工具链实现的服务化转型路径。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -74,7 +75,8 @@ window.NODE_HOVER_DATA_SOA = {
     courses: [
       {
         name: "PREEvision进阶内容 - SOA AP设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在教授如何基于 PREEvision 中的 AUTOSAR Adaptive Explorer 进行与 SOA（服务导向架构） 相关的数据库设计。课程重点讲解如何利用该工具在 AUTOSAR Adaptive 平台下设计和管理数据库结构，特别是如何实现 SOA 架构中的服务和数据交互。学员将深入学习如何创建数据库组件、映射数据对象、配置数据传输及实现服务的通信机制。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -88,7 +90,8 @@ window.NODE_HOVER_DATA_SOA = {
     courses: [
       {
         name: "PREEvision进阶内容 - SOA CP设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在教授如何基于 PREEvision 中的 SOA & Ethernet Explorer 进行 Classic AUTOSAR 中的 SOA（服务导向架构）建模及相关数据库设计。课程将深入讲解如何利用该工具在 AUTOSAR Classic 平台上进行 SOA 相关的数据库建模与配置，重点关注服务的定义、数据交互与通信管理。学员将学习如何创建和配置数据库组件，设计服务之间的数据流与接口，并确保这些服务符合 Classic AUTOSAR 的要求。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -102,7 +105,8 @@ window.NODE_HOVER_DATA_SOA = {
     courses: [
       {
         name: "PREEvision进阶内容 - S2S设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，将详细讲解如何在 PREEvision 中实现信号与服务的互相转换。信号与服务的互转是复杂系统设计中的关键环节，而 PREEvision 提供了对信号与服务的混合设计支持，帮助设计人员灵活配置转换关系，从而提升软件开发效率并优化系统性能。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },

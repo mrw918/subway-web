@@ -13,11 +13,13 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "系统工程培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/9303/"
       },
       {
         name: "系统工程概论",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍系统工程（SE）的基本理念、生命周期方法以及模型驱动系统工程（MBSE）的核心思想，帮助学员理解现代复杂系统开发中的系统视角、复杂性管理方法以及RFLP建模框架。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -31,7 +33,8 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "系统工程培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/9303/"
       },
     ],
   },
@@ -77,19 +80,23 @@ window.NODE_HOVER_DATA_MBSE = {
       },
       {
         name: "PREEvision基础内容 - 工具简介",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在从 产品、服务、IT 三个方面介绍 Vector E/E 系统设计与管理工具 PREEvision。\n学习时长：4小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision基础内容 - 构件的复用",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，如果在PREEvision模型中的不同位置需要创建相同的构件，并期望保留这些构件之间的联系，可以使用构件的复用功能。\n本课程将对构件的复用功能进行初步讲解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision基础内容 - 页面导览与快捷操作",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，本课程旨在通过一系列短视频介绍 PREEvision 的软件页面布局以及常用的快速操作。学员将通过直观的视频教程，快速熟悉 PREEvision 的界面结构、功能模块及常见操作技巧。课程将帮助学员提高使用 PREEvision 的效率，掌握一些高效的快捷操作，便于快速上手并提升日常工作中的操作流畅度。\n学习时长：4小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision进阶内容 - 模型版本比较",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，将介绍如何使用 PREEvision 进行定制化比较，帮助学员掌握在设计电子电气架构过程中对不同版本文件（如 DBC 或 ARXML 文件）进行差异分析的技巧。PREEvision 不仅提供了基本的比较功能，还支持根据不同场景进行定制化比较，允许设置比较内容和个性化输出差异。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision 功能设计培训",
@@ -130,11 +137,13 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "PREEvision即用方案 - 功能设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，主要讲解如何使用PREEvision进行功能设计和系统设计，重点介绍需求层和逻辑层的应用。通过车道保持实例结合建模流程，展示PREEvision中的功能与系统设计。建模流程涵盖UML的用例图、活动图、状态机图，以及组件图（对应PREEvision中的逻辑架构图）。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision基础内容 - 功能设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，主要讲解如何使用PREEvision进行功能设计和系统设计，重点介绍需求层和逻辑层的应用。通过车道保持实例结合建模流程，展示PREEvision中的功能与系统设计。建模流程涵盖UML的用例图、活动图、状态机图，以及组件图（对应PREEvision中的逻辑架构图）。\n学习时长：8小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -166,15 +175,18 @@ window.NODE_HOVER_DATA_MBSE = {
       },
       {
         name: "PREEvision即用方案 - 软件层产品线管理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在通过 PREEvision 进行 软件层的产品线管理，并介绍如何使用 RtU 插件 来优化管理过程。学员将学习如何在 PREEvision 中管理软件层的不同产品配置，使用 RtU 插件实现不同配置项之间的关联和差异分析。课程将讲解产品线管理的基本概念和方法，如何高效处理多种产品版本与配置，并通过 RtU 插件自动化配置管理。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision即用方案 - 软件设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在基于PREEvision Ready-to-Use 软件层界面进行相关数据库设计。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision进阶内容 - AUTOSAR CP 数据类型",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在通过 PREEvision 进行 硬件层的产品线管理，并介绍如何使用 RtU 插件 来优化硬件产品配置与管理。学员将学习如何在 PREEvision 中进行硬件层的产品线建模，了解使用 RtU 插件实现硬件配置项之间的差异化管理。课程将讲解硬件层产品线管理的基本概念和方法，如何高效管理多种硬件配置、模块和接口，并通过 RtU 插件简化配置分析和差异比较。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision 功能设计培训",
@@ -193,7 +205,8 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "汽车电子电气系统服务化转型",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，围绕汽车电子电气系统从“信号驱动”向“服务驱动”的演进，系统讲解从功能建模到服务设计，再到架构落地与工具链实现的服务化转型路径。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -229,11 +242,13 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "PREEvision即用方案 - SOA CP设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在教授如何基于 PREEvision 中的 SOA & Ethernet Explorer 进行 Classic AUTOSAR 中的 SOA（服务导向架构）建模及相关数据库设计。课程将深入讲解如何利用该工具在 AUTOSAR Classic 平台上进行 SOA 相关的数据库建模与配置，重点关注服务的定义、数据交互与通信管理。学员将学习如何创建和配置数据库组件，设计服务之间的数据流与接口，并确保这些服务符合 Classic AUTOSAR 的要求。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision进阶内容 - SOA CP设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在教授如何基于 PREEvision 中的 SOA & Ethernet Explorer 进行 Classic AUTOSAR 中的 SOA（服务导向架构）建模及相关数据库设计。课程将深入讲解如何利用该工具在 AUTOSAR Classic 平台上进行 SOA 相关的数据库建模与配置，重点关注服务的定义、数据交互与通信管理。学员将学习如何创建和配置数据库组件，设计服务之间的数据流与接口，并确保这些服务符合 Classic AUTOSAR 的要求。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -262,11 +277,13 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "PREEvision即用方案 - SOA AP设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在教授如何基于 PREEvision 中的 SOA & Ethernet Explorer 进行 Classic AUTOSAR 中的 SOA（服务导向架构）建模及相关数据库设计。课程将深入讲解如何利用该工具在 AUTOSAR Classic 平台上进行 SOA 相关的数据库建模与配置，重点关注服务的定义、数据交互与通信管理。学员将学习如何创建和配置数据库组件，设计服务之间的数据流与接口，并确保这些服务符合 Classic AUTOSAR 的要求。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision进阶内容 - SOA AP设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在教授如何基于 PREEvision 中的 AUTOSAR Adaptive Explorer 进行与 SOA（服务导向架构） 相关的数据库设计。课程重点讲解如何利用该工具在 AUTOSAR Adaptive 平台下设计和管理数据库结构，特别是如何实现 SOA 架构中的服务和数据交互。学员将深入学习如何创建数据库组件、映射数据对象、配置数据传输及实现服务的通信机制。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -286,11 +303,13 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "PREEvision即用方案 - 硬件层产品线管理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，旨在通过 PREEvision 进行 硬件层的产品线管理，并介绍如何使用 RtU 插件 来优化硬件产品配置与管理。学员将学习如何在 PREEvision 中进行硬件层的产品线建模，了解使用 RtU 插件实现硬件配置项之间的差异化管理。课程将讲解硬件层产品线管理的基本概念和方法，如何高效管理多种硬件配置、模块和接口，并通过 RtU 插件简化配置分析和差异比较。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision基础内容 - 硬件设计",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍PREEvision中需求层，网络拓扑层，电器原理层，线束层以及几何拓扑层的内容，通过这些内容您将会了解到基于模型的电子电气架构设计方法。该课程面向的主要对象是电器原理工程师，线束工程师等。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision 功能设计培训",
@@ -314,7 +333,8 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "PREEvision基础内容 - 版本管理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，协同版License的PREEvision支持对构件进行版本管理。版本管理不仅适用于整个产品线、各个模型层及其Package，还适用于其中包含的构件，例如客户特性、需求、软件或硬件组件等。\n本课程将对版本管理功能进行初步讲解。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -327,11 +347,13 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "PREEvision基础内容 - 权限和变更管理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，本课程旨在讲解 PREEvision 中的 变更管理、生命周期管理以及角色和权限管理。学员将学习如何在 PREEvision 中有效地管理项目变更，跟踪生命周期状态，并确保项目过程中各个阶段的控制与监督。同时，课程将介绍如何配置角色和权限，以保障项目成员在不同阶段的访问和操作权限。\n学习时长：8小时\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "PREEvision进阶内容 - 变型管理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍了PREEvision中的变型管理概念和配置变型的方法，并通过一个实例讲解了两种创建变型的方法：基于客户特征模型的变型管理（Variant Management with Customer Feature Models）和基于概念空间的变型管理（Variant Management with Concept Spaces），同时对它们的差异进行了说明。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -350,7 +372,8 @@ window.NODE_HOVER_DATA_MBSE = {
     courses: [
       {
         name: "PREEvision进阶内容 - 基线管理",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，主要讲解两种角色在PREEvision中如何利用Asset的方式来进行交互。Asset提供多个工作线程(Multistream)的数据交互，进而完成在开发过程中打基线，并交付设计数据给下游部门的工作。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },

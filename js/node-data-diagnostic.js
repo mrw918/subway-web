@@ -34,7 +34,9 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
       },
       {
         name: "车载以太网",
-        type: "自学课"
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003442/latestversion",
+        detail: "本课程为免费在线自学课，基于以太网和IP的通信已在汽车行业中使用多年，如今这种通信技术越来越多地用于车内的数据传输。\n该程适用于所有希望更好地了解以太网和IP通信技术的人员。\n该课程还适用于所有计划参加Vector以太网和IP主题培训课程的人员。您可以在参加培训之前先了解基于以太网和IP的通信的基础知识。这样就能更轻松地进行培训，因为在培训期间会重温某些内容，并进行更深入的讲解。\n请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。"
       },
     ],
   },
@@ -57,7 +59,8 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
       },
       {
         name: "Ethernet高层协议介绍",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，将向您介绍以太网高层协议的内容，内容分为SOME/IP和DoIP，SOME/IP包括服务类型介绍、SOME/IP-SD服务发现过程和SOME/IP帧格式定义，DoIP包括DoIP诊断的工作流程，DoIP帧格式定义。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
       {
         name: "DoIP培训",
@@ -80,7 +83,9 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
       },
       {
         name: "CAN协议",
-        type: "自学课"
+        type: "自学课",
+        url: "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003420/latestversion",
+        detail: "本课程为免费在线自学课。CAN（Controller Area Network，控制器局域网）是一种串行通信技术，专门用于在汽车电子控制单元（ECU）之间实现可靠的数据交换。\n该在线学习课程适用于所有希望更好地了解CAN通信技术的人员。\n该在线学习课程还适用于所有计划参加Vector培训课程的人员。在对数据通信有一定程度的了解之后，您将更容易接受绝大多数Vector培训课程。\n报名方式：请您点击此处打开该在线课程进行学习。如果您未注册Vector学习中心账号，请点击此处注册。"
       },
     ],
   },
@@ -106,7 +111,8 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     courses: [
       {
         name: "UDS协议培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3238/"
       },
       {
         name: "UDS培训",
@@ -153,11 +159,13 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     courses: [
       {
         name: "诊断工具链培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3222/"
       },
       {
         name: "Diagnostic Tools (CANdelaStudio+ODXStudio+CANoe.DiVa+vFlash)",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
@@ -432,7 +440,8 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     courses: [
       {
         name: "SOVD培训",
-        type: "公开课"
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/11795/"
       },
     ],
   },
@@ -451,7 +460,8 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     courses: [
       {
         name: "Security概论",
-        type: "自学课"
+        type: "自学课",
+        detail: "本课程为付费自学课，介绍对称密码、非对称密码、哈希算法、MAC、数字签名和证书等密码技术，为后续学习SecOC、TLS、UDS Security以及Security配置等打下基础。\n单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com"
       },
     ],
   },
