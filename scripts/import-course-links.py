@@ -242,7 +242,7 @@ def parse_link_to_course(link: str, course_name: str, public_urls: dict[tuple[st
     course: dict = {}
 
     if not link.strip():
-        return course
+        return None
 
     if "同公开课" in link and "http" not in link:
         url = public_urls.get((course_name, "公开课"))

@@ -180,7 +180,7 @@
         };
       })
       .filter(function (course) {
-        return !!course.name;
+        return !!course.name && (!!course.url || !!course.detail);
       });
   }
 
@@ -509,42 +509,16 @@
       return { html: "", hasCourses: false, showToggle: false, all: all };
     }
 
-    var emptyOnly = sortCoursesByType(
-      all.filter(function (course) {
-        return !course.url && !course.detail;
-      })
-    );
     var preview = primary.slice(0, 3);
-    var expandedCount = primary.length + emptyOnly.length;
+    var expandedCount = primary.length;
     var previewCount = preview.length;
-    var showToggle = expandedCount > previewCount;
+    var remainingCount = expandedCount - previewCount;
+    var showToggle = remainingCount > 0;
     var expandedClass = expanded ? " is-expanded" : "";
     var listHtml = "";
 
     if (expanded) {
       listHtml = primary.map(renderCourseListEntry).join("");
-      if (emptyOnly.length) {
-        listHtml +=
-          '<li class="node-courses__split" aria-hidden="true"><span>以下课程暂无在线链接</span></li>';
-        listHtml += emptyOnly
-          .map(function (course) {
-            var typeLabel = escapeHtml(formatTypeLabel(course.type));
-            var name = escapeHtml(course.name);
-            return (
-              '<li class="node-courses__item node-courses__item--muted">' +
-              '<div class="node-courses__muted-row">' +
-              '<span class="node-courses__dot node-courses__dot--muted" aria-hidden="true"></span>' +
-              '<span class="node-courses__name">' +
-              name +
-              "</span>" +
-              renderCourseTypeBadge(typeLabel, true) +
-              "</div>" +
-              '<span class="node-courses__note">暂无链接</span>' +
-              "</li>"
-            );
-          })
-          .join("");
-      }
     } else {
       listHtml = preview.map(renderCourseListEntry).join("");
     }
@@ -566,7 +540,7 @@
         '<button type="button" class="node-courses__toggle" aria-expanded="' +
         (expanded ? "true" : "false") +
         '">' +
-        (expanded ? "收起课程列表" : "+ 查看全部 " + expandedCount + " 门相关课程") +
+        (expanded ? "收起课程列表" : "+ 查看其余 " + remainingCount + " 门相关课程") +
         "</button>";
     }
     if (showPinHint) {
