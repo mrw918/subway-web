@@ -30,18 +30,8 @@ SITE_ALIASES = {
     "AUTOSAR概论": "ASR概论",
 }
 
-PDF_Q_URL = (
-    "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/"
-    "Documents/Microsoft%20Teams%20Chat%20Files/"
-    "canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf"
-    "?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY"
-)
-PDF_T_URL = (
-    "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/"
-    "Documents/Microsoft%20Teams%20Chat%20Files/"
-    "canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf"
-    "?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK"
-)
+PDF_Q_URL = "https://www.kdocs.cn/l/cl847wxgMSJQ"
+PDF_T_URL = "https://www.kdocs.cn/l/cexbLBxDDA9x"
 PAID_TAIL = (
     "单人价格（一价包含Vector学习中心所有自学课程）：\n"
     "4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n"

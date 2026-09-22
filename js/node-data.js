@@ -4,10 +4,8 @@
  * type: 学习资源文字标签
  * match: SVG 命中关键词
  */
-var D1_PDF_QINGLIANG =
-  "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY";
-var D1_PDF_TRAININGCAR =
-  "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK";
+var D1_PDF_QINGLIANG = "https://www.kdocs.cn/l/cl847wxgMSJQ";
+var D1_PDF_TRAININGCAR = "https://www.kdocs.cn/l/cexbLBxDDA9x";
 var D1_ATALENT_REGISTER = "https://cloud.atalent.com/vector/learn/#/Register";
 var D1_ATALENT_AUTOSAR =
   "https://vector-external.atalent.com/Saba/Web_spf/A501PRD0117/common/ledetail/cours000000000003440/latestversion";

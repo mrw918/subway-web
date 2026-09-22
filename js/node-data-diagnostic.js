@@ -390,14 +390,14 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
       {
         name: "CANoe/CANalyzer.CAN/CAN FD_TrainingCar版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzercan-can-fd-trainingcar%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE%201.pdf?d=w5cca6efa8ca849739377e6d574f2a719&csf=1&web=1&e=r2T1QK",
+        url: "https://www.kdocs.cn/l/cexbLBxDDA9x",
         detail: "单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
         linkKind: "pdf"
       },
       {
         name: "CANoe/CANalyzer.CAN/CAN FD_轻量版",
         type: "自学课",
-        url: "https://vgroup-my.sharepoint.com/:b:/r/personal/ext_zoe_wen_vector_com/Documents/Microsoft%20Teams%20Chat%20Files/canoe-canalyzer-option-can-can-fd-%E8%BD%BB%E9%87%8F%E7%89%88%E8%87%AA%E5%AD%A6%E8%AF%BE.pdf?d=w1f4c658feba44930b4a134b15865d650&csf=1&web=1&e=j7bFxY",
+        url: "https://www.kdocs.cn/l/cl847wxgMSJQ",
         detail: "单人价格（一价包含Vector学习中心所有自学课程）：\n4,000元+VAT 6%/月\n40,000元+VAT 6%/年\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector学习中心进行咨询：training@cn.vector.com",
         linkKind: "pdf"
       },
