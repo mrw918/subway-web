@@ -739,11 +739,11 @@
 
 @media (max-width: 768px) {
   .role-select {
-    --role-title-zh: clamp(26px, 7.2vw, 34px);
-    --role-title-en: clamp(12px, 3.2vw, 14px);
+    --role-title-zh: clamp(22px, 6.4vw, 30px);
+    --role-title-en: clamp(11px, 3vw, 13px);
     --title-zone-x: max(18px, calc(12px + var(--safe-left)));
     --title-zone-w: min(210px, 52vw);
-    --wm-clear-right: max(120px, calc(110px + var(--safe-right)));
+    --wm-clear-right: max(182px, calc(34vw + 40px + var(--safe-right)));
     --layout-hero-mobile-lift: -16px;
   }
 
@@ -755,7 +755,7 @@
   }
 
   .role-select__logo-mark {
-    width: min(160px, 42vw);
+    width: min(132px, 34vw);
     height: auto;
     max-width: none;
     object-fit: contain;
@@ -873,8 +873,8 @@
   }
 
   .role-select__nav {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
   }
 
   .role-select__nav-icon {
@@ -883,12 +883,12 @@
   }
 
   .role-select__avatar-track {
-    gap: 8px;
+    gap: 6px;
     max-width: 100%;
   }
 
   .role-select__avatar-viewport {
-    width: min(100%, calc(100% - 100px));
+    width: min(100%, calc(100% - 88px));
   }
 
   .role-select__orbit {

@@ -246,11 +246,11 @@
     function computeAvatarMetrics(viewportW, mobile, isTv) {
       var vw = viewportW || window.innerWidth;
       var baseSize = mobile
-        ? clamp(vw * 0.115, 48, 74)
+        ? clamp(vw * 0.092, 40, 54)
         : isTv
           ? clamp(vw * 0.108, 76, 100)
           : clamp(vw * 0.108, 46, 74);
-      var radiusX = Math.min(vw * 0.48, isTv ? 460 : mobile ? vw * 0.44 : 320);
+      var radiusX = Math.min(vw * 0.48, isTv ? 460 : mobile ? vw * 0.5 : 320);
       var radiusY = Math.min(isTv ? 32 : mobile ? 20 : 22, vw * 0.038);
       return { baseSize: baseSize, radiusX: radiusX, radiusY: radiusY };
     }
@@ -829,7 +829,9 @@
         // U 形：中间低、两侧高（CSS y 向下为正）
         var y = (Math.cos(Math.abs(t) * Math.PI * 0.5) - 1) * radiusY;
         var dist = Math.abs(slot);
-        var scale = dist === 0 ? 1.18 : Math.max(0.56, 1 - dist * 0.14);
+        var scale = dist === 0
+          ? mobile ? 1.08 : 1.18
+          : Math.max(mobile ? 0.52 : 0.56, 1 - dist * (mobile ? 0.16 : 0.14));
         var opacity = dist === 0 ? 1 : Math.max(0.28, 0.72 - dist * 0.12);
         var gray = dist === 0 ? 0 : Math.min(100, 45 + dist * 18);
         var z = 20 - dist;
