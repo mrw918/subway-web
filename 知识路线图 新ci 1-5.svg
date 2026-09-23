@@ -309,8 +309,8 @@
 	<text transform="matrix(1 0 0 1 528.1189 362.8874)"><tspan x="0" y="0" class="st66 st73">J1939</tspan><tspan x="25.5" y="0" class="st74 st73">交互层</tspan></text>
 	<rect x="300.2" y="406.7" class="st68" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 310.4471 414.6537)"><tspan x="0" y="0" class="st66 st73">Security</tspan><tspan x="35.1" y="0" class="st74 st73">协议</tspan></text>
-	<rect x="367.1" y="406.9" class="st68" width="110" height="10.7"/>
-	<text transform="matrix(1 0 0 1 375.5756 414.6468)"><tspan x="0" y="0" class="st66 st73">Security</tspan><tspan x="39" y="0" class="st66 st73"> Manager</tspan></text>
+	<rect x="367.1" y="406.9" class="st68" width="96.7" height="10.7"/>
+	<text transform="matrix(1 0 0 1 381.5756 414.6468)" class="st66 st73">CANoe.Security</text>
 	<rect x="207.6" y="367.4" class="st68" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 217.8202 375.362)"><tspan x="0" y="0" class="st66 st73">Security</tspan><tspan x="35.1" y="0" class="st74 st73">概论</tspan></text>
 	<rect x="482.9" y="326.2" class="st68" width="73.6" height="10.7"/>

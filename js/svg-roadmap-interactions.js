@@ -670,12 +670,12 @@
     var tooltip = document.createElement("div");
     tooltip.className = "node-tooltip";
     tooltip.innerHTML = [
-      '<div class="node-tooltip__body">',
       '<div class="node-tooltip__title"></div>',
       '<div class="node-tooltip__types"></div>',
+      '<div class="node-tooltip__content-scroll">',
       '<div class="node-tooltip__desc"></div>',
-      "</div>",
       '<div class="node-tooltip__courses-wrap"></div>',
+      "</div>",
     ].join("");
     stage.appendChild(tooltip);
     tooltip.addEventListener("click", function (event) {
@@ -1468,41 +1468,13 @@
     }
 
     function tooltipCoursesScrollEl() {
-      return (
-        tooltip.querySelector(".node-courses.is-expanded .node-courses__scroll") ||
-        tooltip.querySelector(".node-tooltip__courses-wrap")
-      );
+      return tooltip.querySelector(".node-tooltip__content-scroll");
     }
 
     function syncCoursesScrollBounds() {
-      var scrollEls = tooltip.querySelectorAll(".node-courses__scroll");
-      if (!tooltip.classList.contains("is-courses-expanded")) {
-        scrollEls.forEach(function (el) {
-          el.style.maxHeight = "";
-        });
-        return;
-      }
-
-      var scroll = tooltip.querySelector(".node-courses.is-expanded .node-courses__scroll");
-      if (!scroll) return;
-
-      var pad = 10;
-      var vh = window.innerHeight || document.documentElement.clientHeight || 0;
-      var toggle = tooltip.querySelector(".node-courses__toggle");
-      var toggleSpace = toggle ? toggle.offsetHeight + 12 : 0;
-      var scrollTop = scroll.getBoundingClientRect().top;
-      var viewportRoom = Math.max(120, vh - pad - scrollTop - toggleSpace);
-      var tipRect = tooltip.getBoundingClientRect();
-      var tipStyle = window.getComputedStyle(tooltip);
-      var tipMax = parseFloat(tipStyle.maxHeight);
-      if (!isFinite(tipMax) || tipMax <= 0) tipMax = 640;
-      var tipBottomRoom = Math.max(
-        120,
-        tipMax - (scrollTop - tipRect.top) - toggleSpace - 8
-      );
-      var contentHeight = scroll.scrollHeight;
-      var cap = Math.min(viewportRoom, tipBottomRoom);
-      scroll.style.maxHeight = Math.min(contentHeight, cap) + "px";
+      tooltip.querySelectorAll(".node-courses__scroll").forEach(function (el) {
+        el.style.maxHeight = "";
+      });
     }
 
     function refreshTooltipLayout() {

@@ -107,9 +107,9 @@ window.NODE_HOVER_DATA_EMBEDDED = {
         url: "https://academy.vector.com/cn/zh/courses/detail/6160/autosar-cp%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE-microsar-sip/"
       },
       {
-        name: "DEXTRO 详细配置 (CP08)",
+        name: "DaVinci基础配置(CFG6)",
         type: "直播课",
-        url: "https://forms.cloud.microsoft/e/4d8r-r016d9?origin=lprLink"
+        url: "https://forms.cloud.microsoft/e/5hZjQ2SNQE?origin=lprLink"
       },
       {
         name: "AUTOSAR CP 入门",

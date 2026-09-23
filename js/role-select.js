@@ -3,6 +3,9 @@
  */
 (function (global) {
   var SLIDE_MS = 420;
+  var HERO_REF_HEIGHT = 880;
+  var HERO_SIZE_BOOST = 1;
+  var LAYOUT_RESIZE_MS = 80;
 
   function sortedCatalog() {
     return (global.ROADMAP_CATALOG || [])
@@ -39,6 +42,21 @@
       .replace(/"/g, "&quot;");
   }
 
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function parsePx(value) {
+    var n = parseFloat(value);
+    return isNaN(n) ? 0 : n;
+  }
+
+  function parseShiftPx(value) {
+    if (value == null) return 0;
+    if (typeof value === "number") return value;
+    return parsePx(String(value));
+  }
+
   function mount(options) {
     options = options || {};
     var root = options.root;
@@ -66,9 +84,7 @@
       '      <h1 class="role-select__title-zh"></h1>' +
       '      <p class="role-select__title-en"></p>' +
       '      <button type="button" class="role-select__details-toggle" aria-label="查看角色详情" aria-expanded="false">' +
-      '        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">' +
-      '          <path d="M3 5h12M3 9h12M3 13h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
-      "        </svg>" +
+      "        查看详情" +
       "      </button>" +
       "    </div>" +
       "  </div>" +
@@ -171,13 +187,16 @@
       '  <div class="role-select__training-backdrop" data-training-backdrop hidden></div>' +
       '  <div class="role-select__training-modal" role="dialog" aria-modal="true" aria-label="培训资讯" data-training-modal hidden>' +
       '    <div class="role-select__training-head">' +
-      '      <h3 class="role-select__training-title"></h3>' +
+      '      <div class="role-select__training-head-text">' +
+      '        <h3 class="role-select__training-title"></h3>' +
+      "      </div>" +
       '      <button type="button" class="role-select__training-close" aria-label="关闭培训资讯" data-training-close>' +
       '        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">' +
       '          <path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
       "        </svg>" +
       "      </button>" +
       "    </div>" +
+      '    <div class="role-select__training-tabs" role="tablist" data-training-tabs></div>' +
       '    <div class="role-select__training-body" data-training-body></div>' +
       "  </div>" +
       "</div>";
@@ -203,53 +222,352 @@
     var prevBtn = root.querySelector(".role-select__nav--prev");
     var nextBtn = root.querySelector(".role-select__nav--next");
     var entreBtn = root.querySelector(".role-select__entre");
+    var footerEl = root.querySelector(".role-select__footer");
     var sheetOpen = false;
     var trainingOpen = false;
     var trainingBackdrop = root.querySelector("[data-training-backdrop]");
     var trainingModal = root.querySelector("[data-training-modal]");
+    var trainingTabsEl = root.querySelector("[data-training-tabs]");
     var trainingBody = root.querySelector("[data-training-body]");
     var trainingTitleEl = root.querySelector(".role-select__training-title");
     var trainingCloseBtn = root.querySelector("[data-training-close]");
     var trainingOpenBtns = root.querySelectorAll("[data-open-training]");
+    var trainingActiveTab = "live";
+    var layoutHeroLift = 0;
+    var layoutResizeTimer = null;
+    var layoutObserver = null;
+    var layoutAvatarMetrics = null;
+    var heroDimCache = {};
 
-    function renderTrainingSection(section) {
-      if (!section) return "";
+    function isMobileLayout() {
+      return window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function computeAvatarMetrics(viewportW, mobile, isTv) {
+      var vw = viewportW || window.innerWidth;
+      var baseSize = mobile
+        ? clamp(vw * 0.115, 48, 74)
+        : isTv
+          ? clamp(vw * 0.108, 76, 100)
+          : clamp(vw * 0.108, 46, 74);
+      var radiusX = Math.min(vw * 0.48, isTv ? 460 : mobile ? vw * 0.44 : 320);
+      var radiusY = Math.min(isTv ? 32 : mobile ? 20 : 22, vw * 0.038);
+      return { baseSize: baseSize, radiusX: radiusX, radiusY: radiusY };
+    }
+
+    function isTvViewport(w) {
+      return (w || window.innerWidth) >= 1920;
+    }
+
+    function computeHeroNormScale(naturalH) {
+      if (!naturalH) return 1;
+      return clamp((HERO_REF_HEIGHT / naturalH) * HERO_SIZE_BOOST, 0.96, 1.08);
+    }
+
+    function cacheHeroDimensions(role, w, h) {
+      if (!role || !h) return;
+      heroDimCache[role.id] = {
+        w: w,
+        h: h,
+        scale: computeHeroNormScale(h),
+      };
+    }
+
+    function preloadHeroDimensions(catalog) {
+      catalog.forEach(function (role) {
+        if (heroDimCache[role.id]) return;
+        var img = new Image();
+        img.onload = function () {
+          cacheHeroDimensions(role, img.naturalWidth, img.naturalHeight);
+          if (roles[selectedIndex] && roles[selectedIndex].id === role.id) {
+            applyHeroScale(role);
+          }
+        };
+        img.src = assetUrl(role.heroImage, role.heroVersion);
+      });
+    }
+
+    function computeHeroFeetOverlap(bottom, mobile) {
+      var feetClear = mobile ? 6 : 10;
+      var railY = bottom.footerPad + bottom.trackBlock * 0.52;
+      return clamp(railY - feetClear, mobile ? 28 : 36, mobile ? 68 : 96);
+    }
+
+    function computeBottomCluster(w, h, safeBottom, mobile, avatarMetrics, tv) {
+      var wideT = mobile ? 0 : clamp((w - 769) / (1920 - 769), 0, 1);
+      var trackBlock = clamp(
+        avatarMetrics.baseSize + (mobile ? 40 : 44 + wideT * 12),
+        mobile ? 96 : 124,
+        mobile ? 132 : 184
+      );
+      var entreBlock = mobile
+        ? clamp(44 + w * 0.008, 44, 50)
+        : clamp(50 + wideT * 18, 50, 68);
+      var footerGap = clamp(h * 0.012, 10, 16);
+      var footerPad = clamp(h * 0.005, 3, 8);
+      var footerEdge = safeBottom + clamp(h * 0.006, 4, 8);
+      var footerLift = clamp(h * 0.032, mobile ? 22 : 16, mobile ? 36 : 28);
+      if (!mobile) footerLift = Math.max(8, footerLift - 12);
+      var orbitW = Math.min(w * 0.92, tv ? 1060 : mobile ? 520 : 760);
+      var orbitH = clamp(trackBlock * 0.46, 44, mobile ? 56 : 90);
+      var avatarViewportH = clamp(avatarMetrics.baseSize + 28, 80, mobile ? 104 : 152);
+      var footerClusterH = trackBlock + footerGap + entreBlock + footerPad;
+      return {
+        trackBlock: trackBlock,
+        entreBlock: entreBlock,
+        footerGap: footerGap,
+        footerPad: footerPad,
+        footerEdge: footerEdge,
+        footerLift: footerLift,
+        orbitW: orbitW,
+        orbitH: orbitH,
+        avatarViewportH: avatarViewportH,
+        footerClusterH: footerClusterH,
+      };
+    }
+
+    function applyBottomClusterVars(metrics) {
+      root.style.setProperty("--track-block", metrics.trackBlock + "px");
+      root.style.setProperty("--entre-block", metrics.entreBlock + "px");
+      root.style.setProperty("--layout-footer-gap", metrics.footerGap + "px");
+      root.style.setProperty("--layout-footer-pad-bottom", metrics.footerPad + "px");
+      root.style.setProperty("--layout-footer-bottom", metrics.footerEdge + "px");
+      root.style.setProperty("--layout-footer-lift", metrics.footerLift + "px");
+      root.style.setProperty("--layout-orbit-w", metrics.orbitW + "px");
+      root.style.setProperty("--layout-orbit-h", metrics.orbitH + "px");
+      root.style.setProperty("--layout-avatar-viewport-h", metrics.avatarViewportH + "px");
+    }
+
+    function applyTitleBandCenter(w, safeLeft, safeRight, mobile, heroHalf, heroClearHalf) {
+      var bandLeft = mobile ? Math.max(24, 16 + safeLeft) : Math.max(28, 12 + safeLeft);
+      var clearHalf = heroClearHalf != null ? heroClearHalf : heroHalf;
+      var bandRight = mobile
+        ? w - Math.max(168, 152 + safeRight)
+        : w * 0.5 - clearHalf - 8;
+      if (bandRight <= bandLeft) bandRight = bandLeft + 120;
+      var bandWidth = bandRight - bandLeft;
+      var centerBias = mobile ? 0.5 : 0.62;
+      var centerX = bandLeft + bandWidth * centerBias;
+      root.style.setProperty("--layout-title-center-x", centerX + "px");
+    }
+
+    function clearLayoutVars() {
+      root.classList.remove("role-select--layout-auto");
+      layoutHeroLift = 0;
+      layoutAvatarMetrics = null;
+      [
+        "--layout-hero-w",
+        "--layout-hero-max-h",
+        "--layout-hero-h",
+        "--layout-aside-top",
+        "--layout-title-center-x",
+        "--layout-hero-half",
+        "--layout-details-top",
+        "--layout-details-offset",
+        "--layout-edge-inset",
+        "--layout-logo-top",
+        "--layout-logo-w",
+        "--layout-detail-label",
+        "--layout-detail-value",
+        "--layout-footer-gap",
+        "--layout-footer-pad-bottom",
+        "--layout-footer-bottom",
+        "--layout-footer-lift",
+        "--layout-orbit-w",
+        "--layout-orbit-h",
+        "--layout-avatar-viewport-h",
+      ].forEach(function (name) {
+        root.style.removeProperty(name);
+      });
+    }
+
+    function applyViewportLayout() {
+      var mobile = isMobileLayout();
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var styles = getComputedStyle(root);
+      var safeTop = parsePx(styles.getPropertyValue("--safe-top"));
+      var safeBottom = parsePx(styles.getPropertyValue("--safe-bottom"));
+      var safeLeft = parsePx(styles.getPropertyValue("--safe-left"));
+      var safeRight = parsePx(styles.getPropertyValue("--safe-right"));
+      var avatarVw = avatarViewport ? avatarViewport.clientWidth || w : w;
+      var tv = isTvViewport(w);
+
+      layoutAvatarMetrics = computeAvatarMetrics(avatarVw, mobile, tv);
+      var bottom = computeBottomCluster(w, h, safeBottom, mobile, layoutAvatarMetrics, tv);
+      applyBottomClusterVars(bottom);
+
+      var footerReserve =
+        bottom.footerClusterH + bottom.footerLift + bottom.footerEdge;
+      var usableH = Math.max(280, h - footerReserve - safeTop);
+
+      root.classList.add("role-select--layout-auto");
+
+      if (mobile) {
+        var heroW = clamp(w * 0.94, 320, 440);
+        var heroH = clamp(usableH * 0.76, 340, 600);
+        var heroOverlap = computeHeroFeetOverlap(bottom, true);
+        layoutHeroLift = 0;
+
+        root.style.setProperty("--hero-overlap", heroOverlap + "px");
+        root.style.setProperty("--layout-hero-w", heroW + "px");
+        root.style.setProperty("--layout-hero-half", heroW * 0.5 + "px");
+        root.style.setProperty("--layout-hero-h", heroH + "px");
+        root.style.setProperty("--layout-hero-max-h", heroH + "px");
+      } else {
+        var wideT = clamp((w - 769) / (1920 - 769), 0, 1);
+        var heroW = clamp(w * 0.36 + 96, 480, 720);
+        var heroMaxH = clamp(usableH * 0.92, 540, 920);
+        var heroOverlap = computeHeroFeetOverlap(bottom, false);
+        layoutHeroLift = 0;
+        var heroClearHalf = clamp(heroW * 0.43, 190, 300);
+        var anchorY = safeTop + usableH * 0.44;
+        var edgeInset = clamp(w * 0.026, 32, 56);
+        var detailsOffset = clamp(heroW * 0.5 + 36, 240, 360);
+        var logoW = clamp(148 + w * 0.038, 168, 220);
+        var logoTop = clamp(18 + w * 0.006, 22, 34);
+        var detailLabel = clamp(15 + wideT * 9, 16, 24);
+        var detailValue = clamp(14 + wideT * 6, 14, 20);
+
+        root.style.setProperty("--hero-overlap", heroOverlap + "px");
+        root.style.setProperty("--hero-clear-half", heroClearHalf + "px");
+        root.style.setProperty("--layout-hero-w", heroW + "px");
+        root.style.setProperty("--layout-hero-half", heroW * 0.5 + "px");
+        root.style.setProperty("--layout-hero-max-h", heroMaxH + "px");
+        root.style.removeProperty("--layout-hero-h");
+        root.style.setProperty("--layout-aside-top", anchorY + "px");
+        root.style.setProperty("--layout-details-top", anchorY - 10 + "px");
+        root.style.setProperty("--layout-details-offset", detailsOffset + "px");
+        root.style.setProperty("--layout-edge-inset", edgeInset + "px");
+        root.style.setProperty("--layout-logo-top", logoTop + "px");
+        root.style.setProperty("--layout-logo-w", logoW + "px");
+        root.style.setProperty("--layout-detail-label", detailLabel + "px");
+        root.style.setProperty("--layout-detail-value", detailValue + "px");
+      }
+
+      var heroHalfPx =
+        parsePx(root.style.getPropertyValue("--layout-hero-half")) ||
+        (mobile ? w * 0.42 : w * 0.25);
+      var heroClearHalfPx =
+        parsePx(root.style.getPropertyValue("--hero-clear-half")) || heroHalfPx * 0.86;
+      applyTitleBandCenter(w, safeLeft, safeRight, mobile, heroHalfPx, heroClearHalfPx);
+
+      var role = roles[selectedIndex];
+      if (role) applyHeroLayout(role);
+      layoutAvatars(false);
+    }
+
+    function applyHeroScale(role) {
+      if (!role) return;
+      var adj = (role && role.heroAdjust) || {};
+      var manual = adj.scale != null ? adj.scale : 1;
+      var cached = heroDimCache[role.id];
+      var scale = cached ? cached.scale : 1;
+      heroStage.style.setProperty("--hero-scale", String(scale * manual));
+    }
+
+    function renderTrainingPlaceBadge(place) {
+      if (!place) return "";
+      return (
+        '<span class="role-select__training-badge">' + escapeHtml(place) + "</span>"
+      );
+    }
+
+    function renderTrainingList(section, tabKey) {
+      if (!section) {
+        return '<p class="role-select__training-empty">暂无课程</p>';
+      }
       var items = section.items || [];
+      if (!items.length) {
+        return '<p class="role-select__training-empty">暂无课程</p>';
+      }
       var list = items
         .map(function (item) {
-          var meta = [item.date, item.place].filter(Boolean).join(" ");
           var paid = item.paid
-            ? '<span class="role-select__training-paid">付费</span>'
+            ? '<span class="role-select__training-badge role-select__training-badge--paid">付费</span>'
             : "";
           var titleText = escapeHtml(item.title || "");
-          var titleHtml = item.url
-            ? '<a class="role-select__training-course" href="' +
-              escapeHtml(item.url) +
-              '" target="_blank" rel="noopener noreferrer">' +
-              titleText +
-              '<span class="role-select__training-arrow" aria-hidden="true">→</span></a>'
-            : '<span class="role-select__training-course is-plain">' + titleText + "</span>";
-          return (
-            '<li class="role-select__training-item">' +
-            '<div class="role-select__training-meta">' +
-            escapeHtml(meta) +
+          var inner =
+            '<div class="role-select__training-card-top">' +
+            '<span class="role-select__training-date">' +
+            escapeHtml(item.date || "") +
+            "</span>" +
+            renderTrainingPlaceBadge(item.place) +
             paid +
             "</div>" +
-            titleHtml +
-            "</li>"
+            '<div class="role-select__training-card-bottom">' +
+            '<span class="role-select__training-course">' +
+            titleText +
+            "</span>" +
+            '<span class="role-select__training-arrow" aria-hidden="true">' +
+            (item.url ? "→" : "") +
+            "</span>" +
+            "</div>";
+          if (item.url) {
+            return (
+              '<li class="role-select__training-item">' +
+              '<a class="role-select__training-card" href="' +
+              escapeHtml(item.url) +
+              '" target="_blank" rel="noopener noreferrer">' +
+              inner +
+              "</a></li>"
+            );
+          }
+          return (
+            '<li class="role-select__training-item">' +
+            '<div class="role-select__training-card is-plain">' +
+            inner +
+            "</div></li>"
           );
         })
         .join("");
-      return (
-        '<section class="role-select__training-section">' +
-        '<h4 class="role-select__training-label">' +
-        escapeHtml(section.label || "") +
-        "</h4>" +
-        '<ul class="role-select__training-list">' +
-        list +
-        "</ul>" +
-        "</section>"
+      return '<ul class="role-select__training-list">' + list + "</ul>";
+    }
+
+    function getTrainingSection(tabKey) {
+      var data = global.TRAINING_EVENTS || {};
+      if (tabKey === "open") return data.open;
+      return data.live;
+    }
+
+    function renderTrainingTabs() {
+      if (!trainingTabsEl) return;
+      var data = global.TRAINING_EVENTS || {};
+      var tabs = [
+        { key: "live", label: (data.live && data.live.label) || "直播课" },
+        { key: "open", label: (data.open && data.open.label) || "公开课" },
+      ];
+      trainingTabsEl.innerHTML = tabs
+        .map(function (tab) {
+          var isActive = tab.key === trainingActiveTab;
+          return (
+            '<button type="button" class="role-select__training-tab' +
+            (isActive ? " is-active" : "") +
+            '" role="tab" aria-selected="' +
+            (isActive ? "true" : "false") +
+            '" data-training-tab="' +
+            escapeHtml(tab.key) +
+            '">' +
+            escapeHtml(tab.label) +
+            "</button>"
+          );
+        })
+        .join("");
+    }
+
+    function renderTrainingBody() {
+      if (!trainingBody) return;
+      trainingBody.innerHTML = renderTrainingList(
+        getTrainingSection(trainingActiveTab),
+        trainingActiveTab
       );
+    }
+
+    function setTrainingTab(tabKey) {
+      if (tabKey !== "live" && tabKey !== "open") return;
+      trainingActiveTab = tabKey;
+      renderTrainingTabs();
+      renderTrainingBody();
     }
 
     function fillTrainingModal() {
@@ -257,16 +575,15 @@
       if (trainingTitleEl) {
         trainingTitleEl.textContent = data.title || "了解最新培训资讯";
       }
-      if (trainingBody) {
-        trainingBody.innerHTML =
-          renderTrainingSection(data.live) + renderTrainingSection(data.open);
-      }
+      renderTrainingTabs();
+      renderTrainingBody();
     }
 
     function setTrainingOpen(open) {
       trainingOpen = !!open;
       if (!trainingModal || !trainingBackdrop) return;
       if (trainingOpen) {
+        trainingActiveTab = "live";
         fillTrainingModal();
         trainingModal.hidden = false;
         trainingBackdrop.hidden = false;
@@ -294,6 +611,22 @@
     heroStage.appendChild(heroB);
     var activeHero = heroA;
     var idleHero = heroB;
+
+    function onHeroImgLoad(event) {
+      var img = event.currentTarget;
+      var roleId = img.dataset.roleId;
+      var role =
+        roles.find(function (r) {
+          return r.id === roleId;
+        }) || roles[selectedIndex];
+      if (!role) return;
+      cacheHeroDimensions(role, img.naturalWidth, img.naturalHeight);
+      if (role.id === (roles[selectedIndex] && roles[selectedIndex].id)) {
+        applyHeroScale(role);
+      }
+    }
+    heroA.addEventListener("load", onHeroImgLoad);
+    heroB.addEventListener("load", onHeroImgLoad);
 
     var avatarButtons = [];
 
@@ -323,22 +656,39 @@
     function applyHeroLayout(role) {
       var adj = (role && role.heroAdjust) || {};
       heroStage.dataset.role = (role && role.id) || "";
-      heroStage.style.setProperty("--hero-scale", String(adj.scale != null ? adj.scale : 1));
+      applyHeroScale(role);
       heroStage.style.setProperty("--hero-shift-x", adj.x != null ? String(adj.x) : "0px");
-      heroStage.style.setProperty("--hero-shift-y", adj.y != null ? String(adj.y) : "0px");
+      heroStage.style.setProperty(
+        "--hero-shift-y",
+        -layoutHeroLift + parseShiftPx(adj.y) + "px"
+      );
       heroStage.style.setProperty(
         "--hero-object-position",
         (role && role.heroObjectPosition) || "bottom center"
       );
     }
 
-    function applyRoleTitle(role) {
+    function applyRoleTitle(role, animate) {
       var zh = (role && role.title) || "";
       var en = (role && role.titleEn) || "";
-      titleZhEl.textContent = zh;
-      titleEnEl.textContent = en;
-      if (sheetTitleZhEl) sheetTitleZhEl.textContent = zh;
-      if (sheetTitleEnEl) sheetTitleEnEl.textContent = en;
+      var titleBlock = titleZhEl && titleZhEl.closest(".role-select__title");
+
+      function writeTitle() {
+        titleZhEl.textContent = zh;
+        titleEnEl.textContent = en;
+        if (sheetTitleZhEl) sheetTitleZhEl.textContent = zh;
+        if (sheetTitleEnEl) sheetTitleEnEl.textContent = en;
+      }
+
+      if (animate && titleBlock) {
+        titleBlock.classList.add("is-fading");
+        window.setTimeout(function () {
+          writeTitle();
+          titleBlock.classList.remove("is-fading");
+        }, 180);
+        return;
+      }
+      writeTitle();
     }
 
     function countStations(role) {
@@ -378,8 +728,8 @@
       });
     }
 
-    function applyRoleMeta(role) {
-      applyRoleTitle(role);
+    function applyRoleMeta(role, animateTitle) {
+      applyRoleTitle(role, animateTitle);
       applyRoleDetails(role);
     }
 
@@ -408,6 +758,7 @@
     }
 
     function setHeroImmediate(role) {
+      activeHero.dataset.roleId = role.id;
       activeHero.src = assetUrl(role.heroImage, role.heroVersion);
       activeHero.alt = role.title;
       activeHero.className = "role-select__hero is-active";
@@ -415,16 +766,17 @@
       idleHero.removeAttribute("src");
       applyHeroLayout(role);
       watermarkEl.textContent = role.watermark || role.title || "";
-      applyRoleMeta(role);
+      applyRoleMeta(role, false);
     }
 
     function crossfadeHero(role) {
+      idleHero.dataset.roleId = role.id;
       idleHero.src = assetUrl(role.heroImage, role.heroVersion);
       idleHero.alt = role.title;
       idleHero.className = "role-select__hero is-enter";
       applyHeroLayout(role);
       watermarkEl.textContent = role.watermark || role.title || "";
-      applyRoleMeta(role);
+      applyRoleMeta(role, true);
 
       activeHero.classList.remove("is-active");
       activeHero.classList.add("is-leave");
@@ -451,12 +803,13 @@
      */
     function layoutAvatars(animate) {
       var vw = avatarViewport.clientWidth || 720;
-      var isTv = window.matchMedia("(min-width: 1920px)").matches;
-      var baseSize = isTv
-        ? Math.min(96, Math.max(72, vw * 0.1))
-        : Math.min(68, Math.max(42, vw * 0.1));
-      var radiusX = Math.min(vw * 0.48, isTv ? 460 : 320);
-      var radiusY = Math.min(isTv ? 32 : 22, vw * 0.038);
+      var mobile = isMobileLayout();
+      var tv = isTvViewport();
+      var metrics =
+        layoutAvatarMetrics || computeAvatarMetrics(vw, mobile, tv);
+      var baseSize = metrics.baseSize;
+      var radiusX = metrics.radiusX;
+      var radiusY = metrics.radiusY;
       var half = Math.floor(count / 2);
       var stepX = half === 0 ? 0 : radiusX / half;
 
@@ -534,7 +887,7 @@
     var SWIPE_MIN_DX = 36;
 
     function isMobileSwipeViewport() {
-      return window.matchMedia("(max-width: 768px)").matches;
+      return isMobileLayout();
     }
 
     function resetSwipeTracking() {
@@ -619,6 +972,14 @@
         setTrainingOpen(false);
       });
     }
+    if (trainingTabsEl) {
+      trainingTabsEl.addEventListener("click", function (event) {
+        var tabBtn = event.target.closest("[data-training-tab]");
+        if (!tabBtn || !trainingTabsEl.contains(tabBtn)) return;
+        event.preventDefault();
+        setTrainingTab(tabBtn.getAttribute("data-training-tab"));
+      });
+    }
 
     function onKeyDown(event) {
       if (root.hidden) return;
@@ -646,16 +1007,30 @@
     }
 
     function onResize() {
-      layoutAvatars(false);
-      if (sheetOpen && window.matchMedia("(min-width: 769px)").matches) {
-        setSheetOpen(false);
-      }
+      if (layoutResizeTimer) window.clearTimeout(layoutResizeTimer);
+      layoutResizeTimer = window.setTimeout(function () {
+        applyViewportLayout();
+        layoutAvatars(false);
+        if (sheetOpen && !isMobileLayout()) {
+          setSheetOpen(false);
+        }
+      }, LAYOUT_RESIZE_MS);
+    }
+
+    if (footerEl && typeof ResizeObserver !== "undefined") {
+      layoutObserver = new ResizeObserver(function () {
+        onResize();
+      });
+      layoutObserver.observe(footerEl);
     }
 
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
+    preloadHeroDimensions(roles);
     setHeroImmediate(roles[selectedIndex]);
+    applyViewportLayout();
     requestAnimationFrame(function () {
+      applyViewportLayout();
       layoutAvatars(false);
     });
 
@@ -673,6 +1048,10 @@
         }
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("resize", onResize);
+        if (layoutResizeTimer) window.clearTimeout(layoutResizeTimer);
+        if (layoutObserver) layoutObserver.disconnect();
+        heroA.removeEventListener("load", onHeroImgLoad);
+        heroB.removeEventListener("load", onHeroImgLoad);
       },
     };
   }

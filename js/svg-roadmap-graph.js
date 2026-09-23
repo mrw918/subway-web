@@ -854,6 +854,130 @@
     });
   }
 
+  function nodeHasCourses(courses) {
+    if (!Array.isArray(courses) || !courses.length) return false;
+    return courses.some(function (course) {
+      var name = String((course && course.name) || "").trim();
+      var url = course && course.url != null ? String(course.url).trim() : "";
+      var detail = course && course.detail != null ? String(course.detail).trim() : "";
+      return !!name && (!!url || !!detail);
+    });
+  }
+
+  function isWhiteStationMarker(el) {
+    if (!el) return false;
+    var fill = normalizeColor(el.getAttribute("fill") || "");
+    if (!fill || fill === "none") {
+      try {
+        fill = normalizeColor(window.getComputedStyle(el).fill);
+      } catch (e) {}
+    }
+    return fill === "#ffffff" || fill === "#fff";
+  }
+
+  function courseCoreScaleFromRadius(r) {
+    return r <= 2.5 ? Math.sqrt(2 / 5) : Math.sqrt(3 / 8);
+  }
+
+  function courseCoreScaleFromSize(size) {
+    return size <= 7 ? Math.sqrt(2 / 5) : Math.sqrt(3 / 8);
+  }
+
+  function routeColorForShape(el, routes, routeIds) {
+    var stroke = el.getAttribute("stroke");
+    if (stroke && stroke !== "none") {
+      var parsed = parseHexColor(stroke);
+      if (parsed) return parsed.hex;
+    }
+    for (var i = 0; i < routeIds.length; i += 1) {
+      var route = routes[routeIds[i]];
+      if (route && route.color) return route.color;
+    }
+    return "#d72838";
+  }
+
+  function insertCourseCoreCircle(outer, color) {
+    var cx = parseFloat(outer.getAttribute("cx") || "0");
+    var cy = parseFloat(outer.getAttribute("cy") || "0");
+    var r = parseFloat(outer.getAttribute("r") || "0");
+    if (!(r > 0)) return;
+    var inner = document.createElementNS(SVG_NS, "circle");
+    inner.setAttribute("class", "node-course-core");
+    inner.setAttribute("cx", String(cx));
+    inner.setAttribute("cy", String(cy));
+    inner.setAttribute("r", String(r * courseCoreScaleFromRadius(r)));
+    inner.setAttribute("fill", color);
+    inner.setAttribute("stroke", "none");
+    inner.setAttribute("pointer-events", "none");
+    if (outer.nextSibling) outer.parentNode.insertBefore(inner, outer.nextSibling);
+    else outer.parentNode.appendChild(inner);
+  }
+
+  function insertCourseCoreEllipse(outer, color) {
+    var cx = parseFloat(outer.getAttribute("cx") || "0");
+    var cy = parseFloat(outer.getAttribute("cy") || "0");
+    var rx = parseFloat(outer.getAttribute("rx") || "0");
+    var ry = parseFloat(outer.getAttribute("ry") || "0");
+    if (!(rx > 0 && ry > 0)) return;
+    var scale = courseCoreScaleFromRadius(Math.max(rx, ry));
+    var inner = document.createElementNS(SVG_NS, "ellipse");
+    inner.setAttribute("class", "node-course-core");
+    inner.setAttribute("cx", String(cx));
+    inner.setAttribute("cy", String(cy));
+    inner.setAttribute("rx", String(rx * scale));
+    inner.setAttribute("ry", String(ry * scale));
+    inner.setAttribute("fill", color);
+    inner.setAttribute("stroke", "none");
+    inner.setAttribute("pointer-events", "none");
+    if (outer.nextSibling) outer.parentNode.insertBefore(inner, outer.nextSibling);
+    else outer.parentNode.appendChild(inner);
+  }
+
+  function insertCourseCorePath(outer, color) {
+    var bb;
+    try {
+      bb = outer.getBBox();
+    } catch (e) {
+      return;
+    }
+    if (!(bb.width > 0 && bb.height > 0)) return;
+    var cx = bb.x + bb.width / 2;
+    var cy = bb.y + bb.height / 2;
+    var scale = courseCoreScaleFromSize(Math.max(bb.width, bb.height));
+    var group = document.createElementNS(SVG_NS, "g");
+    group.setAttribute("class", "node-course-core");
+    group.setAttribute("pointer-events", "none");
+    group.setAttribute(
+      "transform",
+      "translate(" + cx + " " + cy + ") scale(" + scale + ") translate(" + -cx + " " + -cy + ")"
+    );
+    var clone = outer.cloneNode(true);
+    clone.removeAttribute("id");
+    clone.removeAttribute("class");
+    clone.setAttribute("fill", color);
+    clone.setAttribute("stroke", "none");
+    group.appendChild(clone);
+    if (outer.nextSibling) outer.parentNode.insertBefore(group, outer.nextSibling);
+    else outer.parentNode.appendChild(group);
+  }
+
+  function decorateCalibrationCourseCore(wrap, routes, routeIds) {
+    if (!wrap || !wrap.querySelectorAll) return;
+    wrap.querySelectorAll("circle, ellipse, path").forEach(function (el) {
+      if (el.closest && el.closest(".node-ripple-anchor")) return;
+      if (el.classList.contains("node-hit") || el.classList.contains("node-ripple")) return;
+      if (el.classList.contains("node-course-core")) return;
+      if (el.parentElement && el.parentElement.classList.contains("node-course-core")) return;
+      if (!isWhiteStationMarker(el)) return;
+      var color = routeColorForShape(el, routes, routeIds);
+      var tag = (el.tagName || "").toLowerCase();
+      if (tag === "circle") insertCourseCoreCircle(el, color);
+      else if (tag === "ellipse") insertCourseCoreEllipse(el, color);
+      else if (tag === "path") insertCourseCorePath(el, color);
+    });
+    wrap.classList.add("node--has-courses");
+  }
+
   function build(svg, options) {
     options = options || {};
     var nodeData = options.nodeData || {};
@@ -1181,6 +1305,9 @@
       station.el.setAttribute("data-node-id", nodeId);
       station.el.setAttribute("data-route-id", routeIds.join(" "));
       if (knowledgeId) station.el.setAttribute("data-node-key", knowledgeId);
+      if (roadmapId === "calibration" && nodeHasCourses(info.courses)) {
+        decorateCalibrationCourseCore(station.el, routes, routeIds);
+      }
       nodes[nodeId] = node;
       routeIds.forEach(function (rid) {
         if (routes[rid] && routes[rid].nodeIds.indexOf(nodeId) === -1) {
