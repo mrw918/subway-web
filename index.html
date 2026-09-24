@@ -341,6 +341,64 @@
           touch-action: none;
         }
       }
+
+      .mobile-qr-hint {
+        display: none;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      @media (min-width: 769px) {
+        .mobile-qr-hint {
+          position: fixed;
+          right: max(18px, calc(14px + var(--safe-right)));
+          bottom: max(18px, calc(14px + var(--safe-bottom)));
+          z-index: 9;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 7px;
+          padding: 10px 10px 9px;
+          border-radius: 12px;
+          border: 1px solid rgba(220, 224, 232, 0.72);
+          background: rgba(255, 255, 255, 0.9);
+          box-shadow: 0 4px 18px rgba(28, 37, 92, 0.07);
+          backdrop-filter: blur(10px) saturate(1.15);
+          -webkit-backdrop-filter: blur(10px) saturate(1.15);
+        }
+
+        .mobile-qr-hint__label {
+          margin: 0;
+          padding: 0 2px;
+          font-size: 11px;
+          font-weight: 500;
+          line-height: 1.3;
+          letter-spacing: 0.08em;
+          color: #8b95a8;
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        .mobile-qr-hint__frame {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 5px;
+          border-radius: 8px;
+          background: #fff;
+          border: 1px solid rgba(228, 232, 238, 0.95);
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85);
+        }
+
+        .mobile-qr-hint__code {
+          display: block;
+          width: 84px;
+          height: 84px;
+          border-radius: 4px;
+          object-fit: contain;
+          background: #fff;
+        }
+      }
     </style>
   </head>
   <body>
@@ -383,6 +441,20 @@
       </section>
     </main>
 
+    <aside class="mobile-qr-hint" aria-label="手机端扫码观看">
+      <p class="mobile-qr-hint__label">手机端扫码观看</p>
+      <div class="mobile-qr-hint__frame">
+        <img
+          class="mobile-qr-hint__code"
+          src="./assets/v-bahn-mobile-qr.png"
+          width="84"
+          height="84"
+          alt="扫码打开 https://academy.vectoryun.cn/v-bahn/"
+          decoding="async"
+        />
+      </div>
+    </aside>
+
     <script src="./js/roadmaps.js?v=36"></script>
     <script src="./js/node-data.js?v=24"></script>
     <script src="./js/node-data-network-test.js?v=18"></script>
@@ -394,7 +466,7 @@
     <script src="./js/svg-roadmap-layers.js?v=26"></script>
     <script src="./js/svg-hover-card.js?v=25"></script>
     <script src="./js/route-presets.js?v=11"></script>
-    <script src="./js/svg-roadmap-graph.js?v=58"></script>
+    <script src="./js/svg-roadmap-graph.js?v=59"></script>
     <script src="./js/svg-roadmap-interactions.js?v=93"></script>
     <script src="./js/training-events.js?v=8"></script>
     <script src="./js/role-select.js?v=67"></script>

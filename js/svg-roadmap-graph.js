@@ -961,7 +961,7 @@
     else outer.parentNode.appendChild(group);
   }
 
-  function decorateCalibrationCourseCore(wrap, routes, routeIds) {
+  function decorateCourseCore(wrap, routes, routeIds) {
     if (!wrap || !wrap.querySelectorAll) return;
     wrap.querySelectorAll("circle, ellipse, path").forEach(function (el) {
       if (el.closest && el.closest(".node-ripple-anchor")) return;
@@ -1305,8 +1305,8 @@
       station.el.setAttribute("data-node-id", nodeId);
       station.el.setAttribute("data-route-id", routeIds.join(" "));
       if (knowledgeId) station.el.setAttribute("data-node-key", knowledgeId);
-      if (roadmapId === "calibration" && nodeHasCourses(info.courses)) {
-        decorateCalibrationCourseCore(station.el, routes, routeIds);
+      if (nodeHasCourses(info.courses)) {
+        decorateCourseCore(station.el, routes, routeIds);
       }
       nodes[nodeId] = node;
       routeIds.forEach(function (rid) {
