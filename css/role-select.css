@@ -564,8 +564,8 @@
 /* 自动布局引擎（JS 写入 --layout-*）激活时的桌面排版 */
 @media (min-width: 769px) {
   .role-select {
-    --role-title-zh: clamp(54px, 4vw, 64px);
-    --role-title-en: clamp(19px, 1.28vw, 23px);
+    --role-title-zh: clamp(48px, 3.6vw, 58px);
+    --role-title-en: clamp(17px, 1.15vw, 21px);
   }
 
   .role-select--layout-auto .role-select__aside {
@@ -590,6 +590,7 @@
     align-items: center;
     width: max-content;
     max-width: 100%;
+    transform: translateX(var(--layout-title-shift-x, 0px));
   }
 
   .role-select--layout-auto .role-select__title-zh {

@@ -872,7 +872,139 @@
         fill = normalizeColor(window.getComputedStyle(el).fill);
       } catch (e) {}
     }
-    return fill === "#ffffff" || fill === "#fff";
+    if (fill === "#ffffff" || fill === "#fff") return true;
+    var hex = parseHexColor(fill);
+    if (hex && hex.r >= 248 && hex.g >= 248 && hex.b >= 248) return true;
+    var rgb = fill.match(/^rgba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)/);
+    if (rgb) {
+      return Number(rgb[1]) >= 248 && Number(rgb[2]) >= 248 && Number(rgb[3]) >= 248;
+    }
+    return false;
+  }
+
+  function isDecoratableStationShape(el) {
+    if (!el) return false;
+    if (el.closest && el.closest(".node-ripple-anchor")) return false;
+    if (el.classList.contains("node-hit") || el.classList.contains("node-ripple")) return false;
+    if (el.classList.contains("node-course-core")) return false;
+    if (el.parentElement && el.parentElement.classList.contains("node-course-core")) return false;
+    return isWhiteStationMarker(el);
+  }
+
+  function markerVisualSize(el) {
+    var tag = (el.tagName || "").toLowerCase();
+    if (tag === "circle") return parseFloat(el.getAttribute("r") || "0") || 0;
+    if (tag === "ellipse") {
+      var rx = parseFloat(el.getAttribute("rx") || "0") || 0;
+      var ry = parseFloat(el.getAttribute("ry") || "0") || 0;
+      return Math.max(rx, ry);
+    }
+    if (tag === "path") {
+      try {
+        var bb = el.getBBox();
+        return Math.max(bb.width, bb.height);
+      } catch (e) {
+        return 0;
+      }
+    }
+    return 0;
+  }
+
+  function isTallCapsulePath(el) {
+    if ((el.tagName || "").toLowerCase() !== "path") return false;
+    try {
+      var bb = el.getBBox();
+      return bb.height > 24 && bb.height > bb.width * 1.25;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function maxPillarPathHeight(wrap) {
+    var maxH = 0;
+    if (!wrap || !wrap.querySelectorAll) return 0;
+    wrap.querySelectorAll("path").forEach(function (el) {
+      if (!isDecoratableStationShape(el) || !isTallCapsulePath(el)) return;
+      try {
+        maxH = Math.max(maxH, el.getBBox().height);
+      } catch (e) {}
+    });
+    return maxH;
+  }
+
+  /** 长换乘立柱：竖条仅作结构，有课标记改在交点圆/椭圆（方案 A） */
+  function isLongPillarHub(wrap) {
+    if (!wrap) return false;
+    if (wrap.getAttribute("data-tall-hub") === "1") return true;
+    return maxPillarPathHeight(wrap) > 72;
+  }
+
+  function pickCapRoundMarker(wrap) {
+    var rounds = [];
+    wrap.querySelectorAll("circle, ellipse").forEach(function (el) {
+      if (isDecoratableStationShape(el)) rounds.push(el);
+    });
+    if (!rounds.length) return null;
+    var best = rounds[0];
+    var bestSize = markerVisualSize(best);
+    for (var i = 1; i < rounds.length; i += 1) {
+      var size = markerVisualSize(rounds[i]);
+      if (size > bestSize) {
+        best = rounds[i];
+        bestSize = size;
+      }
+    }
+    return best;
+  }
+
+  function pickPrimaryWhiteMarker(wrap) {
+    var shapes = [];
+    wrap.querySelectorAll("circle, ellipse, path").forEach(function (el) {
+      if (isDecoratableStationShape(el)) shapes.push(el);
+    });
+    if (!shapes.length) return null;
+
+    if (isLongPillarHub(wrap)) {
+      var capMarker = pickCapRoundMarker(wrap);
+      if (capMarker) return capMarker;
+    }
+
+    var tallCapsule = null;
+    var tallHeight = 0;
+    shapes.forEach(function (el) {
+      if (!isTallCapsulePath(el)) return;
+      try {
+        var h = el.getBBox().height;
+        if (h > tallHeight) {
+          tallCapsule = el;
+          tallHeight = h;
+        }
+      } catch (e2) {}
+    });
+    if (tallCapsule) return tallCapsule;
+
+    var rounds = shapes.filter(function (el) {
+      var tag = (el.tagName || "").toLowerCase();
+      return tag === "circle" || tag === "ellipse";
+    });
+    var pool = rounds.length ? rounds : shapes;
+    var best = pool[0];
+    var bestSize = markerVisualSize(best);
+    for (var i = 1; i < pool.length; i += 1) {
+      var size = markerVisualSize(pool[i]);
+      if (size > bestSize) {
+        best = pool[i];
+        bestSize = size;
+      }
+    }
+    return best;
+  }
+
+  function insertBeforeNodeHit(wrap, node) {
+    if (!wrap || !node) return;
+    var hit = wrap.querySelector(".node-hit");
+    if (hit && hit.parentNode === wrap) wrap.insertBefore(node, hit);
+    else wrap.appendChild(node);
   }
 
   function courseCoreScaleFromRadius(r) {
@@ -881,6 +1013,14 @@
 
   function courseCoreScaleFromSize(size) {
     return size <= 7 ? Math.sqrt(2 / 5) : Math.sqrt(3 / 8);
+  }
+
+  /** path 内芯为纯色 fill，不含外圈 stroke，竖条胶囊需略缩小才接近 5:3 视觉 */
+  function courseCoreScaleFromPath(bb) {
+    var size = Math.max(bb.width, bb.height);
+    if (size <= 7) return Math.sqrt(2 / 5);
+    if (bb.height > bb.width * 1.25 && bb.height > 24) return 0.5;
+    return Math.sqrt(3 / 8);
   }
 
   function routeColorForShape(el, routes, routeIds) {
@@ -896,7 +1036,7 @@
     return "#d72838";
   }
 
-  function insertCourseCoreCircle(outer, color) {
+  function insertCourseCoreCircle(wrap, outer, color) {
     var cx = parseFloat(outer.getAttribute("cx") || "0");
     var cy = parseFloat(outer.getAttribute("cy") || "0");
     var r = parseFloat(outer.getAttribute("r") || "0");
@@ -909,11 +1049,10 @@
     inner.setAttribute("fill", color);
     inner.setAttribute("stroke", "none");
     inner.setAttribute("pointer-events", "none");
-    if (outer.nextSibling) outer.parentNode.insertBefore(inner, outer.nextSibling);
-    else outer.parentNode.appendChild(inner);
+    insertBeforeNodeHit(wrap, inner);
   }
 
-  function insertCourseCoreEllipse(outer, color) {
+  function insertCourseCoreEllipse(wrap, outer, color) {
     var cx = parseFloat(outer.getAttribute("cx") || "0");
     var cy = parseFloat(outer.getAttribute("cy") || "0");
     var rx = parseFloat(outer.getAttribute("rx") || "0");
@@ -929,11 +1068,10 @@
     inner.setAttribute("fill", color);
     inner.setAttribute("stroke", "none");
     inner.setAttribute("pointer-events", "none");
-    if (outer.nextSibling) outer.parentNode.insertBefore(inner, outer.nextSibling);
-    else outer.parentNode.appendChild(inner);
+    insertBeforeNodeHit(wrap, inner);
   }
 
-  function insertCourseCorePath(outer, color) {
+  function insertCourseCorePath(wrap, outer, color) {
     var bb;
     try {
       bb = outer.getBBox();
@@ -943,7 +1081,7 @@
     if (!(bb.width > 0 && bb.height > 0)) return;
     var cx = bb.x + bb.width / 2;
     var cy = bb.y + bb.height / 2;
-    var scale = courseCoreScaleFromSize(Math.max(bb.width, bb.height));
+    var scale = courseCoreScaleFromPath(bb);
     var group = document.createElementNS(SVG_NS, "g");
     group.setAttribute("class", "node-course-core");
     group.setAttribute("pointer-events", "none");
@@ -957,24 +1095,35 @@
     clone.setAttribute("fill", color);
     clone.setAttribute("stroke", "none");
     group.appendChild(clone);
-    if (outer.nextSibling) outer.parentNode.insertBefore(group, outer.nextSibling);
-    else outer.parentNode.appendChild(group);
+    insertBeforeNodeHit(wrap, group);
+  }
+
+  /** 短换乘竖条加 path 内芯时隐藏交点圆；长立柱（方案 A）不隐藏 */
+  function hideJunctionCapMarkers(wrap, pillarPath) {
+    if (!wrap || (pillarPath.tagName || "").toLowerCase() !== "path") return;
+    if (isLongPillarHub(wrap)) return;
+    if (!isTallCapsulePath(pillarPath)) return;
+    wrap.querySelectorAll("circle, ellipse").forEach(function (el) {
+      if (el.closest && el.closest(".node-ripple-anchor")) return;
+      if (!isWhiteStationMarker(el)) return;
+      el.setAttribute("visibility", "hidden");
+      el.setAttribute("pointer-events", "none");
+    });
   }
 
   function decorateCourseCore(wrap, routes, routeIds) {
     if (!wrap || !wrap.querySelectorAll) return;
-    wrap.querySelectorAll("circle, ellipse, path").forEach(function (el) {
-      if (el.closest && el.closest(".node-ripple-anchor")) return;
-      if (el.classList.contains("node-hit") || el.classList.contains("node-ripple")) return;
-      if (el.classList.contains("node-course-core")) return;
-      if (el.parentElement && el.parentElement.classList.contains("node-course-core")) return;
-      if (!isWhiteStationMarker(el)) return;
-      var color = routeColorForShape(el, routes, routeIds);
-      var tag = (el.tagName || "").toLowerCase();
-      if (tag === "circle") insertCourseCoreCircle(el, color);
-      else if (tag === "ellipse") insertCourseCoreEllipse(el, color);
-      else if (tag === "path") insertCourseCorePath(el, color);
-    });
+    if (wrap.querySelector(".node-course-core")) return;
+    var outer = pickPrimaryWhiteMarker(wrap);
+    if (!outer) return;
+    var color = routeColorForShape(outer, routes, routeIds);
+    var tag = (outer.tagName || "").toLowerCase();
+    if (tag === "circle") insertCourseCoreCircle(wrap, outer, color);
+    else if (tag === "ellipse") insertCourseCoreEllipse(wrap, outer, color);
+    else if (tag === "path") {
+      insertCourseCorePath(wrap, outer, color);
+      hideJunctionCapMarkers(wrap, outer);
+    }
     wrap.classList.add("node--has-courses");
   }
 

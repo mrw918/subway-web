@@ -161,18 +161,37 @@
     return "web";
   }
 
+  function isSpreadsheetNoLinkPlaceholder(rawLink) {
+    var s = String(rawLink || "").trim();
+    if (!s) return false;
+    if (s === "暂无" || s === "暂无。" || s === "暂无链接") return true;
+    if (s.indexOf("暂无，") === 0) return true;
+    if (s.indexOf("不展示") !== -1) return true;
+    return false;
+  }
+
+  function isPlaceholderCourseName(name) {
+    var n = String(name || "").trim();
+    if (!n) return true;
+    if (n === "暂无" || n.indexOf("暂无") === 0) return true;
+    return false;
+  }
+
   function normalizeCourses(raw) {
     if (!Array.isArray(raw) || !raw.length) return [];
     return raw
       .map(function (course) {
+        if (!course) return null;
+        if (isSpreadsheetNoLinkPlaceholder(course.link)) return null;
         var url =
-          course && course.url != null && course.url !== ""
+          course.url != null && course.url !== ""
             ? String(course.url).trim()
-            : parseCourseUrl(course && course.link);
-        var detail =
-          course && course.detail != null ? String(course.detail).trim() : "";
+            : parseCourseUrl(course.link);
+        var detail = course.detail != null ? String(course.detail).trim() : "";
+        var name = String((course && course.name) || "").trim();
+        if (isPlaceholderCourseName(name)) return null;
         return {
-          name: String((course && course.name) || "").trim(),
+          name: name,
           type: String((course && course.type) || "").trim(),
           url: url || null,
           linkKind: inferLinkKind(url, course && course.linkKind),
@@ -180,9 +199,23 @@
         };
       })
       .filter(function (course) {
-        return !!course.name && (!!course.url || !!course.detail);
+        return course && !!course.name;
       });
   }
+
+  /** 有正式课名、无 url/detail；表格「暂无」占位已在 normalize 阶段剔除 */
+  function isUnscheduledCourse(course) {
+    return !!(
+      course &&
+      course.name &&
+      !course.url &&
+      !course.detail &&
+      !isPlaceholderCourseName(course.name)
+    );
+  }
+
+  var UNSCHEDULED_COURSE_HINT =
+    "该课程暂无排课，后续将更新排课信息。";
 
   function courseKey(course) {
     return (course.name || "") + "\0" + (course.type || "");
@@ -395,8 +428,27 @@
     );
   }
 
+  function renderUnscheduledCourseRow(course) {
+    var typeLabel = escapeHtml(formatTypeLabel(course.type));
+    var name = escapeHtml(course.name);
+    return (
+      '<li class="node-courses__item node-courses__item--muted node-courses__item--unscheduled" tabindex="0">' +
+      '<div class="node-courses__link node-courses__link--unscheduled">' +
+      '<span class="node-courses__dot node-courses__dot--muted" aria-hidden="true"></span>' +
+      '<span class="node-courses__name node-courses__name--muted">' +
+      name +
+      "</span>" +
+      renderCourseTypeBadge(typeLabel, true) +
+      "</div>" +
+      '<p class="node-courses__unscheduled-hint" role="tooltip">' +
+      escapeHtml(UNSCHEDULED_COURSE_HINT) +
+      "</p></li>"
+    );
+  }
+
   function renderCourseListEntry(entry) {
     if (entry.kind === "direct") return renderLinkedCourseRow(entry.course);
+    if (entry.kind === "unscheduled") return renderUnscheduledCourseRow(entry.course);
     return renderDetailCourseRow(entry.course);
   }
 
@@ -423,6 +475,9 @@
     detailOnly.forEach(function (course) {
       entries.push({ kind: "detail", course: course, rank: courseListRank(course) });
     });
+    sortCoursesByType(all.filter(isUnscheduledCourse)).forEach(function (course) {
+      entries.push({ kind: "unscheduled", course: course, rank: courseListRank(course) });
+    });
     entries.sort(function (a, b) {
       if (a.rank !== b.rank) return a.rank - b.rank;
       return a.course.name.localeCompare(b.course.name, "zh-CN");
@@ -439,7 +494,7 @@
   function bindCoursesSectionEvents(container, courses) {
     if (!container) return;
     var lookup = buildCourseLookup(courses);
-    container.querySelectorAll(".node-courses__link--detail").forEach(function (btn) {
+    container.querySelectorAll(".node-courses__link--detail:not(.node-courses__link--unscheduled)").forEach(function (btn) {
       btn.addEventListener("click", function (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -479,10 +534,16 @@
   }
 
   function openCourseDetailModal(course) {
-    if (!course || !course.detail) return;
+    if (!course || !course.name) return;
+    if (!isUnscheduledCourse(course) && !course.detail) return;
     var modal = ensureCourseDetailModal();
     modal.querySelector(".course-detail-modal__title").textContent = course.name || "课程说明";
-    modal.querySelector(".course-detail-modal__body").innerHTML = formatCourseDetailHtml(course);
+    if (isUnscheduledCourse(course)) {
+      modal.querySelector(".course-detail-modal__body").innerHTML =
+        '<p class="course-detail-modal__empty">该课程暂无排课，后续将更新排课信息。</p>';
+    } else {
+      modal.querySelector(".course-detail-modal__body").innerHTML = formatCourseDetailHtml(course);
+    }
     var action = modal.querySelector(".course-detail-modal__action");
     if (course.url && course.linkKind === "pdf") {
       action.href = course.url;

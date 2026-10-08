@@ -771,6 +771,57 @@ body.course-detail-open {
   color: #9ca3af;
 }
 
+.node-courses__item--muted .node-courses__link:hover .node-courses__name--muted {
+  color: #6b7280;
+}
+
+.node-courses__item--muted .node-courses__ext--info {
+  color: #9ca3af;
+}
+
+.node-courses__item--unscheduled {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  border-radius: 10px;
+  outline: none;
+}
+
+.node-courses__link--unscheduled {
+  cursor: default;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.node-courses__item--unscheduled:hover .node-courses__link--unscheduled,
+.node-courses__item--unscheduled:focus-within .node-courses__link--unscheduled {
+  background: rgba(156, 163, 175, 0.12);
+}
+
+.node-courses__unscheduled-hint {
+  display: none;
+  margin: 0;
+  padding: 8px 10px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #64748b;
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(248, 250, 252, 0.95);
+  border-radius: 0 0 10px 10px;
+}
+
+.node-courses__item--unscheduled:hover .node-courses__unscheduled-hint,
+.node-courses__item--unscheduled:focus-within .node-courses__unscheduled-hint {
+  display: block;
+}
+
+@media (hover: none) {
+  .node-courses__item--unscheduled:active .node-courses__unscheduled-hint {
+    display: block;
+  }
+}
+
 .node-courses__note {
   flex-shrink: 0;
   font-size: 11px;
