@@ -725,17 +725,21 @@
       root.classList.add("role-select--layout-auto");
 
       if (mobile) {
-        var heroW = heroLayoutScale(clamp(w * 0.94, 320, 440));
-        var heroH = heroLayoutScale(clamp(usableH * 0.76, 340, 600));
+        var headerClear = layoutScale(clamp(108 + w * 0.08, 112, 156));
+        var stageAvail = Math.max(220, usableH - headerClear);
+        var heroW = heroLayoutScale(clamp(w * 0.76, 260, 360));
+        var heroH = heroLayoutScale(clamp(stageAvail * 0.62, 240, 400));
         var heroOverlap = computeHeroFeetOverlap(bottom, true);
         layoutHeroLift = 0;
 
+        root.style.setProperty("--layout-mobile-header-clear", headerClear + "px");
         root.style.setProperty("--hero-overlap", heroOverlap + "px");
         root.style.setProperty("--layout-hero-w", heroW + "px");
         root.style.setProperty("--layout-hero-half", heroW * 0.5 + "px");
         root.style.setProperty("--layout-hero-h", heroH + "px");
         root.style.setProperty("--layout-hero-max-h", heroH + "px");
       } else {
+        root.style.removeProperty("--layout-mobile-header-clear");
         var wideT = clamp((w - 769) / (1920 - 769), 0, 1);
         var heroW = heroLayoutScale(clamp(w * 0.38 + 104, 500, 900));
         var heroMaxH = heroLayoutScale(clamp(usableH * 0.94, 560, 1100));
@@ -752,8 +756,8 @@
         );
         var logoW = layoutScale(clamp(148 + w * 0.038, 168, 220));
         var logoTop = layoutScale(clamp(18 + w * 0.006, 22, 34));
-        var detailLabel = layoutScale(clamp(16 + wideT * 5, 17, 22));
-        var detailValue = layoutScale(clamp(15 + wideT * 4, 15, 20));
+        var detailLabel = layoutScale(clamp(13 + wideT * 3.5, 13, 17));
+        var detailValue = layoutScale(clamp(12 + wideT * 2.5, 12, 15));
 
         root.style.setProperty("--hero-overlap", heroOverlap + "px");
         root.style.setProperty("--hero-clear-half", heroClearHalf + "px");

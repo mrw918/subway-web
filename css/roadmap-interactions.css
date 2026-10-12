@@ -1192,14 +1192,16 @@ body.course-detail-open {
 
   .roadmap-search-input {
     width: 100%;
-    min-height: 48px;
-    padding: 11px 20px 11px 48px;
-    border-radius: 24px;
-    font-size: 18px;
+    min-height: 40px;
+    padding: 7px 14px 7px 38px;
+    border-radius: 20px;
+    font-size: 15px;
   }
 
   .roadmap-search-icon {
-    left: 14px;
+    left: 12px;
+    width: 17px;
+    height: 17px;
   }
 
   .roadmap-search-results {

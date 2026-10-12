@@ -634,8 +634,8 @@
   }
 
   .role-select--layout-auto .role-select__detail-chevron {
-    width: 12px;
-    height: 17px;
+    width: 10px;
+    height: 14px;
   }
 
   .role-select--layout-auto .role-select__detail-value {
@@ -744,8 +744,9 @@
     --role-title-en: clamp(11px, 3vw, 13px);
     --title-zone-x: max(18px, calc(12px + var(--safe-left)));
     --title-zone-w: min(210px, 52vw);
-    --wm-clear-right: max(182px, calc(34vw + 40px + var(--safe-right)));
-    --layout-hero-mobile-lift: -16px;
+    --wm-clear-right: max(168px, calc(32vw + 36px + var(--safe-right)));
+    --layout-hero-mobile-lift: 6px;
+    --layout-mobile-header-clear: 128px;
   }
 
   .role-select__logo {
@@ -753,6 +754,7 @@
     right: max(22px, calc(18px + var(--safe-right)));
     left: auto;
     gap: 0;
+    z-index: 11;
   }
 
   .role-select__logo-mark {
@@ -769,6 +771,7 @@
     left: var(--title-zone-x);
     right: auto;
     top: max(24px, calc(14px + var(--safe-top)));
+    z-index: 10;
     transform: none;
     bottom: auto;
     max-width: calc(100vw - var(--wm-clear-right) - var(--title-zone-x) - 8px);
@@ -864,14 +867,19 @@
   }
 
   .role-select__hero-stage {
-    top: max(32px, calc(2% + var(--safe-top)));
+    top: max(
+      var(--layout-mobile-header-clear, 128px),
+      calc(16px + var(--safe-top))
+    );
     bottom: calc(-1 * var(--hero-overlap));
-    width: var(--layout-hero-w, min(420px, 96vw));
+    width: var(--layout-hero-w, min(360px, 88vw));
     height: auto;
     max-height: none;
     align-items: flex-end;
-    pointer-events: auto;
+    justify-content: center;
+    pointer-events: none;
     touch-action: pan-y;
+    z-index: 2;
   }
 
   .role-select__nav {
@@ -899,9 +907,13 @@
 
   .role-select__hero {
     width: auto;
-    height: var(--layout-hero-h, clamp(380px, 62vh, 520px));
+    height: min(
+      var(--layout-hero-h, clamp(280px, 48vh, 400px)),
+      100%
+    );
     max-width: 100%;
-    max-height: none;
+    max-height: 100%;
+    object-fit: contain;
     object-position: bottom center;
   }
 
