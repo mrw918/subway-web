@@ -207,7 +207,7 @@
     return global.TrainingSchedule || null;
   }
 
-  /** 灰 Link：直播/公开、无链接，且本季无排课（或站点不在 E1/E3/D1/D2） */
+  /** 无 url/detail 的课：展示「暂无排课」提示（直播/公开且本季已排课除外） */
   function isUnscheduledCourse(course, routeIds) {
     if (!course || !course.name || isPlaceholderCourseName(course.name)) return false;
     var sched = scheduleApi();
@@ -223,7 +223,7 @@
     return sched.isScheduledWithoutNavLink(course, routeIds || []);
   }
 
-  /** 列表 Link 是否用本季排课蓝色（非直播/公开恒为 true） */
+  /** 列表 Link 蓝色：非直播/公开恒为蓝；直播/公开仅本季有排课为蓝，无排课有链接仍为灰可点 */
   function courseUsesScheduleBlue(course, routeIds) {
     var sched = scheduleApi();
     if (!sched) return true;
@@ -507,14 +507,17 @@
     var typeLabel = escapeHtml(formatTypeLabel(course.type));
     var name = escapeHtml(course.name);
     return (
-      '<li class="node-courses__item node-courses__item--scheduled-pending">' +
+      '<li class="node-courses__item node-courses__item--scheduled-pending" tabindex="0">' +
       '<div class="node-courses__link node-courses__link--scheduled-pending">' +
       '<span class="node-courses__dot" aria-hidden="true"></span>' +
       '<span class="node-courses__name">' +
       name +
       "</span>" +
       renderCourseTypeBadge(typeLabel, false) +
-      "</div></li>"
+      "</div>" +
+      '<p class="node-courses__unscheduled-hint" role="tooltip">' +
+      escapeHtml(UNSCHEDULED_COURSE_HINT) +
+      "</p></li>"
     );
   }
 

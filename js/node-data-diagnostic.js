@@ -14,11 +14,19 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     type: ["直播课"],
     match: ["汽车通信概论"],
     description: "现代汽车中存在多种数据通信网络及协议，包括CAN、LIN、FlexRay等。此外，以太网和TCP/IP等传统计算机网络技术也已在汽车中得到应用。在此站点，将向您介绍汽车通信的整体概况以及不同通信网络之间的区别。",
+
+    courses: [
+      {
+        name: "汽车通信概论",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/rwVFZEpBnz?origin=lprLink",
+      },
+    ],
   },
   "ETH基础协议": {
     nodeName: "ETH基础协议",
-    type: [],
-    match: ["ETH基础协议", "ETH 基础协议"],
+    type: ["直播课", "自学课"],
+    match: ["ETH基础协议", "ETH 基础协议", "Ethernet基础协议"],
     description: "了解车载以太网基础协议与通信概念，为 DoIP 等诊断传输方式打基础。",
   
     courses: [
@@ -42,7 +50,7 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
   },
   "DoIP协议": {
     nodeName: "DoIP协议",
-    type: [],
+    type: ["直播课", "公开课", "自学课", "内训课"],
     match: ["DoIP协议", "DoIP"],
     description: "了解基于 IP 的诊断通信（DoIP）协议与应用场景。",
   

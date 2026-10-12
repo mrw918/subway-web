@@ -244,6 +244,7 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     type: ["视频课"],
     match: ["VT/VIO System", "VT/VIOSystem", "VT System"],
     description: "在HIL测试中，VT System将所有必要的测试组件集成到一个模块化系统中，从而简化HIL测试系统的设置。在此站点，您将了解VT System概况。",
+    svgIndex: 17,
   },
   "VT System配置": {
     nodeName: "VT System配置",
@@ -329,8 +330,9 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
   "LIN协议": {
     nodeName: "LIN协议",
     type: ["直播课", "视频课", "自学课"],
-    match: ["LIN协议"],
+    match: ["LIN协议", "LIN 协议"],
     description: "系统学习LIN（Local Interconnect Network）通信协议，掌握LIN网络架构、主从通信机制、帧结构、调度表以及节点管理等核心知识，理解LIN总线在车身电子控制系统中的应用场景。",
+    svgIndex: 30,
   
     courses: [
       {
@@ -365,6 +367,7 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     type: ["直播课", "视频课", "公开课", "自学课", "内训课"],
     match: ["CANoe.LIN", "CAN.LIN"],
     description: "重点介绍CANoe平台中LIN网络的分析与仿真功能，通过理论结合实践的方式，掌握LIN网络搭建、报文监测、节点仿真、故障注入及通信分析等核心技能，快速具备LIN网络开发与调试能力。",
+    svgIndex: 31,
   
     courses: [
       {
@@ -394,6 +397,7 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     type: ["自学课"],
     match: ["LIN一致性测试"],
     description: "LIN 一致性测试是依据 LIN 协议规范，对 Master、Slave 节点及相关 ECU 的通信行为进行标准符合性验证的测试方法。介绍通过对帧格式、调度机制、主从通信、错误处理、网络管理及诊断服务等内容进行测试，验证设备是否满足 LIN 标准要求。",
+    svgIndex: 32,
   
     courses: [
       {
@@ -420,9 +424,10 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
   },
   "ETH基础协议": {
     nodeName: "ETH基础协议",
-    type: ["视频课", "公开课", "自学课", "内训课"],
-    match: ["ETH基础协议", "Ethernet基础协议"],
+    type: ["直播课", "视频课", "公开课", "自学课", "内训课"],
+    match: ["ETH基础协议", "Ethernet基础协议", "ETH 基础协议"],
     description: "在此站点，您将学习以太网基础协议的内容，内容包括以太网物理层、数据链路层（MAC地址和VLAN）、网络层（IPv4/IPv6）和传输层(TCP/UDP)。",
+    svgIndex: 26,
   
     courses: [
       {
@@ -453,6 +458,7 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     type: ["视频课", "公开课", "自学课", "内训课"],
     match: ["ETH应用协议", "Ethernet应用协议"],
     description: "在此站点，您将学习以太网应用协议的内容，包括SOME/IP和DoIP。SOME/IP包括服务类型介绍、SOME/IP-SD服务发现过程和SOME/IP报文格式定义；DoIP包括DoIP诊断的工作流程，DoIP报文格式定义。",
+    svgIndex: 29,
   
     courses: [
       {
@@ -469,11 +475,17 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
   },
   "CANoe.ETH": {
     nodeName: "CANoe.ETH",
-    type: ["视频课", "公开课", "自学课", "内训课"],
+    type: ["直播课", "视频课", "公开课", "自学课", "内训课"],
     match: ["CANoe.ETH", "CANoe.Ethernet"],
     description: "在此站点，您将首先学习以太网硬件（VN5000系列）配置，随后学习在CANoe中测量分析以太网网络数据。最后，您将结合Add-on、CAPL和Panel实现节点的仿真。",
+    svgIndex: 28,
   
     courses: [
+      {
+        name: "Ethernet基础协议培训",
+        type: "直播课",
+        url: "https://forms.cloud.microsoft/e/Ac1j7sZsDL?origin=lprLink"
+      },
       {
         name: "CANoe.Ethernet 培训",
         type: "公开课",
@@ -491,6 +503,7 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
     type: ["自学课"],
     match: ["TC8&TC10测试", "TC8", "TC10"],
     description: "TC8为车载以太网ECU测试规范，TC10为以太网休眠唤醒规范。Vector提供了TC8测试解决方案。在此站点，您将主要了解TC8测试规范以及Vector提供的相关解决方案。",
+    svgIndex: 27,
   },
   "J1939协议": {
     nodeName: "J1939协议",

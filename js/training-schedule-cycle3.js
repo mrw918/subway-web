@@ -1,10 +1,8 @@
 /**
  * 2026 Cycle3 直播（Intro）/ 公开课（OET）排课表
- * 仅 E1、E3、D1、D2 线路上的直播课/公开课参与「本季排课」判定
+ * 本季有排课：直播/公开课课名命中 Cycle3（与站点 routeId 无关，含 DG/T/D/E 等路线图）
  */
 (function (global) {
-  var SCHEDULE_ROUTE_IDS = ["E1", "E3", "D1", "D2"];
-
   var LIVE_TITLES = [
     "汽车通信概论",
     "AUTOSAR通信培训",
@@ -53,8 +51,20 @@
     { schedule: "CANoe.CAN培训（中）", names: ["CANoe.CAN 培训"] },
     { schedule: "CANoe.CAN培训（下）", names: ["CANoe.CAN 培训"] },
     { schedule: "CANoe.CAN培训", names: ["CANoe.CAN 培训", "CANoe.CAN培训"] },
-    { schedule: "ETH基础协议", names: ["以太网基础协议", "ETH 基础协议"] },
+    { schedule: "ETH基础协议", names: ["以太网基础协议", "ETH 基础协议", "Ethernet基础协议培训"] },
     { schedule: "CAPL培训", names: ["CAPL 测试培训", "CAPL测试培训"] },
+    {
+      schedule: "DaVinci基础配置(CFG6)培训",
+      names: ["DaVinci基础配置(CFG6)"],
+    },
+    {
+      schedule: "DaVinci基础配置(DEVC)培训",
+      names: ["DaVinci基础配置(DEVC)"],
+    },
+    {
+      schedule: "诊断工具链培训",
+      names: ["诊断工具链培训"],
+    },
   ];
 
   function formatTypeLabel(value) {
@@ -132,12 +142,6 @@
     return !!(course && (course.url || course.detail));
   }
 
-  function nodeOnScheduleRoutes(routeIds) {
-    return (routeIds || []).some(function (rid) {
-      return SCHEDULE_ROUTE_IDS.indexOf(rid) !== -1;
-    });
-  }
-
   function isInCycle3Schedule(course) {
     if (!isLiveOrOpenCourse(course)) return false;
     var types = splitDisplayTypes(course.type).filter(function (label) {
@@ -149,21 +153,22 @@
     });
   }
 
-  /** 本季有排课：站点在 E1/E3/D1/D2 且课名命中 Cycle3（仅直播/公开） */
+  /** 本季有排课：课名命中 Cycle3（仅直播/公开；routeIds 保留参数供列表调用） */
   function isScheduledThisQuarter(course, routeIds) {
     if (!course || !course.name || !isLiveOrOpenCourse(course)) return false;
-    if (!nodeOnScheduleRoutes(routeIds)) return false;
     return isInCycle3Schedule(course);
   }
 
   /**
-   * 灰 Link +「暂无排课」：直播/公开、无 url/detail，且本季无排课
+   * 灰行 +「暂无排课」：任意类型，无 url/detail；直播/公开若本季已排课则走 scheduled-pending，不显示此项
    */
   function shouldShowUnscheduledCourse(course, routeIds) {
     if (!course || !course.name) return false;
-    if (!isLiveOrOpenCourse(course)) return false;
     if (courseHasNavLink(course)) return false;
-    return !isScheduledThisQuarter(course, routeIds);
+    if (isLiveOrOpenCourse(course) && isScheduledThisQuarter(course, routeIds)) {
+      return false;
+    }
+    return true;
   }
 
   /** 本季已排课但节点尚未配置链接（非灰「无排课」样式） */
@@ -174,11 +179,9 @@
   }
 
   global.TrainingSchedule = {
-    SCHEDULE_ROUTE_IDS: SCHEDULE_ROUTE_IDS,
     formatTypeLabel: formatTypeLabel,
     isLiveOrOpenCourse: isLiveOrOpenCourse,
     courseHasNavLink: courseHasNavLink,
-    nodeOnScheduleRoutes: nodeOnScheduleRoutes,
     isInCycle3Schedule: isInCycle3Schedule,
     isScheduledThisQuarter: isScheduledThisQuarter,
     shouldShowUnscheduledCourse: shouldShowUnscheduledCourse,

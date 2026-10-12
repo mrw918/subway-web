@@ -652,8 +652,9 @@
     if (c === a) return true;
     // 文案包含别名（如「诊断安全配置」含「安全配置」）
     if (c.indexOf(a) !== -1) return true;
-    // 别名包含文案：仅允许几乎完整前缀，避免「诊断安全」误绑「诊断安全配置」
+    // 别名包含文案：仅允许几乎完整前缀，避免「LIN」误绑「LIN协议」等
     if (a.indexOf(c) !== -1) {
+      if (c.length <= 3) return false;
       return c.length >= a.length - 1;
     }
     return false;

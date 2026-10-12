@@ -111,11 +111,6 @@ window.NODE_HOVER_DATA_EMBEDDED = {
         type: "直播课",
         url: "https://forms.cloud.microsoft/e/5hZjQ2SNQE?origin=lprLink"
       },
-      {
-        name: "AUTOSAR CP 入门",
-        type: "公开课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/6160/autosar-cp%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE-microsar-sip/"
-      },
     ],
   },
   "DaVinci基础配置": {
@@ -198,7 +193,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   
     courses: [
       {
-        name: "AUTOSAR CP 培训",
+        name: "AUTOSAR CP培训",
         type: "公开课",
         url: "https://academy.vector.com/cn/zh/courses/detail/9180/"
       },
@@ -821,6 +816,11 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     description: "了解产品生命周期中的信息安全设计活动，理解开发工程师负责的环节。",
   
     courses: [
+      {
+        name: "TÜV认证汽车网络安全ISO/SAE 21434及安全工程培训：二级",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3231/"
+      },
       {
         name: "MICROSAR 信息安全培训",
         type: "公开课",

@@ -802,10 +802,26 @@ body.course-detail-open {
 
 .node-courses__item--scheduled-pending .node-courses__link--scheduled-pending {
   cursor: default;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .node-courses__item--scheduled-pending .node-courses__link--scheduled-pending:hover .node-courses__name {
   color: inherit;
+}
+
+.node-courses__item--scheduled-pending {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  border-radius: 10px;
+  outline: none;
+}
+
+.node-courses__item--scheduled-pending:hover .node-courses__link--scheduled-pending,
+.node-courses__item--scheduled-pending:focus-within .node-courses__link--scheduled-pending {
+  background: rgba(75, 103, 175, 0.08);
 }
 
 .node-courses__item--unscheduled {
@@ -841,12 +857,15 @@ body.course-detail-open {
 }
 
 .node-courses__item--unscheduled:hover .node-courses__unscheduled-hint,
-.node-courses__item--unscheduled:focus-within .node-courses__unscheduled-hint {
+.node-courses__item--unscheduled:focus-within .node-courses__unscheduled-hint,
+.node-courses__item--scheduled-pending:hover .node-courses__unscheduled-hint,
+.node-courses__item--scheduled-pending:focus-within .node-courses__unscheduled-hint {
   display: block;
 }
 
 @media (hover: none) {
-  .node-courses__item--unscheduled:active .node-courses__unscheduled-hint {
+  .node-courses__item--unscheduled:active .node-courses__unscheduled-hint,
+  .node-courses__item--scheduled-pending:active .node-courses__unscheduled-hint {
     display: block;
   }
 }
