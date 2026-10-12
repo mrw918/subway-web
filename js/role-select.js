@@ -14,6 +14,7 @@
   /** 英文相对中文 cap 高度比例（全大写 + 字距，约 1/3 视觉协调） */
   var TITLE_ZH_EN_RATIO = 0.335;
   var LAYOUT_RESIZE_MS = 80;
+  var TITLE_EDGE_PAD = 8;
 
   function layoutScale(value) {
     return value * LAYOUT_SCALE;
@@ -474,6 +475,85 @@
       return Math.max(120, Math.min(fromLayout, 560));
     }
 
+    function getDesktopTitleBandEdges(w, safeLeft, heroHalfPx, heroClearHalfPx) {
+      var bandLeft = Math.max(28, 12 + safeLeft);
+      var clearHalf = heroClearHalfPx != null ? heroClearHalfPx : heroHalfPx;
+      var bandRight = w * 0.5 - clearHalf - 8;
+      if (bandRight <= bandLeft) bandRight = bandLeft + 120;
+      return { bandLeft: bandLeft, bandRight: bandRight };
+    }
+
+    /** 桌面：中心锚点 + translate(-50%)，保证标题块不超出 safe-area / 标题带 */
+    function clampDesktopTitleToViewport() {
+      if (isMobileLayout() || root.hidden || !titleZhEl || !titleEnEl) return;
+
+      var w = window.innerWidth;
+      var styles = getComputedStyle(root);
+      var safeLeft = parsePx(styles.getPropertyValue("--safe-left"));
+      var safeRight = parsePx(styles.getPropertyValue("--safe-right"));
+      var heroHalfPx =
+        parsePx(root.style.getPropertyValue("--layout-hero-half")) || w * 0.25;
+      var heroClearHalfPx =
+        parsePx(root.style.getPropertyValue("--hero-clear-half")) || heroHalfPx * 0.86;
+      var edges = getDesktopTitleBandEdges(w, safeLeft, heroHalfPx, heroClearHalfPx);
+
+      var titleBlock = titleZhEl.closest(".role-select__title");
+      var contentW = Math.max(
+        titleZhEl.scrollWidth,
+        titleEnEl.scrollWidth,
+        titleBlock ? titleBlock.scrollWidth : 0
+      );
+      if (contentW < 1) return;
+
+      var half = contentW / 2 + TITLE_EDGE_PAD;
+      var minCx = Math.max(
+        edges.bandLeft + half,
+        safeLeft + TITLE_EDGE_PAD + half
+      );
+      var maxCx = Math.min(
+        edges.bandRight - half,
+        w - safeRight - TITLE_EDGE_PAD - half
+      );
+      if (maxCx < minCx) maxCx = minCx;
+
+      var centerRaw = root.style.getPropertyValue("--layout-title-center-x");
+      var centerCx = parsePx(centerRaw);
+      if (!centerRaw || !isFinite(centerCx)) {
+        centerCx = edges.bandLeft + (edges.bandRight - edges.bandLeft) * 0.58;
+      }
+      var newCx = clamp(centerCx, minCx, maxCx);
+      root.style.setProperty("--layout-title-center-x", newCx.toFixed(1) + "px");
+      root.style.removeProperty("--layout-title-shift-x");
+    }
+
+    /** 移动：整块 aside 若贴边则平移标题 */
+    function clampMobileTitleToViewport() {
+      if (!isMobileLayout() || root.hidden || !titleZhEl) return;
+      var aside = titleZhEl.closest(".role-select__aside");
+      if (!aside) return;
+
+      var styles = getComputedStyle(root);
+      var safeLeft = parsePx(styles.getPropertyValue("--safe-left"));
+      var safeRight = parsePx(styles.getPropertyValue("--safe-right"));
+      var pad = TITLE_EDGE_PAD;
+      var rect = aside.getBoundingClientRect();
+      var shift = 0;
+
+      if (rect.left < safeLeft + pad) {
+        shift = safeLeft + pad - rect.left;
+      }
+      var rightLimit = window.innerWidth - safeRight - pad;
+      if (rect.right + shift > rightLimit) {
+        shift = rightLimit - rect.right;
+      }
+
+      if (Math.abs(shift) < 0.5) {
+        root.style.removeProperty("--layout-title-shift-x");
+      } else {
+        root.style.setProperty("--layout-title-shift-x", shift.toFixed(1) + "px");
+      }
+    }
+
     function restoreTitleTextForSelectedRole() {
       var role = roles[selectedIndex];
       if (!role || !titleZhEl || !titleEnEl) return;
@@ -536,6 +616,7 @@
         unifiedTitleWidthKey = Math.round(window.innerWidth);
 
         restoreTitleTextForSelectedRole();
+        clampDesktopTitleToViewport();
         return true;
       }
 
@@ -568,6 +649,7 @@
           "--role-title-en",
           unifiedTitleSizesCache.en.toFixed(1) + "px"
         );
+        clampDesktopTitleToViewport();
         return;
       }
 
@@ -586,6 +668,7 @@
           unifiedTitleSizesCache.en.toFixed(1) + "px"
         );
       }
+      clampDesktopTitleToViewport();
     }
 
     function clearLayoutVars() {
@@ -697,6 +780,7 @@
 
       var role = roles[selectedIndex];
       if (role) applyDesktopTitleFit(role);
+      if (mobile) clampMobileTitleToViewport();
       if (role) applyHeroLayout(role);
       layoutAvatars(false);
     }
@@ -1267,11 +1351,15 @@
     }
 
     function reflowAfterHomeVisible() {
-      if (root.hidden || isMobileLayout()) return;
+      if (root.hidden) return;
       applyViewportLayout();
       layoutAvatars(false);
-      var role = roles[selectedIndex];
-      if (role) applyDesktopTitleFit(role);
+      if (isMobileLayout()) {
+        clampMobileTitleToViewport();
+      } else {
+        var role = roles[selectedIndex];
+        if (role) applyDesktopTitleFit(role);
+      }
     }
 
     function remeasureTitlesAfterFonts() {

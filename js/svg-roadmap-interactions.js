@@ -768,6 +768,59 @@
       return window.matchMedia("(max-width: 480px)").matches;
     };
 
+    function readSafeInset(name) {
+      var raw = getComputedStyle(document.documentElement).getPropertyValue(name);
+      var value = parseFloat(raw);
+      return isFinite(value) ? value : 0;
+    }
+
+    function getSafeViewportInsets() {
+      return {
+        top: readSafeInset("--safe-top"),
+        right: readSafeInset("--safe-right"),
+        bottom: readSafeInset("--safe-bottom"),
+        left: readSafeInset("--safe-left"),
+      };
+    }
+
+    function getRoadmapToolbarBottom() {
+      var toolbar = document.querySelector(".roadmap-toolbar");
+      if (toolbar) {
+        var rect = toolbar.getBoundingClientRect();
+        if (rect.bottom > 0) return rect.bottom;
+      }
+      var safe = getSafeViewportInsets();
+      return 56 + safe.top;
+    }
+
+    function clampTooltipBox(left, top, tw, th, pad) {
+      var insets = getSafeViewportInsets();
+      var vw = window.innerWidth || document.documentElement.clientWidth || 0;
+      var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+      var minLeft = insets.left + pad;
+      var maxLeft = Math.max(minLeft, vw - insets.right - pad - tw);
+      var minTop = Math.max(insets.top + pad, getRoadmapToolbarBottom() + 4);
+      var maxTop = Math.max(minTop, vh - insets.bottom - pad - th);
+      return {
+        left: Math.max(minLeft, Math.min(maxLeft, left)),
+        top: Math.max(minTop, Math.min(maxTop, top)),
+      };
+    }
+
+    function ensureTooltipWithinViewport() {
+      if (!tooltip.classList.contains("is-visible")) return;
+      var pad = 10;
+      var rect = tooltip.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      var left = parseFloat(tooltip.style.left);
+      var top = parseFloat(tooltip.style.top);
+      if (!isFinite(left)) left = rect.left;
+      if (!isFinite(top)) top = rect.top;
+      var box = clampTooltipBox(left, top, rect.width, rect.height, pad);
+      tooltip.style.left = box.left + "px";
+      tooltip.style.top = box.top + "px";
+    }
+
     /* 有底部详情面板才可拖/缩；无面板全锁；拖拽有边界
        用 viewBox 缩放（矢量重绘），避免 CSS transform 栅格化导致文字发糊 */
     var VIEW_MIN = 1;
@@ -1375,18 +1428,22 @@
     function positionTooltip(anchorEl) {
       var pad = 10;
       var gap = 16;
+      var insets = getSafeViewportInsets();
       var vw = window.innerWidth || document.documentElement.clientWidth || 0;
       var vh = window.innerHeight || document.documentElement.clientHeight || 0;
 
       tooltip.style.position = "fixed";
 
       if (isNarrow()) {
-        tooltip.style.left = pad + "px";
-        tooltip.style.right = pad + "px";
+        var sidePad = Math.max(pad, insets.left, insets.right);
+        tooltip.style.left = sidePad + "px";
+        tooltip.style.right = sidePad + "px";
         tooltip.style.width = "auto";
         tooltip.style.top = "auto";
         tooltip.style.bottom =
-          Math.max(pad, (window.visualViewport && window.visualViewport.offsetTop) || 0) + pad + "px";
+          Math.max(pad, insets.bottom, (window.visualViewport && window.visualViewport.offsetTop) || 0) +
+          pad +
+          "px";
         return;
       }
 
@@ -1435,10 +1492,10 @@
 
       var tw = tooltip.offsetWidth || 280;
       var th = tooltip.offsetHeight || 80;
-      var minLeft = pad;
-      var maxLeft = Math.max(pad, vw - tw - pad);
-      var minTop = pad;
-      var maxTop = Math.max(pad, vh - th - pad);
+      var minLeft = insets.left + pad;
+      var maxLeft = Math.max(minLeft, vw - insets.right - pad - tw);
+      var minTop = Math.max(insets.top + pad, getRoadmapToolbarBottom() + 4);
+      var maxTop = Math.max(minTop, vh - insets.bottom - pad - th);
       var maxNear = Math.max(tw, th) * 1.15 + 56;
       var stageRect = stage.getBoundingClientRect();
       var stageCx = stageRect.left + stageRect.width / 2;
@@ -1638,9 +1695,13 @@
       tooltip.style.right = "auto";
       tooltip.style.bottom = "auto";
       tooltip.style.width = "";
-      tooltip.style.left = best.left + "px";
-      tooltip.style.top = best.top + "px";
+      tooltip.style.maxWidth =
+        "min(520px, calc(100vw - " + (insets.left + insets.right + pad * 2) + "px))";
+      var fitted = clampTooltipBox(best.left, best.top, tw, th, pad);
+      tooltip.style.left = fitted.left + "px";
+      tooltip.style.top = fitted.top + "px";
       syncCoursesScrollBounds();
+      requestAnimationFrame(ensureTooltipWithinViewport);
     }
 
     function tooltipCoursesScrollEl() {
@@ -2121,7 +2182,18 @@
     stage.addEventListener("pointerup", onPointerUp);
     stage.addEventListener("pointercancel", onPointerUp);
     stage.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("resize", syncGestureCursor);
+    function onViewportChange() {
+      syncGestureCursor();
+      if (tooltipAnchorEl && tooltip.classList.contains("is-visible")) {
+        positionTooltip(tooltipAnchorEl);
+      }
+    }
+
+    window.addEventListener("resize", onViewportChange);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", onViewportChange);
+      window.visualViewport.addEventListener("scroll", onViewportChange);
+    }
     applyView(false);
     syncGestureCursor();
 
@@ -2276,7 +2348,11 @@
         stage.removeEventListener("pointerup", onPointerUp);
         stage.removeEventListener("pointercancel", onPointerUp);
         stage.removeEventListener("wheel", onWheel);
-        window.removeEventListener("resize", syncGestureCursor);
+        window.removeEventListener("resize", onViewportChange);
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener("resize", onViewportChange);
+          window.visualViewport.removeEventListener("scroll", onViewportChange);
+        }
         if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
         restoreVisual();
         if (panel) {

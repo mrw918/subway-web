@@ -796,6 +796,7 @@
     min-width: 0;
     max-width: 100%;
     text-align: left;
+    transform: translateX(var(--layout-title-shift-x, 0px));
   }
 
   .role-select__title-zh {
