@@ -855,12 +855,14 @@
   }
 
   function nodeHasCourses(courses) {
+    if (global.CourseCore && typeof global.CourseCore.nodeHasAnyCourse === "function") {
+      return global.CourseCore.nodeHasAnyCourse(courses);
+    }
     if (!Array.isArray(courses) || !courses.length) return false;
     return courses.some(function (course) {
       var name = String((course && course.name) || "").trim();
-      var url = course && course.url != null ? String(course.url).trim() : "";
-      var detail = course && course.detail != null ? String(course.detail).trim() : "";
-      return !!name && (!!url || !!detail);
+      if (!name || name === "暂无" || name.indexOf("暂无") === 0) return false;
+      return true;
     });
   }
 

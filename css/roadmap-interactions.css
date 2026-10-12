@@ -506,7 +506,7 @@ svg.is-route-locked g.labels #站点文字 text.is-active-route-label {
 }
 
 .node-courses__link,
-.node-courses__item--muted {
+.node-courses__item--unscheduled .node-courses__link--unscheduled {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -777,6 +777,35 @@ body.course-detail-open {
 
 .node-courses__item--muted .node-courses__ext--info {
   color: #9ca3af;
+}
+
+.node-courses__item--off-schedule .node-courses__link--off-schedule {
+  cursor: pointer;
+}
+
+.node-courses__item--off-schedule .node-courses__link--off-schedule:hover {
+  background: rgba(156, 163, 175, 0.12);
+}
+
+.node-courses__item--off-schedule .node-courses__link--off-schedule:hover .node-courses__name {
+  color: #6b7280;
+}
+
+.node-courses__item--off-schedule .node-courses__name--muted {
+  color: #9ca3af;
+}
+
+.node-courses__item--off-schedule .node-courses__ext--muted,
+.node-courses__item--off-schedule .node-courses__ext--info {
+  color: #9ca3af;
+}
+
+.node-courses__item--scheduled-pending .node-courses__link--scheduled-pending {
+  cursor: default;
+}
+
+.node-courses__item--scheduled-pending .node-courses__link--scheduled-pending:hover .node-courses__name {
+  color: inherit;
 }
 
 .node-courses__item--unscheduled {

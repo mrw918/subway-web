@@ -203,15 +203,32 @@
       });
   }
 
-  /** 有正式课名、无 url/detail；表格「暂无」占位已在 normalize 阶段剔除 */
-  function isUnscheduledCourse(course) {
-    return !!(
-      course &&
-      course.name &&
-      !course.url &&
-      !course.detail &&
-      !isPlaceholderCourseName(course.name)
-    );
+  function scheduleApi() {
+    return global.TrainingSchedule || null;
+  }
+
+  /** 灰 Link：直播/公开、无链接，且本季无排课（或站点不在 E1/E3/D1/D2） */
+  function isUnscheduledCourse(course, routeIds) {
+    if (!course || !course.name || isPlaceholderCourseName(course.name)) return false;
+    var sched = scheduleApi();
+    if (sched) {
+      return sched.shouldShowUnscheduledCourse(course, routeIds || []);
+    }
+    return !!(course && !course.url && !course.detail);
+  }
+
+  function isScheduledPendingCourse(course, routeIds) {
+    var sched = scheduleApi();
+    if (!sched) return false;
+    return sched.isScheduledWithoutNavLink(course, routeIds || []);
+  }
+
+  /** 列表 Link 是否用本季排课蓝色（非直播/公开恒为 true） */
+  function courseUsesScheduleBlue(course, routeIds) {
+    var sched = scheduleApi();
+    if (!sched) return true;
+    if (!sched.isLiveOrOpenCourse(course)) return true;
+    return sched.isScheduledThisQuarter(course, routeIds || []);
   }
 
   var UNSCHEDULED_COURSE_HINT =
@@ -390,39 +407,79 @@
     return '<span class="node-courses__ext node-courses__ext--info" aria-hidden="true">ⓘ</span>';
   }
 
-  function renderLinkedCourseRow(course) {
+  function renderLinkedCourseRow(course, offSchedule) {
     var typeLabel = escapeHtml(formatTypeLabel(course.type));
     var name = escapeHtml(course.name);
+    var muted = !!offSchedule;
+    var itemClass =
+      "node-courses__item node-courses__item--linked" +
+      (muted ? " node-courses__item--off-schedule" : "");
+    var linkClass =
+      "node-courses__link" + (muted ? " node-courses__link--off-schedule" : "");
+    var dotClass = "node-courses__dot" + (muted ? " node-courses__dot--muted" : "");
+    var nameClass = "node-courses__name" + (muted ? " node-courses__name--muted" : "");
+    var titleAttr = muted
+      ? ' title="' + escapeHtml(UNSCHEDULED_COURSE_HINT) + '"'
+      : "";
     return (
-      '<li class="node-courses__item node-courses__item--linked">' +
-      '<a class="node-courses__link" href="' +
+      "<li class=\"" +
+      itemClass +
+      '">' +
+      "<a class=\"" +
+      linkClass +
+      '" href="' +
       escapeHtml(course.url) +
-      '" target="_blank" rel="noopener noreferrer">' +
-      '<span class="node-courses__dot" aria-hidden="true"></span>' +
-      '<span class="node-courses__name">' +
+      '" target="_blank" rel="noopener noreferrer"' +
+      titleAttr +
+      ">" +
+      '<span class="' +
+      dotClass +
+      '" aria-hidden="true"></span>' +
+      '<span class="' +
+      nameClass +
+      '">' +
       name +
       "</span>" +
-      renderCourseTypeBadge(typeLabel, false) +
-      renderLinkSuffix() +
+      renderCourseTypeBadge(typeLabel, muted) +
+      (muted
+        ? '<span class="node-courses__ext node-courses__ext--muted" aria-hidden="true">↗</span>'
+        : renderLinkSuffix()) +
       "</a></li>"
     );
   }
 
-  function renderDetailCourseRow(course) {
+  function renderDetailCourseRow(course, offSchedule) {
     var typeLabel = escapeHtml(formatTypeLabel(course.type));
     var name = escapeHtml(course.name);
+    var muted = !!offSchedule;
+    var itemClass =
+      "node-courses__item node-courses__item--linked" +
+      (muted ? " node-courses__item--off-schedule" : "");
+    var linkClass =
+      "node-courses__link node-courses__link--detail" +
+      (muted ? " node-courses__link--off-schedule" : "");
+    var dotClass = "node-courses__dot" + (muted ? " node-courses__dot--muted" : "");
+    var nameClass = "node-courses__name" + (muted ? " node-courses__name--muted" : "");
     return (
-      '<li class="node-courses__item node-courses__item--linked">' +
-      '<button type="button" class="node-courses__link node-courses__link--detail" data-course-key="' +
+      "<li class=\"" +
+      itemClass +
+      '">' +
+      '<button type="button" class="' +
+      linkClass +
+      '" data-course-key="' +
       escapeHtml(encodeURIComponent(courseKey(course))) +
       '" aria-label="查看' +
       name +
       '课程说明">' +
-      '<span class="node-courses__dot" aria-hidden="true"></span>' +
-      '<span class="node-courses__name">' +
+      '<span class="' +
+      dotClass +
+      '" aria-hidden="true"></span>' +
+      '<span class="' +
+      nameClass +
+      '">' +
       name +
       "</span>" +
-      renderCourseTypeBadge(typeLabel, false) +
+      renderCourseTypeBadge(typeLabel, muted) +
       renderDetailSuffix() +
       "</button></li>"
     );
@@ -446,13 +503,32 @@
     );
   }
 
-  function renderCourseListEntry(entry) {
-    if (entry.kind === "direct") return renderLinkedCourseRow(entry.course);
-    if (entry.kind === "unscheduled") return renderUnscheduledCourseRow(entry.course);
-    return renderDetailCourseRow(entry.course);
+  function renderScheduledPendingCourseRow(course) {
+    var typeLabel = escapeHtml(formatTypeLabel(course.type));
+    var name = escapeHtml(course.name);
+    return (
+      '<li class="node-courses__item node-courses__item--scheduled-pending">' +
+      '<div class="node-courses__link node-courses__link--scheduled-pending">' +
+      '<span class="node-courses__dot" aria-hidden="true"></span>' +
+      '<span class="node-courses__name">' +
+      name +
+      "</span>" +
+      renderCourseTypeBadge(typeLabel, false) +
+      "</div></li>"
+    );
   }
 
-  function buildPrimaryCourseEntries(all) {
+  function renderCourseListEntry(entry) {
+    if (entry.kind === "direct") {
+      return renderLinkedCourseRow(entry.course, entry.offSchedule);
+    }
+    if (entry.kind === "unscheduled") return renderUnscheduledCourseRow(entry.course);
+    if (entry.kind === "scheduled-pending") return renderScheduledPendingCourseRow(entry.course);
+    return renderDetailCourseRow(entry.course, entry.offSchedule);
+  }
+
+  function buildPrimaryCourseEntries(all, routeIds) {
+    routeIds = routeIds || [];
     var directRaw = all.filter(function (course) {
       return course.url && !course.detail;
     });
@@ -467,15 +543,44 @@
       })
     );
     var entries = mergeLinkedCourses(directRaw).map(function (course) {
-      return { kind: "direct", course: course, rank: course.rank };
+      var blue = courseUsesScheduleBlue(course, routeIds);
+      return {
+        kind: "direct",
+        course: course,
+        rank: course.rank,
+        offSchedule: !blue,
+      };
     });
     detailWithUrl.forEach(function (course) {
-      entries.push({ kind: "detail", course: course, rank: courseListRank(course) });
+      var blue = courseUsesScheduleBlue(course, routeIds);
+      entries.push({
+        kind: "detail",
+        course: course,
+        rank: courseListRank(course),
+        offSchedule: !blue,
+      });
     });
     detailOnly.forEach(function (course) {
-      entries.push({ kind: "detail", course: course, rank: courseListRank(course) });
+      var blue = courseUsesScheduleBlue(course, routeIds);
+      entries.push({
+        kind: "detail",
+        course: course,
+        rank: courseListRank(course),
+        offSchedule: !blue,
+      });
     });
-    sortCoursesByType(all.filter(isUnscheduledCourse)).forEach(function (course) {
+    sortCoursesByType(
+      all.filter(function (course) {
+        return isScheduledPendingCourse(course, routeIds);
+      })
+    ).forEach(function (course) {
+      entries.push({ kind: "scheduled-pending", course: course, rank: courseListRank(course) });
+    });
+    sortCoursesByType(
+      all.filter(function (course) {
+        return isUnscheduledCourse(course, routeIds);
+      })
+    ).forEach(function (course) {
       entries.push({ kind: "unscheduled", course: course, rank: courseListRank(course) });
     });
     entries.sort(function (a, b) {
@@ -563,9 +668,9 @@
     document.body.classList.remove("course-detail-open");
   }
 
-  function buildCoursesSection(courses, expanded, showPinHint) {
+  function buildCoursesSection(courses, expanded, showPinHint, routeIds) {
     var all = normalizeCourses(courses);
-    var primary = buildPrimaryCourseEntries(all);
+    var primary = buildPrimaryCourseEntries(all, routeIds);
     if (!primary.length) {
       return { html: "", hasCourses: false, showToggle: false, all: all };
     }
@@ -745,6 +850,7 @@
     var tooltipCoursesExpanded = false;
     var tooltipAnchorEl = null;
     var tooltipDetailState = null;
+    var panelDetailRouteIds = [];
     var tooltipHovering = false;
     var tooltipLeaveTimer = null;
 
@@ -995,7 +1101,8 @@
           color: safeCssColor(route.color),
         });
       });
-      var courseSection = buildCoursesSection(courses, !!expanded, false);
+      panelDetailRouteIds = routeIds || [];
+      var courseSection = buildCoursesSection(courses, !!expanded, false, panelDetailRouteIds);
       var hasContent = !!(title || desc || routeList.length || courseSection.hasCourses);
       if (!hasContent) {
         panel.hidden = true;
@@ -1053,7 +1160,12 @@
     function updatePanelCoursesSection(courses, expanded) {
       if (!panel) return;
       var scrollTop = panel.scrollTop;
-      var courseSection = buildCoursesSection(courses, !!expanded, false);
+      var courseSection = buildCoursesSection(
+        courses,
+        !!expanded,
+        false,
+        panelDetailRouteIds
+      );
       var wrap = panel.querySelector(".info-panel__courses-wrap");
       if (wrap) wrap.innerHTML = courseSection.html;
       panel.classList.toggle("has-courses", courseSection.hasCourses);
@@ -1556,7 +1668,8 @@
       var courseSection = buildCoursesSection(
         tooltipDetailState.courses,
         tooltipCoursesExpanded,
-        false
+        false,
+        tooltipDetailState.routeIds || []
       );
       var coursesWrap = tooltip.querySelector(".node-tooltip__courses-wrap");
       coursesWrap.innerHTML = courseSection.html;
@@ -1581,7 +1694,9 @@
       typesEl.innerHTML = "";
       typesEl.hidden = true;
 
-      var courseSection = buildCoursesSection(courses, !!expanded, false);
+      var routeIds =
+        tooltipDetailState && tooltipDetailState.routeIds ? tooltipDetailState.routeIds : [];
+      var courseSection = buildCoursesSection(courses, !!expanded, false, routeIds);
       var coursesWrap = tooltip.querySelector(".node-tooltip__courses-wrap");
       coursesWrap.innerHTML = courseSection.html;
       tooltip.classList.toggle("has-courses", courseSection.hasCourses);
@@ -1603,9 +1718,10 @@
       }
     }
 
-    function showTooltip(title, desc, types, anchorEl, courses) {
+    function showTooltip(title, desc, types, anchorEl, courses, routeIds) {
+      routeIds = routeIds || [];
       if (panel && isMobileLayout()) {
-        renderPanel(title, desc, types, [], courses, false);
+        renderPanel(title, desc, types, routeIds, courses, false);
         return;
       }
       tooltipCoursesExpanded = false;
@@ -1615,6 +1731,7 @@
         desc: desc,
         types: types,
         courses: courses,
+        routeIds: routeIds,
         expanded: false,
       };
       fillTooltipContent(title, desc, types, courses, false);
@@ -1647,7 +1764,14 @@
       if (panel && isMobileLayout()) {
         renderPanel(node.name, node.desc, types, node.routeIds || [], node.courses || [], false);
       } else {
-        showTooltip(node.name, node.desc, types, anchorEl, node.courses || []);
+        showTooltip(
+          node.name,
+          node.desc,
+          types,
+          anchorEl,
+          node.courses || [],
+          node.routeIds || []
+        );
       }
       if (opts.focus) focusNode(anchorEl);
     }
@@ -1665,7 +1789,20 @@
         var calibRoutes = routeAttr ? routeAttr.split(/\s+/).filter(Boolean) : [];
         renderPanel(info.name, info.desc, info.type || [], calibRoutes, info.courses || [], false);
       } else {
-        showTooltip(info.name, info.desc, info.type || [], anchorEl || nodeEl, info.courses || []);
+        var routeAttr = String(
+          (nodeEl &&
+            (nodeEl.getAttribute("data-route-id") || nodeEl.getAttribute("data-route"))) ||
+            ""
+        ).trim();
+        var calibRoutes = routeAttr ? routeAttr.split(/\s+/).filter(Boolean) : [];
+        showTooltip(
+          info.name,
+          info.desc,
+          info.type || [],
+          anchorEl || nodeEl,
+          info.courses || [],
+          calibRoutes
+        );
       }
       if (opts.focus) focusNode(anchorEl || nodeEl);
       return true;
