@@ -5,7 +5,23 @@
   var SLIDE_MS = 420;
   var HERO_REF_HEIGHT = 880;
   var HERO_SIZE_BOOST = 1;
+  /** 选角页核心区整体缩放（相对线上一版约 +16%） */
+  var LAYOUT_SCALE = 1.16;
+  /** 人物容器在 LAYOUT_SCALE 之上再放大 */
+  var HERO_EXTRA_SCALE = 1.18;
+  /** 左侧标题在 LAYOUT_SCALE 之上再放大 */
+  var TITLE_EXTRA_SCALE = 2.15;
+  /** 英文相对中文 cap 高度比例（全大写 + 字距，约 1/3 视觉协调） */
+  var TITLE_ZH_EN_RATIO = 0.335;
   var LAYOUT_RESIZE_MS = 80;
+
+  function layoutScale(value) {
+    return value * LAYOUT_SCALE;
+  }
+
+  function heroLayoutScale(value) {
+    return layoutScale(value) * HERO_EXTRA_SCALE;
+  }
 
   function sortedCatalog() {
     return (global.ROADMAP_CATALOG || [])
@@ -238,6 +254,14 @@
     var layoutObserver = null;
     var layoutAvatarMetrics = null;
     var heroDimCache = {};
+    var unifiedTitleSizesCache = null;
+    var unifiedTitleWidthKey = 0;
+    var titleMeasureSeq = 0;
+    var lastLayoutWidthKey = Math.round(window.innerWidth);
+    var mountDestroyed = false;
+    /** 桌面人物垂直微调：lift 上移，shiftY 正数下移 */
+    var DESKTOP_HERO_LIFT = 0;
+    var DESKTOP_HERO_SHIFT_Y = 10;
 
     function isMobileLayout() {
       return window.matchMedia("(max-width: 768px)").matches;
@@ -261,7 +285,7 @@
 
     function computeHeroNormScale(naturalH) {
       if (!naturalH) return 1;
-      return clamp((HERO_REF_HEIGHT / naturalH) * HERO_SIZE_BOOST, 0.96, 1.08);
+      return clamp((HERO_REF_HEIGHT / naturalH) * HERO_SIZE_BOOST, 0.98, 1.06);
     }
 
     function cacheHeroDimensions(role, w, h) {
@@ -288,9 +312,9 @@
     }
 
     function computeHeroFeetOverlap(bottom, mobile) {
-      var feetClear = mobile ? 6 : 10;
+      var feetClear = mobile ? 6 : 6;
       var railY = bottom.footerPad + bottom.trackBlock * 0.52;
-      return clamp(railY - feetClear, mobile ? 28 : 36, mobile ? 68 : 96);
+      return clamp(railY - feetClear, mobile ? 28 : 44, mobile ? 68 : 118);
     }
 
     function computeBottomCluster(w, h, safeBottom, mobile, avatarMetrics, tv) {
@@ -303,11 +327,14 @@
       var entreBlock = mobile
         ? clamp(44 + w * 0.008, 44, 50)
         : clamp(50 + wideT * 18, 50, 68);
-      var footerGap = clamp(h * 0.012, 10, 16);
+      var footerGap = mobile
+        ? clamp(h * 0.012, 10, 16)
+        : clamp(h * 0.008, 6, 10);
       var footerPad = clamp(h * 0.005, 3, 8);
       var footerEdge = safeBottom + clamp(h * 0.006, 4, 8);
-      var footerLift = clamp(h * 0.032, mobile ? 22 : 16, mobile ? 36 : 28);
-      if (!mobile) footerLift = Math.max(8, footerLift - 12);
+      var footerLift = mobile
+        ? clamp(h * 0.032, 22, 36)
+        : 4;
       var orbitW = Math.min(w * 0.92, tv ? 1060 : mobile ? 520 : 760);
       var orbitH = clamp(trackBlock * 0.46, 44, mobile ? 56 : 90);
       var avatarViewportH = clamp(avatarMetrics.baseSize + 28, 80, mobile ? 104 : 152);
@@ -327,15 +354,15 @@
     }
 
     function applyBottomClusterVars(metrics) {
-      root.style.setProperty("--track-block", metrics.trackBlock + "px");
-      root.style.setProperty("--entre-block", metrics.entreBlock + "px");
-      root.style.setProperty("--layout-footer-gap", metrics.footerGap + "px");
-      root.style.setProperty("--layout-footer-pad-bottom", metrics.footerPad + "px");
+      root.style.setProperty("--track-block", layoutScale(metrics.trackBlock) + "px");
+      root.style.setProperty("--entre-block", layoutScale(metrics.entreBlock) + "px");
+      root.style.setProperty("--layout-footer-gap", layoutScale(metrics.footerGap) + "px");
+      root.style.setProperty("--layout-footer-pad-bottom", layoutScale(metrics.footerPad) + "px");
       root.style.setProperty("--layout-footer-bottom", metrics.footerEdge + "px");
-      root.style.setProperty("--layout-footer-lift", metrics.footerLift + "px");
-      root.style.setProperty("--layout-orbit-w", metrics.orbitW + "px");
-      root.style.setProperty("--layout-orbit-h", metrics.orbitH + "px");
-      root.style.setProperty("--layout-avatar-viewport-h", metrics.avatarViewportH + "px");
+      root.style.setProperty("--layout-footer-lift", layoutScale(metrics.footerLift) + "px");
+      root.style.setProperty("--layout-orbit-w", layoutScale(metrics.orbitW) + "px");
+      root.style.setProperty("--layout-orbit-h", layoutScale(metrics.orbitH) + "px");
+      root.style.setProperty("--layout-avatar-viewport-h", layoutScale(metrics.avatarViewportH) + "px");
     }
 
     function applyTitleBandCenter(w, safeLeft, safeRight, mobile, heroHalf, heroClearHalf) {
@@ -353,10 +380,16 @@
       root.style.setProperty("--layout-title-center-x", centerX + "px");
     }
 
+    function pairedEnTitleSize(zhSize) {
+      var en = zhSize * TITLE_ZH_EN_RATIO;
+      return clamp(en, layoutScale(24), zhSize * 0.36);
+    }
+
     function desktopTitleBaseSizes(w) {
+      var zh = layoutScale(clamp(w * 0.058, 76, 108)) * TITLE_EXTRA_SCALE;
       return {
-        zh: clamp(w * 0.036, 48, 58),
-        en: clamp(w * 0.0115, 17, 21),
+        zh: zh,
+        en: pairedEnTitleSize(zh),
       };
     }
 
@@ -364,23 +397,47 @@
       var zhScale = 1;
       var enScale = 1;
 
-      if (zhLen >= 11) zhScale = 0.84;
-      else if (zhLen >= 9) zhScale = 0.91;
-      else if (zhLen >= 7) zhScale = 0.94;
-      else zhScale = 0.91;
+      if (zhLen >= 11) zhScale = 0.88;
+      else if (zhLen >= 9) zhScale = 0.94;
+      else if (zhLen >= 7) zhScale = 0.97;
+      else zhScale = 0.94;
 
-      if (enLen >= 34) enScale = 0.76;
-      else if (enLen >= 26) enScale = 0.86;
-      else if (enLen >= 19) enScale = 0.94;
-      else enScale = 0.91;
+      if (enLen >= 34) enScale = 0.88;
+      else if (enLen >= 26) enScale = 0.93;
+      else if (enLen >= 19) enScale = 0.97;
+      else enScale = 0.95;
 
       return { zh: zhScale, en: enScale };
     }
 
-    function isLongRoleTitle(role) {
-      var zh = (role && role.title) || "";
-      var en = (role && role.titleEn) || "";
-      return zh.length >= 9 || en.length >= 26;
+    /** 全角色共用同一套标题字号（按最长标题收紧，切换角色不再忽大忽小） */
+    function getCatalogUnifiedTitleSizes(w) {
+      var widthKey = Math.round(w);
+      if (unifiedTitleSizesCache && unifiedTitleWidthKey === widthKey) {
+        return unifiedTitleSizesCache;
+      }
+      var bases = desktopTitleBaseSizes(w);
+      var catalogScale = 1;
+      roles.forEach(function (role) {
+        var zhLen = (role.title || "").length;
+        var enLen = (role.titleEn || "").length;
+        var scales = desktopTitleScaleByLength(zhLen, enLen);
+        catalogScale = Math.min(catalogScale, scales.zh, scales.en);
+      });
+      var zh = bases.zh * catalogScale;
+      return {
+        zh: zh,
+        en: pairedEnTitleSize(zh),
+      };
+    }
+
+    function invalidateUnifiedTitleSizes() {
+      unifiedTitleSizesCache = null;
+      unifiedTitleWidthKey = 0;
+      titleMeasureSeq += 1;
+      if (!isMobileLayout()) {
+        clearDesktopTitleFitVars();
+      }
     }
 
     function clearDesktopTitleFitVars() {
@@ -406,26 +463,87 @@
       applyTitleBandCenter(w, safeLeft, safeRight, false, heroHalfPx, heroClearHalfPx);
     }
 
-    function measureDesktopTitleFit() {
-      if (isMobileLayout() || !titleZhEl || !titleEnEl) return;
-      requestAnimationFrame(function () {
-        if (isMobileLayout() || !titleZhEl || !titleEnEl) return;
-        var aside = titleZhEl.closest(".role-select__aside");
-        var maxW = aside && aside.clientWidth ? aside.clientWidth : 0;
-        if (maxW < 48) return;
-        var zhSize =
-          parsePx(getComputedStyle(root).getPropertyValue("--role-title-zh")) || 48;
-        var enSize =
-          parsePx(getComputedStyle(root).getPropertyValue("--role-title-en")) || 17;
-        while (titleZhEl.scrollWidth > maxW + 1 && zhSize > 32) {
-          zhSize -= 1.5;
+    /** 与 CSS `.role-select--layout-auto .role-select__aside` 的 max-width 一致（勿用 aside.clientWidth，max-content 会随字号撑开） */
+    function getDesktopTitleFitMaxWidth(w) {
+      var styles = getComputedStyle(root);
+      var safeLeft = parsePx(styles.getPropertyValue("--safe-left"));
+      var titleZoneX = Math.max(28, 20 + safeLeft);
+      var heroHalf =
+        parsePx(root.style.getPropertyValue("--layout-hero-half")) || w * 0.25;
+      var fromLayout = w * 0.5 - heroHalf - 16 - Math.max(titleZoneX, 12);
+      return Math.max(120, Math.min(fromLayout, 560));
+    }
+
+    function restoreTitleTextForSelectedRole() {
+      var role = roles[selectedIndex];
+      if (!role || !titleZhEl || !titleEnEl) return;
+      titleZhEl.textContent = role.title || "";
+      titleEnEl.textContent = role.titleEn || "";
+    }
+
+    function measureCatalogTitleFit(unified, options) {
+      options = options || {};
+      if (isMobileLayout() || !titleZhEl || !titleEnEl || !unified) return false;
+
+      var seq = titleMeasureSeq + 1;
+      titleMeasureSeq = seq;
+
+      function runMeasure() {
+        if (seq !== titleMeasureSeq) return false;
+        if (isMobileLayout() || !titleZhEl || !titleEnEl) return false;
+        if (root.hidden) return false;
+        var maxW = getDesktopTitleFitMaxWidth(window.innerWidth);
+        if (maxW < 48) return false;
+
+        var longest = roles.reduce(
+          function (acc, role) {
+            if ((role.title || "").length >= (acc.title || "").length) {
+              acc = role;
+            }
+            return acc;
+          },
+          roles[0] || { title: "", titleEn: "" }
+        );
+        var longestEn = roles.reduce(function (acc, role) {
+          return (role.titleEn || "").length >= (acc.titleEn || "").length ? role : acc;
+        }, roles[0] || { title: "", titleEn: "" });
+
+        titleZhEl.textContent = longest.title || "";
+        titleEnEl.textContent = longestEn.titleEn || "";
+
+        var zhSize = unified.zh;
+        var enSize = pairedEnTitleSize(zhSize);
+
+        function applyTitlePair() {
+          enSize = pairedEnTitleSize(zhSize);
           root.style.setProperty("--role-title-zh", zhSize.toFixed(1) + "px");
-        }
-        while (titleEnEl.scrollWidth > maxW + 1 && enSize > 12) {
-          enSize -= 1;
           root.style.setProperty("--role-title-en", enSize.toFixed(1) + "px");
         }
-      });
+
+        applyTitlePair();
+
+        while (
+          (titleZhEl.scrollWidth > maxW + 1 || titleEnEl.scrollWidth > maxW + 1) &&
+          zhSize > 48
+        ) {
+          zhSize -= 1;
+          applyTitlePair();
+        }
+
+        if (seq !== titleMeasureSeq) return false;
+
+        unifiedTitleSizesCache = { zh: zhSize, en: enSize };
+        unifiedTitleWidthKey = Math.round(window.innerWidth);
+
+        restoreTitleTextForSelectedRole();
+        return true;
+      }
+
+      if (options.sync) {
+        return runMeasure();
+      }
+      requestAnimationFrame(runMeasure);
+      return true;
     }
 
     function applyDesktopTitleFit(role) {
@@ -433,27 +551,41 @@
         clearDesktopTitleFitVars();
         return;
       }
+      if (root.hidden) return;
+
       var w = window.innerWidth;
-      var bases = desktopTitleBaseSizes(w);
-      var zhLen = (role.title || "").length;
-      var enLen = (role.titleEn || "").length;
-      var scales = desktopTitleScaleByLength(zhLen, enLen);
-      var zh = bases.zh * scales.zh;
-      var en = bases.en * scales.en;
+      var widthKey = Math.round(w);
+      root.style.setProperty("--layout-title-center-bias", "0.58");
+      root.style.removeProperty("--layout-title-shift-x");
+      reflowTitleBandCenter();
 
-      root.style.setProperty("--role-title-zh", zh.toFixed(1) + "px");
-      root.style.setProperty("--role-title-en", en.toFixed(1) + "px");
-
-      if (isLongRoleTitle(role)) {
-        root.style.setProperty("--layout-title-center-bias", "0.56");
-        root.style.setProperty("--layout-title-shift-x", "-8px");
-      } else {
-        root.style.removeProperty("--layout-title-center-bias");
-        root.style.removeProperty("--layout-title-shift-x");
+      if (unifiedTitleSizesCache && unifiedTitleWidthKey === widthKey) {
+        root.style.setProperty(
+          "--role-title-zh",
+          unifiedTitleSizesCache.zh.toFixed(1) + "px"
+        );
+        root.style.setProperty(
+          "--role-title-en",
+          unifiedTitleSizesCache.en.toFixed(1) + "px"
+        );
+        return;
       }
 
-      reflowTitleBandCenter();
-      measureDesktopTitleFit();
+      var sizes = getCatalogUnifiedTitleSizes(w);
+      if (!measureCatalogTitleFit(sizes, { sync: true })) {
+        measureCatalogTitleFit(sizes, { sync: false });
+        return;
+      }
+      if (unifiedTitleSizesCache) {
+        root.style.setProperty(
+          "--role-title-zh",
+          unifiedTitleSizesCache.zh.toFixed(1) + "px"
+        );
+        root.style.setProperty(
+          "--role-title-en",
+          unifiedTitleSizesCache.en.toFixed(1) + "px"
+        );
+      }
     }
 
     function clearLayoutVars() {
@@ -510,8 +642,8 @@
       root.classList.add("role-select--layout-auto");
 
       if (mobile) {
-        var heroW = clamp(w * 0.94, 320, 440);
-        var heroH = clamp(usableH * 0.76, 340, 600);
+        var heroW = heroLayoutScale(clamp(w * 0.94, 320, 440));
+        var heroH = heroLayoutScale(clamp(usableH * 0.76, 340, 600));
         var heroOverlap = computeHeroFeetOverlap(bottom, true);
         layoutHeroLift = 0;
 
@@ -522,18 +654,23 @@
         root.style.setProperty("--layout-hero-max-h", heroH + "px");
       } else {
         var wideT = clamp((w - 769) / (1920 - 769), 0, 1);
-        var heroW = clamp(w * 0.36 + 96, 480, 720);
-        var heroMaxH = clamp(usableH * 0.92, 540, 920);
+        var heroW = heroLayoutScale(clamp(w * 0.38 + 104, 500, 900));
+        var heroMaxH = heroLayoutScale(clamp(usableH * 0.94, 560, 1100));
         var heroOverlap = computeHeroFeetOverlap(bottom, false);
-        layoutHeroLift = 0;
-        var heroClearHalf = clamp(heroW * 0.43, 190, 300);
+        layoutHeroLift = DESKTOP_HERO_LIFT;
+        var heroClearHalf = clamp(heroW * 0.43, layoutScale(190), layoutScale(300));
         var anchorY = safeTop + usableH * 0.44;
-        var edgeInset = clamp(w * 0.026, 32, 56);
-        var detailsOffset = clamp(heroW * 0.5 + 36, 240, 360);
-        var logoW = clamp(148 + w * 0.038, 168, 220);
-        var logoTop = clamp(18 + w * 0.006, 22, 34);
-        var detailLabel = clamp(15 + wideT * 9, 16, 24);
-        var detailValue = clamp(14 + wideT * 6, 14, 20);
+        var detailsAnchorY = safeTop + usableH * 0.39;
+        var edgeInset = layoutScale(clamp(w * 0.026, 32, 56));
+        var detailsOffset = clamp(
+          heroW * 0.5 + layoutScale(36),
+          layoutScale(240),
+          layoutScale(360)
+        );
+        var logoW = layoutScale(clamp(148 + w * 0.038, 168, 220));
+        var logoTop = layoutScale(clamp(18 + w * 0.006, 22, 34));
+        var detailLabel = layoutScale(clamp(16 + wideT * 5, 17, 22));
+        var detailValue = layoutScale(clamp(15 + wideT * 4, 15, 20));
 
         root.style.setProperty("--hero-overlap", heroOverlap + "px");
         root.style.setProperty("--hero-clear-half", heroClearHalf + "px");
@@ -542,7 +679,7 @@
         root.style.setProperty("--layout-hero-max-h", heroMaxH + "px");
         root.style.removeProperty("--layout-hero-h");
         root.style.setProperty("--layout-aside-top", anchorY + "px");
-        root.style.setProperty("--layout-details-top", anchorY - 10 + "px");
+        root.style.setProperty("--layout-details-top", detailsAnchorY + "px");
         root.style.setProperty("--layout-details-offset", detailsOffset + "px");
         root.style.setProperty("--layout-edge-inset", edgeInset + "px");
         root.style.setProperty("--layout-logo-top", logoTop + "px");
@@ -566,11 +703,9 @@
 
     function applyHeroScale(role) {
       if (!role) return;
-      var adj = (role && role.heroAdjust) || {};
-      var manual = adj.scale != null ? adj.scale : 1;
       var cached = heroDimCache[role.id];
       var scale = cached ? cached.scale : 1;
-      heroStage.style.setProperty("--hero-scale", String(scale * manual));
+      heroStage.style.setProperty("--hero-scale", String(scale));
     }
 
     function renderTrainingPlaceBadge(place) {
@@ -761,14 +896,13 @@
     });
 
     function applyHeroLayout(role) {
-      var adj = (role && role.heroAdjust) || {};
       heroStage.dataset.role = (role && role.id) || "";
       applyHeroScale(role);
-      heroStage.style.setProperty("--hero-shift-x", adj.x != null ? String(adj.x) : "0px");
-      heroStage.style.setProperty(
-        "--hero-shift-y",
-        -layoutHeroLift + parseShiftPx(adj.y) + "px"
-      );
+      heroStage.style.setProperty("--hero-shift-x", "0px");
+      var shiftY = isMobileLayout()
+        ? -layoutHeroLift
+        : -layoutHeroLift + layoutScale(DESKTOP_HERO_SHIFT_Y);
+      heroStage.style.setProperty("--hero-shift-y", shiftY + "px");
       heroStage.style.setProperty(
         "--hero-object-position",
         (role && role.heroObjectPosition) || "bottom center"
@@ -915,9 +1049,9 @@
       var tv = isTvViewport();
       var metrics =
         layoutAvatarMetrics || computeAvatarMetrics(vw, mobile, tv);
-      var baseSize = metrics.baseSize;
-      var radiusX = metrics.radiusX;
-      var radiusY = metrics.radiusY;
+      var baseSize = layoutScale(metrics.baseSize);
+      var radiusX = layoutScale(metrics.radiusX);
+      var radiusY = layoutScale(metrics.radiusY);
       var half = Math.floor(count / 2);
       var stepX = half === 0 ? 0 : radiusX / half;
 
@@ -1119,12 +1253,32 @@
     function onResize() {
       if (layoutResizeTimer) window.clearTimeout(layoutResizeTimer);
       layoutResizeTimer = window.setTimeout(function () {
+        var widthKey = Math.round(window.innerWidth);
+        if (widthKey !== lastLayoutWidthKey) {
+          lastLayoutWidthKey = widthKey;
+          invalidateUnifiedTitleSizes();
+        }
         applyViewportLayout();
         layoutAvatars(false);
         if (sheetOpen && !isMobileLayout()) {
           setSheetOpen(false);
         }
       }, LAYOUT_RESIZE_MS);
+    }
+
+    function reflowAfterHomeVisible() {
+      if (root.hidden || isMobileLayout()) return;
+      applyViewportLayout();
+      layoutAvatars(false);
+      var role = roles[selectedIndex];
+      if (role) applyDesktopTitleFit(role);
+    }
+
+    function remeasureTitlesAfterFonts() {
+      if (mountDestroyed || root.hidden || isMobileLayout()) return;
+      invalidateUnifiedTitleSizes();
+      var role = roles[selectedIndex];
+      if (role) applyDesktopTitleFit(role);
     }
 
     if (footerEl && typeof ResizeObserver !== "undefined") {
@@ -1144,11 +1298,18 @@
       layoutAvatars(false);
     });
 
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(remeasureTitlesAfterFonts).catch(function () {});
+    }
+
     return {
       getSelectedId: function () {
         return roles[selectedIndex] && roles[selectedIndex].id;
       },
+      reflowAfterHomeVisible: reflowAfterHomeVisible,
       destroy: function () {
+        mountDestroyed = true;
+        titleMeasureSeq += 1;
         setTrainingOpen(false);
         setSheetOpen(false);
         if (mainEl) {

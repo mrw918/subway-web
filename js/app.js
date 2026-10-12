@@ -255,6 +255,9 @@
         resetRoadmapEnterClasses();
         home.hidden = false;
         resetHomeExitClass();
+        if (roleSelect && roleSelect.reflowAfterHomeVisible) {
+          roleSelect.reflowAfterHomeVisible();
+        }
         transitioning = false;
       }, 430);
       return;
@@ -264,6 +267,9 @@
     roadmap.hidden = true;
     resetRoadmapEnterClasses();
     resetHomeExitClass();
+    if (roleSelect && roleSelect.reflowAfterHomeVisible) {
+      roleSelect.reflowAfterHomeVisible();
+    }
   }
 
   function showError(message) {

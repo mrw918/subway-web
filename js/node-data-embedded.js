@@ -194,13 +194,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     courses: [
       {
         name: "AUTOSAR CP培训",
-        type: "公开课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/9180/"
-      },
-      {
-        name: "AUTOSAR CP 培训",
-        type: "内训课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/9180/"
+        type: "公开课/内训课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/9180/",
       },
     ],
   },
@@ -825,11 +820,6 @@ window.NODE_HOVER_DATA_EMBEDDED = {
         name: "MICROSAR 信息安全培训",
         type: "公开课",
         detail: "本课程为付费内训课，现代汽车与其环境的连接日益增强，这带来了对车载应用的新要求，以满足机密性、完整性和真实性的需求。在本课程的第一个模块中，您将学习汽车网络安全的基础知识。在此基础上，您将通过理论和练习探索相应的Vector解决方案。\n课程内容：\n1. 车辆信息安全的基础理论知识\n- 车辆信息安全的动因\n- 信息安全的目标\n- 设计原则和一般方法\n- 密码学算法理论知识\n- 实施方案 - 使用案例\n2. MICROSAR加密模块的基本概念\n- 算法，密钥，任务\n- 加密模块配置\n3. 演示示例：基于密码的消息认证码（CMAC）\n- 演示CMAC生成与验证的详细任务配置\n- 演示加密模块的配置（Csm模块, CryIf模块, Crypto驱动模块）\n4. 使用案例\n- SecOC的详细介绍，包含新鲜度值的管理\n- CANoe中的Security Manager配置\n- MICROSAR KeyM模块，包括证书管理\n- 安全诊断简介\n- TLS简介\n5. 实操练习 (DaVinci Configurator Classic)\n- 加密模块配置\n- 加密密钥配置\n- 加密作业配置（加解密、MAC生成与验证）\n在内训课中，Vector中国将与您商定培训日期，也可以基于您的培训需求进行单独的沟通。\n本课程价格为每场50,000元+6%税。\n如您有意向购买该类课程，请您联系您的对接销售，或发送邮件至Vector中国培训团队进行咨询：training@cn.vector.com"
-      },
-      {
-        name: "汽车网络安全ISO/SAE 21434及网络安全工程培训-二级",
-        type: "公开课",
-        url: "https://academy.vector.com/cn/zh/courses/detail/3231/"
       },
       {
         name: "MICROSAR 信息安全培训",

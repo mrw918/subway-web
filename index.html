@@ -11,8 +11,8 @@
     <title>知识路线图</title>
     <link rel="stylesheet" href="./css/fonts.css?v=1" />
     <link rel="stylesheet" href="./css/node-hover-card.css?v=41" />
-    <link rel="stylesheet" href="./css/roadmap-interactions.css?v=87" />
-    <link rel="stylesheet" href="./css/role-select.css?v=132" />
+    <link rel="stylesheet" href="./css/roadmap-interactions.css?v=89" />
+    <link rel="stylesheet" href="./css/role-select.css?v=144" />
     <style>
       :root {
         color-scheme: light;
@@ -124,12 +124,12 @@
         border: 0;
         background: transparent;
         color: #dc2626;
-        font-size: 13px;
+        font-size: 17px;
         font-weight: 600;
         cursor: pointer;
-        min-height: 34px;
-        min-width: 34px;
-        padding: 6px 10px;
+        min-height: 46px;
+        min-width: 46px;
+        padding: 9px 14px;
         border-radius: 8px;
         white-space: nowrap;
       }
@@ -142,14 +142,14 @@
 
       .roadmap-title {
         margin: 0;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 650;
         color: #1c255c;
       }
 
       .roadmap-error {
         position: absolute;
-        top: calc(52px + var(--safe-top));
+        top: calc(56px + var(--safe-top));
         left: calc(16px + var(--safe-left));
         right: calc(16px + var(--safe-right));
         z-index: 11;
@@ -170,7 +170,7 @@
       .stage-shell {
         position: absolute;
         inset: 0;
-        top: calc(48px + var(--safe-top));
+        top: calc(56px + var(--safe-top));
         flex: none;
         min-height: 0;
         background: #ffffff;
@@ -190,19 +190,19 @@
         }
 
         .back-btn {
-          font-size: 18px;
-          min-height: 48px;
-          min-width: 48px;
-          padding: 10px 16px;
+          font-size: 22px;
+          min-height: 56px;
+          min-width: 56px;
+          padding: 11px 20px;
           border-radius: 10px;
         }
 
         .roadmap-title {
-          font-size: 18px;
+          font-size: 22px;
         }
 
         .stage-shell {
-          top: calc(68px + var(--safe-top));
+          top: calc(74px + var(--safe-top));
         }
 
         .roadmap-error {
@@ -282,7 +282,7 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          font-size: 14px;
+          font-size: 18px;
           line-height: 1.35;
         }
 
@@ -294,9 +294,10 @@
 
         .roadmap-search-input {
           width: 100%;
-          min-height: 40px;
-          padding: 8px 16px 8px 40px;
-          border-radius: 20px;
+          min-height: 48px;
+          padding: 11px 20px 11px 48px;
+          border-radius: 24px;
+          font-size: 18px;
         }
 
         .roadmap-error {
@@ -370,7 +371,7 @@
         .mobile-qr-hint__label {
           margin: 0;
           padding: 0 2px;
-          font-size: 11px;
+          font-size: 14px;
           font-weight: 500;
           line-height: 1.3;
           letter-spacing: 0.08em;
@@ -392,8 +393,8 @@
 
         .mobile-qr-hint__code {
           display: block;
-          width: 84px;
-          height: 84px;
+          width: 108px;
+          height: 108px;
           border-radius: 4px;
           object-fit: contain;
           background: #fff;
@@ -414,7 +415,7 @@
             </div>
           </div>
           <div class="roadmap-search-wrap">
-            <svg class="roadmap-search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <svg class="roadmap-search-icon" width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
               <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
               <path d="M11 11l3.2 3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
@@ -447,19 +448,19 @@
         <img
           class="mobile-qr-hint__code"
           src="./assets/v-bahn-mobile-qr.png"
-          width="84"
-          height="84"
+          width="108"
+          height="108"
           alt="扫码打开 https://academy.vectoryun.cn/v-bahn/"
           decoding="async"
         />
       </div>
     </aside>
 
-    <script src="./js/roadmaps.js?v=36"></script>
+    <script src="./js/roadmaps.js?v=37"></script>
     <script src="./js/node-data.js?v=25"></script>
     <script src="./js/node-data-network-test.js?v=22"></script>
     <script src="./js/node-data-diagnostic.js?v=11"></script>
-    <script src="./js/node-data-embedded.js?v=23"></script>
+    <script src="./js/node-data-embedded.js?v=24"></script>
     <script src="./js/node-data-mbse.js?v=7"></script>
     <script src="./js/node-data-soa.js?v=6"></script>
     <script src="./js/node-data-calibration.js?v=6"></script>
@@ -471,7 +472,7 @@
     <script src="./js/svg-roadmap-graph.js?v=66"></script>
     <script src="./js/svg-roadmap-interactions.js?v=103"></script>
     <script src="./js/training-events.js?v=8"></script>
-    <script src="./js/role-select.js?v=70"></script>
-    <script src="./js/app.js?v=45"></script>
+    <script src="./js/role-select.js?v=90"></script>
+    <script src="./js/app.js?v=46"></script>
   </body>
 </html>
