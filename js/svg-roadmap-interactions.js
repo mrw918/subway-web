@@ -743,6 +743,16 @@
     var routes = graph.routes;
     var nodes = graph.nodes;
     var roadmapId = options.roadmapId || "";
+
+    function analyticsTrackNode(nodeId) {
+      if (!window.VBahnAnalytics || !window.VBahnAnalytics.track) return;
+      var n = nodes[nodeId];
+      window.VBahnAnalytics.track("view_node", {
+        roadmapId: roadmapId,
+        nodeKey: nodeId,
+        nodeName: (n && n.name) || nodeId,
+      });
+    }
     var calibrationFallbackByStation = {};
     if (roadmapId === "calibration") {
       Object.keys(nodeData || {}).forEach(function (id) {
@@ -2000,6 +2010,7 @@
         nodeEl.classList.add("is-hover");
         highlightNodeRoutes(routeIds, nodeEl);
         showNodeTooltip(nodeId, nodeEl, { focus: isMobileLayout() });
+        analyticsTrackNode(nodeId);
       }
 
       if (!useClickOnly) {
@@ -2267,6 +2278,7 @@
             nodeEl.classList.add("is-hover");
             highlightNodeRoutes(routeIds, nodeEl);
             showNodeTooltip(nodeId, nodeEl, { focus: isMobileLayout() });
+            analyticsTrackNode(nodeId);
           }
         });
       });

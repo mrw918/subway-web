@@ -90,6 +90,19 @@
       '<svg class="role-select__detail-chevron" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true">' +
       '<path d="M2 1.5 L8 7 L2 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="butt" stroke-linejoin="miter"/>' +
       "</svg>";
+    var siteLinksAsideFoot =
+      '<div class="role-select__details-aside-foot" aria-label="反馈与联系">' +
+      '<a class="role-select__details-aside-foot-link" href="https://forms.cloud.microsoft/e/bFcgGbxAuk?origin=lprLink" target="_blank" rel="noopener noreferrer">反馈与建议</a>' +
+      '<span class="role-select__details-aside-foot-sep" aria-hidden="true">·</span>' +
+      '<span class="role-select__details-aside-foot-prefix">联系我们</span>' +
+      '<a class="role-select__details-aside-foot-mail" href="mailto:training@cn.vector.com">training@cn.vector.com</a>' +
+      "</div>";
+    var siteLinksMobileStrip =
+      '<p class="role-select__site-links" aria-label="反馈与联系">' +
+      '<a class="role-select__site-links-feedback" href="https://forms.cloud.microsoft/e/bFcgGbxAuk?origin=lprLink" target="_blank" rel="noopener noreferrer">反馈与建议</a>' +
+      '<span class="role-select__site-links-sep" aria-hidden="true">·</span>' +
+      '<a class="role-select__site-links-mail" href="mailto:training@cn.vector.com">training@cn.vector.com</a>' +
+      "</p>";
 
     root.innerHTML =
       '<div class="role-select__scene">' +
@@ -105,6 +118,7 @@
       "      </button>" +
       "    </div>" +
       "  </div>" +
+      '  <div class="role-select__details-wrap role-select__details-wrap--desktop">' +
       '  <dl class="role-select__details role-select__details--desktop" aria-live="polite">' +
       '    <div class="role-select__detail-item">' +
       '      <dt class="role-select__detail-label">' +
@@ -131,11 +145,14 @@
       '      <span class="role-select__detail-value">直播课 / 公开课</span>' +
       "    </button>" +
       "  </dl>" +
+      siteLinksAsideFoot +
+      "  </div>" +
       '  <div class="role-select__main">' +
       '    <div class="role-select__watermark" aria-hidden="true"></div>' +
       '    <div class="role-select__hero-stage"></div>' +
       "  </div>" +
       '  <footer class="role-select__footer">' +
+      siteLinksMobileStrip +
       '    <div class="role-select__avatar-track">' +
       '      <svg class="role-select__orbit" viewBox="0 0 820 80" aria-hidden="true">' +
       '        <ellipse cx="410" cy="62" rx="390" ry="28" fill="none" stroke="rgba(210, 214, 222, 0.42)" stroke-width="1.2"/>' +
@@ -200,6 +217,7 @@
       '        <span class="role-select__detail-value">直播课 / 公开课</span>' +
       "      </button>" +
       "    </dl>" +
+      siteLinksAsideFoot +
       "  </aside>" +
       '  <div class="role-select__training-backdrop" data-training-backdrop hidden></div>' +
       '  <div class="role-select__training-modal" role="dialog" aria-modal="true" aria-label="培训资讯" data-training-modal hidden>' +
@@ -803,10 +821,64 @@
       );
     }
 
+    function parseTrainingEndDate(dateStr) {
+      var s = String(dateStr || "").trim();
+      if (!s) return null;
+      var parts = s.split("-");
+      var startPart = parts[0].trim();
+      var endPart = (parts.length > 1 ? parts[parts.length - 1] : startPart).trim();
+      var year = new Date().getFullYear();
+      var startFull = startPart.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+      if (startFull) {
+        year = parseInt(startFull[1], 10);
+      }
+      var endFull = endPart.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+      if (endFull) {
+        return new Date(
+          parseInt(endFull[1], 10),
+          parseInt(endFull[2], 10) - 1,
+          parseInt(endFull[3], 10)
+        );
+      }
+      var endShort = endPart.match(/^(\d{1,2})\/(\d{1,2})$/);
+      if (endShort) {
+        return new Date(
+          year,
+          parseInt(endShort[1], 10) - 1,
+          parseInt(endShort[2], 10)
+        );
+      }
+      if (startFull) {
+        return new Date(
+          parseInt(startFull[1], 10),
+          parseInt(startFull[2], 10) - 1,
+          parseInt(startFull[3], 10)
+        );
+      }
+      return null;
+    }
+
+    function isTrainingItemStillVisible(item, today) {
+      var end = parseTrainingEndDate(item && item.date);
+      if (!end) return true;
+      var dayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      var endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+      return endDay >= dayStart;
+    }
+
+    function filterTrainingSection(section) {
+      if (!section) return section;
+      var items = (section.items || []).filter(function (item) {
+        return isTrainingItemStillVisible(item, new Date());
+      });
+      return { label: section.label, items: items };
+    }
+
     function renderTrainingList(section, tabKey) {
       if (!section) {
         return '<p class="role-select__training-empty">暂无课程</p>';
       }
+      section = filterTrainingSection(section);
       var items = section.items || [];
       if (!items.length) {
         return '<p class="role-select__training-empty">暂无课程</p>';
@@ -870,7 +942,7 @@
       trainingTabsEl.innerHTML = tabs
         .map(function (tab) {
           var isActive = tab.key === trainingActiveTab;
-          return (
+      return (
             '<button type="button" class="role-select__training-tab' +
             (isActive ? " is-active" : "") +
             '" role="tab" aria-selected="' +
@@ -1003,10 +1075,10 @@
       var titleBlock = titleZhEl && titleZhEl.closest(".role-select__title");
 
       function writeTitle() {
-        titleZhEl.textContent = zh;
-        titleEnEl.textContent = en;
-        if (sheetTitleZhEl) sheetTitleZhEl.textContent = zh;
-        if (sheetTitleEnEl) sheetTitleEnEl.textContent = en;
+      titleZhEl.textContent = zh;
+      titleEnEl.textContent = en;
+      if (sheetTitleZhEl) sheetTitleZhEl.textContent = zh;
+      if (sheetTitleEnEl) sheetTitleEnEl.textContent = en;
         applyDesktopTitleFit(role);
       }
 
@@ -1269,6 +1341,12 @@
     entreBtn.addEventListener("click", function () {
       if (animating) return;
       var role = roles[selectedIndex];
+      if (role && window.VBahnAnalytics && window.VBahnAnalytics.track) {
+        window.VBahnAnalytics.track("click_enter_roadmap", {
+          roadmapId: role.id,
+          title: role.title || "",
+        });
+      }
       if (role && onEnter) onEnter(role.id);
     });
     if (detailsToggleBtn) {
@@ -1291,6 +1369,9 @@
       btn.addEventListener("click", function (event) {
         event.preventDefault();
         event.stopPropagation();
+        if (window.VBahnAnalytics && window.VBahnAnalytics.track) {
+          window.VBahnAnalytics.track("open_training_modal", {});
+        }
         setTrainingOpen(true);
       });
     });
@@ -1347,10 +1428,10 @@
           invalidateUnifiedTitleSizes();
         }
         applyViewportLayout();
-        layoutAvatars(false);
+      layoutAvatars(false);
         if (sheetOpen && !isMobileLayout()) {
-          setSheetOpen(false);
-        }
+        setSheetOpen(false);
+      }
       }, LAYOUT_RESIZE_MS);
     }
 

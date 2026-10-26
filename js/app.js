@@ -296,6 +296,12 @@
     home.hidden = true;
     roadmap.hidden = false;
     resetHomeExitClass();
+    if (window.VBahnAnalytics && window.VBahnAnalytics.track) {
+      window.VBahnAnalytics.track("view_roadmap", {
+        roadmapId: item.id,
+        title: item.title || "",
+      });
+    }
     document.getElementById("roadmap-title").textContent = item.title;
     document.getElementById("roadmap-error").hidden = true;
     document.title = item.title + " · 知识路线图";
@@ -440,6 +446,47 @@
       return;
     }
 
+    if (window.VBahnAnalytics && window.VBahnAnalytics.track) {
+      window.VBahnAnalytics.track("view_home", {});
+    }
+    document.addEventListener(
+      "click",
+      function (event) {
+        if (!window.VBahnAnalytics || !window.VBahnAnalytics.track) return;
+        var t = event.target && event.target.closest ? event.target.closest("a[href]") : null;
+        if (!t) return;
+        var href = t.getAttribute("href") || "";
+        var forms = href.indexOf("forms.cloud.microsoft") !== -1;
+        var mail = /^mailto:/i.test(href);
+        var courseLink = t.classList && t.classList.contains("node-courses__link");
+        if (!forms && !mail && !courseLink) return;
+        if (courseLink && !forms && !mail) {
+          var nameEl = t.querySelector(".node-courses__name");
+          window.VBahnAnalytics.track("click_course", {
+            href: href.slice(0, 500),
+            courseName: nameEl ? String(nameEl.textContent || "").trim().slice(0, 200) : "",
+            roadmapId:
+              (document.getElementById("roadmap-view") &&
+              !document.getElementById("roadmap-view").hidden
+                ? (location.hash || "").replace(/^#\/?/, "") || "unknown"
+                : "") || "unknown",
+          });
+          return;
+        }
+        window.VBahnAnalytics.track(forms ? "click_feedback" : "click_contact_mail", {
+          href: href.slice(0, 500),
+          location:
+            t.closest(".roadmap-toolbar") != null
+              ? "roadmap_toolbar"
+              : t.closest(".role-select__details-aside-foot") != null
+                ? "details_foot"
+                : t.closest(".role-select__site-links") != null
+                  ? "mobile_strip"
+                  : "other",
+        });
+      },
+      true
+    );
     initRoleSelect();
     document.getElementById("back-btn").addEventListener("click", function () {
       location.hash = "";

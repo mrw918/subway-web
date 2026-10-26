@@ -8,18 +8,6 @@ window.TRAINING_EVENTS = {
     label: "直播课",
     items: [
       {
-        date: "2026/10/19",
-        place: "线上",
-        title: "汽车通信概论",
-        url: "https://forms.cloud.microsoft/e/rwVFZEpBnz?origin=lprLink",
-      },
-      {
-        date: "2026/10/26",
-        place: "线上",
-        title: "AUTOSAR通信培训",
-        url: "https://forms.cloud.microsoft/e/7zWp3C4yBA?origin=lprLink",
-      },
-      {
         date: "2026/11/2",
         place: "线上",
         title: "CAN&CAN FD",
@@ -60,12 +48,6 @@ window.TRAINING_EVENTS = {
   open: {
     label: "公开课",
     items: [
-      {
-        date: "2026/10/22",
-        place: "北京",
-        title: "诊断工具链培训",
-        url: "https://academy.vector.com/cn/zh/courses/detail/3222/",
-      },
       {
         date: "2026/11/3-11/5",
         place: "上海",

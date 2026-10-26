@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./css/fonts.css?v=1" />
     <link rel="stylesheet" href="./css/node-hover-card.css?v=41" />
     <link rel="stylesheet" href="./css/roadmap-interactions.css?v=90" />
-    <link rel="stylesheet" href="./css/role-select.css?v=147" />
+    <link rel="stylesheet" href="./css/role-select.css?v=156" />
     <style>
       :root {
         color-scheme: light;
@@ -132,6 +132,69 @@
         padding: 9px 14px;
         border-radius: 8px;
         white-space: nowrap;
+      }
+
+      .roadmap-toolbar__aside {
+        flex-shrink: 0;
+        margin-left: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px 10px;
+        max-width: min(42vw, 320px);
+      }
+
+      .roadmap-feedback-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0.02em;
+        color: #5a6578;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .roadmap-feedback-link::before {
+        content: "";
+        flex-shrink: 0;
+        width: 14px;
+        height: 14px;
+        background-color: #8b95a8;
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM13 15h-2v-6h2v6zm0-8h-2V5h2v2z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM13 15h-2v-6h2v6zm0-8h-2V5h2v2z'/%3E%3C/svg%3E");
+      }
+
+      .roadmap-mail-link {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.35;
+        letter-spacing: 0.01em;
+        color: #8b95a8;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .roadmap-feedback-link:hover {
+          color: #2c3a4d;
+        }
+
+        .roadmap-feedback-link:hover::before {
+          background-color: #5a6578;
+        }
+
+        .roadmap-mail-link:hover {
+          color: #5a6578;
+        }
       }
 
       @media (hover: hover) and (pointer: fine) {
@@ -278,6 +341,34 @@
           padding-right: 8px;
         }
 
+        .roadmap-toolbar__aside {
+          grid-column: 3;
+          justify-self: end;
+          margin-left: 0;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 0;
+          max-width: min(46vw, 168px);
+        }
+
+        .roadmap-feedback-link {
+          min-height: 32px;
+          padding: 4px 6px;
+          font-size: 13px;
+          font-weight: 600;
+        }
+
+        .roadmap-feedback-link::before {
+          width: 12px;
+          height: 12px;
+        }
+
+        .roadmap-mail-link {
+          padding: 0 6px 2px;
+          font-size: 11px;
+          max-width: 100%;
+        }
+
         .roadmap-toolbar__meta {
           grid-column: 2;
           flex: none;
@@ -379,6 +470,7 @@
           box-shadow: 0 4px 18px rgba(28, 37, 92, 0.07);
           backdrop-filter: blur(10px) saturate(1.15);
           -webkit-backdrop-filter: blur(10px) saturate(1.15);
+          pointer-events: auto;
         }
 
         .mobile-qr-hint__label {
@@ -425,6 +517,18 @@
             <button id="back-btn" class="back-btn" type="button">← 返回选择</button>
             <div class="roadmap-toolbar__meta">
               <h2 id="roadmap-title" class="roadmap-title"></h2>
+            </div>
+            <div class="roadmap-toolbar__aside">
+              <a
+                class="roadmap-feedback-link"
+                href="https://forms.cloud.microsoft/e/bFcgGbxAuk?origin=lprLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                >反馈与建议</a
+              >
+              <a class="roadmap-mail-link" href="mailto:training@cn.vector.com"
+                >training@cn.vector.com</a
+              >
             </div>
           </div>
           <div class="roadmap-search-wrap">
@@ -473,7 +577,7 @@
     <script src="./js/node-data.js?v=25"></script>
     <script src="./js/node-data-network-test.js?v=22"></script>
     <script src="./js/node-data-diagnostic.js?v=11"></script>
-    <script src="./js/node-data-embedded.js?v=25"></script>
+    <script src="./js/node-data-embedded.js?v=26"></script>
     <script src="./js/node-data-mbse.js?v=7"></script>
     <script src="./js/node-data-soa.js?v=6"></script>
     <script src="./js/node-data-calibration.js?v=6"></script>
@@ -483,9 +587,10 @@
     <script src="./js/course-core.js?v=1"></script>
     <script src="./js/training-schedule-cycle3.js?v=5"></script>
     <script src="./js/svg-roadmap-graph.js?v=66"></script>
-    <script src="./js/svg-roadmap-interactions.js?v=104"></script>
-    <script src="./js/training-events.js?v=8"></script>
-    <script src="./js/role-select.js?v=93"></script>
-    <script src="./js/app.js?v=46"></script>
+    <script src="./js/svg-roadmap-interactions.js?v=105"></script>
+    <script src="./js/training-events.js?v=9"></script>
+    <script src="./js/v-bahn-analytics.js?v=1"></script>
+    <script src="./js/role-select.js?v=100"></script>
+    <script src="./js/app.js?v=47"></script>
   </body>
 </html>

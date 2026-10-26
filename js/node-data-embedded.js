@@ -78,19 +78,51 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   },
   "CANoe分析": {
     nodeName: "CANoe分析",
-    type: ["视频课", "自学课", "公开课", "内训课", "直播课"],
+    type: ["视频课", "公开课", "直播课"],
     match: ["CANoe分析"],
     description:
       "CANoe工具可以辅助工程师在开发阶段快速验证通信功能。本站点将介绍CANoe总线分析功能，包含以下内容：\n\n总线分析\n报文过滤\n记录与回放",
     svgIndex: 9,
+    courses: [
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD测量培训",
+        type: "直播课",
+      },
+      {
+        name: "CANoe.CAN 培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/5366/",
+      },
+      {
+        name: "CANoe/CANalyzer基础教程视频合集",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1t54y1s7Qo/",
+      },
+    ],
   },
   "CANoe仿真": {
     nodeName: "CANoe仿真",
-    type: ["视频课", "自学课", "公开课", "内训课", "直播课"],
+    type: ["视频课", "公开课", "直播课"],
     match: ["CANoe仿真"],
     description:
       "CANoe工具可以辅助工程师在开发阶段模拟ECU所在网络的通信行为。本站点将介绍CANoe节点仿真功能，包含以下内容：\n\n节点仿真\nInteractive Generator\nCANoeIL.dll\nvECU.dll",
     svgIndex: 10,
+    courses: [
+      {
+        name: "CANoe/CANalyzer.CAN/CAN FD测量培训",
+        type: "直播课",
+      },
+      {
+        name: "CANoe.CAN 培训",
+        type: "公开课",
+        url: "https://academy.vector.com/cn/zh/courses/detail/5366/",
+      },
+      {
+        name: "CANoe/CANalyzer基础教程视频合集",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1t54y1s7Qo/",
+      },
+    ],
   },
   "MICROSAR SIP": {
     nodeName: "MICROSAR SIP",
