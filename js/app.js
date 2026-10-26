@@ -195,7 +195,13 @@
   }
 
   function svgUrl(fileName) {
-    var basePath = location.pathname.replace(/[^/]*$/, "");
+    var vb = typeof window !== "undefined" ? window.VBahnBase : null;
+    if (vb && vb.resolveAssetUrl) {
+      return vb.resolveAssetUrl(fileName, SVG_ASSET_VERSION);
+    }
+    var basePath = vb
+      ? vb.getAppBasePath()
+      : location.pathname.replace(/[^/]*$/, "");
     return (
       location.origin +
       basePath +
@@ -478,9 +484,11 @@
           location:
             t.closest(".roadmap-toolbar") != null
               ? "roadmap_toolbar"
-              : t.closest(".role-select__details-aside-foot") != null
-                ? "details_foot"
-                : t.closest(".role-select__site-links") != null
+              : t.closest("[data-contact-modal]") != null
+                ? "contact_modal"
+                : t.closest(".role-select__details-aside-foot") != null
+                  ? "details_foot"
+                  : t.closest(".role-select__site-links") != null
                   ? "mobile_strip"
                   : "other",
         });

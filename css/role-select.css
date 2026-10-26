@@ -32,6 +32,17 @@
   pointer-events: none;
 }
 
+/* 首屏：布局引擎两次 reflow 后再显示，避免错误中间态（不改变最终坐标） */
+.role-select:not(.role-select--layout-ready) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.role-select--layout-ready {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
 /* 布局引擎激活：覆盖 base aside 的旧右对齐/宽度限制 */
 .role-select--layout-auto .role-select__aside {
   right: auto;
@@ -72,7 +83,7 @@
 
 .role-select__aside {
   position: absolute;
-  z-index: 6;
+  z-index: 2;
   margin-left: 0;
   height: auto;
   max-height: none;
@@ -167,21 +178,22 @@
 
 .role-select__details-wrap--desktop {
   position: absolute;
-  left: max(56%, calc(50% + var(--layout-details-offset, 250px)));
-  right: max(var(--layout-edge-inset, 36px), calc(24px + var(--safe-right)));
+  right: auto;
   top: var(--layout-details-top, max(88px, calc(12% + var(--safe-top))));
   bottom: auto;
-  transform: none;
-  z-index: 6;
-  width: auto;
-  max-width: min(340px, 32vw);
+  height: max-content;
+  z-index: 2;
+  width: max-content;
+  max-width: var(--layout-details-max-width, min(340px, 32vw));
   margin-right: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-content: flex-start;
   pointer-events: none;
   user-select: none;
   overflow: visible;
+  min-width: 0;
 }
 
 .role-select__details--desktop {
@@ -208,6 +220,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 8px;
+  flex-shrink: 0;
   margin-top: 12px;
   padding-top: 12px;
   padding-left: 16px;
@@ -401,7 +414,7 @@ a.role-select__detail-item--link {
   left: 50%;
   bottom: calc(-1 * var(--hero-overlap));
   transform: translateX(-50%);
-  z-index: 3;
+  z-index: 4;
   width: var(--layout-hero-w, min(520px, 84vw));
   height: min(calc(100% - 8px), 680px);
   max-height: var(--layout-hero-max-h, calc(100vh - var(--track-block) - var(--entre-block) - 24px));
@@ -671,9 +684,15 @@ a.role-select__detail-item--link {
 
 /* 自动布局引擎（JS 写入 --layout-*）激活时的桌面排版 */
 @media (min-width: 769px) {
-  .role-select {
-    --role-title-zh: clamp(100px, 7.35vw, 124px);
-    --role-title-en: clamp(33px, calc(7.35vw * 0.335), 42px);
+  /* 未启用 layout-auto 时的兜底；启用后由 JS 写 inline，且用更小 fallback 避免清变量时回弹到 74px+ */
+  .role-select:not(.role-select--layout-auto) {
+    --role-title-zh: clamp(74px, 5.2vw, 92px);
+    --role-title-en: clamp(29px, calc(6.2vw * 0.335), 36px);
+  }
+
+  .role-select--layout-auto {
+    --role-title-zh: clamp(44px, 3.35vw, 58px);
+    --role-title-en: clamp(14px, calc(3.35vw * 0.255), 20px);
   }
 
   .role-select--layout-auto .role-select__aside {
@@ -727,36 +746,111 @@ a.role-select__detail-item--link {
   }
 
   .role-select--layout-auto .role-select__details-wrap--desktop {
-    max-width: min(440px, 30vw);
+    left: var(--layout-details-band-left);
+    right: var(--layout-details-band-right);
+    width: auto;
+    max-width: none;
+    transform: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
   }
 
-  .role-select--layout-auto .role-select__details-aside-foot {
-    margin-top: clamp(12px, 1.2vw, 18px);
-    padding-top: clamp(10px, 1vw, 14px);
-    padding-left: 20px;
-    font-size: var(--layout-detail-value, 12px);
+  .role-select--layout-auto .role-select__details--desktop {
+    width: var(--layout-details-content-width, min(360px, 100%));
+    max-width: min(var(--layout-details-max-width, 440px), 100%);
+    min-width: 0;
+    margin: 0 auto;
+    flex: 0 1 auto;
   }
 
   .role-select--layout-auto .role-select__detail-item {
-    margin: 0 0 clamp(10px, 1vw, 16px);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .role-select--layout-auto .role-select__details-aside-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: clamp(8px, 0.9vw, 14px);
+    padding-top: clamp(8px, 0.85vw, 12px);
+    padding-left: 0;
+    font-size: var(--layout-detail-foot, 12px);
+    line-height: 1.5;
+  }
+
+  .role-select--layout-auto .role-select__details-aside-foot-sep {
+    display: none;
+  }
+
+  .role-select--layout-auto .role-select__details-aside-foot-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+    max-width: 100%;
+  }
+
+  .role-select--layout-auto .role-select__detail-item {
+    margin: 0 0 var(--layout-detail-item-gap, clamp(8px, 0.9vw, 14px));
   }
 
   .role-select--layout-auto .role-select__detail-label {
-    margin: 0 0 5px;
+    margin: 0 0 6px;
     gap: 8px;
     font-size: var(--layout-detail-label);
-    line-height: 1.35;
+    font-weight: 700;
+    line-height: 1.38;
+    color: #4a5668;
   }
 
   .role-select--layout-auto .role-select__detail-chevron {
-    width: 10px;
-    height: 14px;
+    width: 12px;
+    height: 16px;
   }
 
   .role-select--layout-auto .role-select__detail-value {
-    padding-left: 20px;
+    display: block;
+    width: 100%;
+    padding-left: 19px;
     font-size: var(--layout-detail-value);
-    line-height: 1.5;
+    line-height: 1.52;
+    color: #7a8496;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: normal;
+    white-space: normal;
+    text-wrap: pretty;
+  }
+
+  .role-select--layout-auto .role-select__detail-value[data-detail="skills"] {
+    line-height: 1.55;
+  }
+
+  .role-select--layout-auto .role-select__detail-value--dot-chunks {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    align-content: flex-start;
+    row-gap: 0.32em;
+    padding-left: 19px;
+  }
+
+  .role-select--layout-auto .role-select__detail-dot-chunk {
+    white-space: nowrap;
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .role-select--layout-auto .role-select__detail-dot-sep {
+    flex: 0 0 auto;
+    white-space: pre;
+    color: #7a8496;
   }
 
   .role-select--layout-auto .role-select__detail-item--link .role-select__detail-label,
@@ -772,8 +866,8 @@ a.role-select__detail-item--link {
 
 /* 大屏 / TV（1920×1080 及以上）：底栏控件放大（位置由 JS 布局引擎计算） */
 @media (min-width: 1920px) {
-  .role-select--layout-auto .role-select__details-wrap--desktop {
-    max-width: min(480px, 28vw);
+  .role-select--layout-auto .role-select__details--desktop {
+    max-width: min(var(--layout-details-max-width, 480px), 100%, 480px);
   }
 
   .role-select__footer {
@@ -1198,9 +1292,172 @@ a.role-select__detail-item--link {
 }
 
 .role-select__training-backdrop[hidden],
-.role-select__training-modal[hidden] {
+.role-select__training-modal[hidden],
+.role-select__contact-backdrop[hidden],
+.role-select__contact-modal[hidden] {
   display: none !important;
   pointer-events: none !important;
+}
+
+/* 反馈与联系：入口 + 弹窗 */
+.role-select__detail-item--contact {
+  pointer-events: auto;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  width: 100%;
+}
+
+.role-select__detail-item--contact .role-select__detail-label {
+  color: #5a6578;
+}
+
+.role-select__detail-label--contact-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.role-select__contact-entry-icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background-color: #8b95a8;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM13 15h-2v-6h2v6zm0-8h-2V5h2v2z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM13 15h-2v-6h2v6zm0-8h-2V5h2v2z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.role-select--layout-auto .role-select__detail-item--contact .role-select__detail-label {
+  font-size: var(--layout-detail-value, 14px);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.role-select__contact-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 42;
+  background: rgba(20, 24, 32, 0.28);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.role-select__contact-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.role-select__contact-modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.98);
+  z-index: 43;
+  width: min(400px, calc(100% - 48px));
+  padding: 22px 24px 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  pointer-events: none;
+}
+
+.role-select__contact-modal.is-open {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+.role-select__contact-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.role-select__contact-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #3a4558;
+}
+
+.role-select__contact-close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.role-select__contact-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.role-select__contact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(214, 220, 230, 0.9);
+  background: #fafbfc;
+  color: #4a5668;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.role-select__contact-link::before {
+  content: "";
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background-color: #8b95a8;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM13 15h-2v-6h2v6zm0-8h-2V5h2v2z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM13 15h-2v-6h2v6zm0-8h-2V5h2v2z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.role-select__contact-link--mail::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/%3E%3Cpath fill='none' stroke='black' stroke-width='2' d='m22 6-10 7L2 6'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'/%3E%3Cpath fill='none' stroke='black' stroke-width='2' d='m22 6-10 7L2 6'/%3E%3C/svg%3E");
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .role-select__contact-link:hover {
+    background: #ffffff;
+    border-color: rgba(180, 188, 200, 0.95);
+    color: #2c3a4d;
+  }
 }
 
 .role-select__training-modal {

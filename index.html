@@ -2,6 +2,21 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        var path = location.pathname.replace(/\/index\.html$/i, "/");
+        if (/^\/v-bahn$/i.test(path)) path = "/v-bahn/";
+        if (path !== "/" && !path.endsWith("/")) {
+          var last = path.split("/").pop() || "";
+          if (!last || !/\.[a-zA-Z0-9]{1,8}$/.test(last)) path += "/";
+          else path = path.replace(/[^/]+$/, "");
+        }
+        var base = document.createElement("base");
+        base.href = path;
+        base.setAttribute("data-vbahn-base", "1");
+        document.head.appendChild(base);
+      })();
+    </script>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -12,7 +27,7 @@
     <link rel="stylesheet" href="./css/fonts.css?v=1" />
     <link rel="stylesheet" href="./css/node-hover-card.css?v=41" />
     <link rel="stylesheet" href="./css/roadmap-interactions.css?v=90" />
-    <link rel="stylesheet" href="./css/role-select.css?v=157" />
+    <link rel="stylesheet" href="./css/role-select.css?v=186" />
     <style>
       :root {
         color-scheme: light;
@@ -524,7 +539,7 @@
                 href="https://forms.cloud.microsoft/e/bFcgGbxAuk?origin=lprLink"
                 target="_blank"
                 rel="noopener noreferrer"
-                >反馈与建议</a
+                >打开反馈表单</a
               >
               <a class="roadmap-mail-link" href="mailto:training@cn.vector.com"
                 >training@cn.vector.com</a
@@ -573,6 +588,7 @@
       </div>
     </aside>
 
+    <script src="./js/v-bahn-base.js?v=1"></script>
     <script src="./js/roadmaps.js?v=37"></script>
     <script src="./js/node-data.js?v=25"></script>
     <script src="./js/node-data-network-test.js?v=22"></script>
@@ -590,7 +606,7 @@
     <script src="./js/svg-roadmap-interactions.js?v=105"></script>
     <script src="./js/training-events.js?v=9"></script>
     <script src="./js/v-bahn-analytics.js?v=1"></script>
-    <script src="./js/role-select.js?v=101"></script>
-    <script src="./js/app.js?v=47"></script>
+    <script src="./js/role-select.js?v=133"></script>
+    <script src="./js/app.js?v=49"></script>
   </body>
 </html>

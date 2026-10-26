@@ -9,12 +9,29 @@
   var LAYOUT_SCALE = 1.16;
   /** 人物容器在 LAYOUT_SCALE 之上再放大 */
   var HERO_EXTRA_SCALE = 1.18;
-  /** 左侧标题在 LAYOUT_SCALE 之上再放大 */
-  var TITLE_EXTRA_SCALE = 2.15;
-  /** 英文相对中文 cap 高度比例（全大写 + 字距，约 1/3 视觉协调） */
-  var TITLE_ZH_EN_RATIO = 0.335;
+  /** 左侧中文标题在 LAYOUT_SCALE 之上再放大（英文不跟此系数） */
+  var TITLE_ZH_EXTRA_SCALE = 1;
+  /** 英文副标题基准：按上一档中文参考字号推导，不随中文再缩小 */
+  var TITLE_EN_REF_ZH_EXTRA_SCALE = 1.22;
+  /** 改标题算法时递增，避免同窗口宽度复用旧 unifiedTitleSizesCache */
+  var TITLE_SIZES_REVISION = 9;
+  /** 英文相对中文 cap 高度比例（全大写 + 字距） */
+  var TITLE_ZH_EN_RATIO = 0.255;
   var LAYOUT_RESIZE_MS = 80;
   var TITLE_EDGE_PAD = 8;
+  /** 桌面：详情带左缘与人物右缘的最小留白（用于计算「人物～右边界」居中） */
+  var DESKTOP_DETAILS_HERO_CLEAR = 10;
+  /** 桌面：详情带与人物右缘的留白 */
+  var DESKTOP_DETAILS_BAND_GAP = 16;
+  /** 详情列宽占可用水平带的比例（偏窄以换行，避免单行过长） */
+  var DESKTOP_DETAILS_CONTENT_WIDTH_RATIO = 0.68;
+  /** 详情列最大宽度（缩放 px），过长单行会难读 */
+  var DESKTOP_DETAILS_CONTENT_MAX = 292;
+  var DESKTOP_DETAILS_CONTENT_MIN = 228;
+  /** 详情区整体相对立绘右缘再右移（光学居中） */
+  var DESKTOP_DETAILS_SHIFT_RIGHT = 68;
+  /** 标题带与立绘左缘的留白 */
+  var DESKTOP_TITLE_BAND_GAP = 16;
 
   function layoutScale(value) {
     return value * LAYOUT_SCALE;
@@ -33,7 +50,12 @@
   }
 
   function assetUrl(path, version) {
-    var basePath = location.pathname.replace(/[^/]*$/, "");
+    if (global.VBahnBase && global.VBahnBase.resolveAssetUrl) {
+      return global.VBahnBase.resolveAssetUrl(path, version);
+    }
+    var basePath = global.VBahnBase
+      ? global.VBahnBase.getAppBasePath()
+      : location.pathname.replace(/[^/]*$/, "");
     var url =
       location.origin +
       basePath +
@@ -90,13 +112,12 @@
       '<svg class="role-select__detail-chevron" width="10" height="14" viewBox="0 0 10 14" aria-hidden="true">' +
       '<path d="M2 1.5 L8 7 L2 12.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="butt" stroke-linejoin="miter"/>' +
       "</svg>";
-    var siteLinksAsideFoot =
-      '<div class="role-select__details-aside-foot" aria-label="反馈与联系">' +
-      '<a class="role-select__details-aside-foot-link" href="https://forms.cloud.microsoft/e/bFcgGbxAuk?origin=lprLink" target="_blank" rel="noopener noreferrer">反馈与建议</a>' +
-      '<span class="role-select__details-aside-foot-sep" aria-hidden="true">·</span>' +
-      '<span class="role-select__details-aside-foot-prefix">联系我们</span>' +
-      '<a class="role-select__details-aside-foot-mail" href="mailto:training@cn.vector.com">training@cn.vector.com</a>' +
-      "</div>";
+    var contactEntryBtn =
+      '<button type="button" class="role-select__detail-item role-select__detail-item--contact" data-open-contact>' +
+      '<span class="role-select__detail-label role-select__detail-label--contact-entry">' +
+      '<span class="role-select__contact-entry-icon" aria-hidden="true"></span>' +
+      "反馈与建议</span>" +
+      "</button>";
     root.innerHTML =
       '<div class="role-select__scene">' +
       '  <div class="role-select__logo" aria-label="VECTOR">' +
@@ -137,8 +158,8 @@
       "更多资讯</span>" +
       '      <span class="role-select__detail-value">直播课 / 公开课</span>' +
       "    </button>" +
+      contactEntryBtn +
       "  </dl>" +
-      siteLinksAsideFoot +
       "  </div>" +
       '  <div class="role-select__main">' +
       '    <div class="role-select__watermark" aria-hidden="true"></div>' +
@@ -208,8 +229,8 @@
       "更多资讯</span>" +
       '        <span class="role-select__detail-value">直播课 / 公开课</span>' +
       "      </button>" +
+      contactEntryBtn +
       "    </dl>" +
-      siteLinksAsideFoot +
       "  </aside>" +
       '  <div class="role-select__training-backdrop" data-training-backdrop hidden></div>' +
       '  <div class="role-select__training-modal" role="dialog" aria-modal="true" aria-label="培训资讯" data-training-modal hidden>' +
@@ -226,7 +247,24 @@
       '    <div class="role-select__training-tabs" role="tablist" data-training-tabs></div>' +
       '    <div class="role-select__training-body" data-training-body></div>' +
       "  </div>" +
+      '  <div class="role-select__contact-backdrop" data-contact-backdrop hidden></div>' +
+      '  <div class="role-select__contact-modal" role="dialog" aria-modal="true" aria-label="反馈与联系" data-contact-modal hidden>' +
+      '    <div class="role-select__contact-head">' +
+      '      <h3 class="role-select__contact-title">反馈与联系</h3>' +
+      '      <button type="button" class="role-select__contact-close" aria-label="关闭" data-contact-close>' +
+      '        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">' +
+      '          <path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+      "        </svg>" +
+      "      </button>" +
+      "    </div>" +
+      '    <div class="role-select__contact-body">' +
+      '      <a class="role-select__contact-link" href="https://forms.cloud.microsoft/e/bFcgGbxAuk?origin=lprLink" target="_blank" rel="noopener noreferrer" data-contact-forms>打开反馈表单</a>' +
+      '      <a class="role-select__contact-link role-select__contact-link--mail" href="mailto:training@cn.vector.com" data-contact-mail>training@cn.vector.com</a>' +
+      "    </div>" +
+      "  </div>" +
       "</div>";
+
+    root.classList.remove("role-select--layout-ready");
 
     var watermarkEl = root.querySelector(".role-select__watermark");
     var titleZhEl = root.querySelector(".role-select__title-zh");
@@ -252,8 +290,13 @@
     var footerEl = root.querySelector(".role-select__footer");
     var sheetOpen = false;
     var trainingOpen = false;
+    var contactOpen = false;
     var trainingBackdrop = root.querySelector("[data-training-backdrop]");
     var trainingModal = root.querySelector("[data-training-modal]");
+    var contactBackdrop = root.querySelector("[data-contact-backdrop]");
+    var contactModal = root.querySelector("[data-contact-modal]");
+    var contactCloseBtn = root.querySelector("[data-contact-close]");
+    var contactOpenBtns = root.querySelectorAll("[data-open-contact]");
     var trainingTabsEl = root.querySelector("[data-training-tabs]");
     var trainingBody = root.querySelector("[data-training-body]");
     var trainingTitleEl = root.querySelector(".role-select__training-title");
@@ -267,12 +310,14 @@
     var heroDimCache = {};
     var unifiedTitleSizesCache = null;
     var unifiedTitleWidthKey = 0;
+    var unifiedTitleSizesRevision = 0;
     var titleMeasureSeq = 0;
     var lastLayoutWidthKey = Math.round(window.innerWidth);
     var mountDestroyed = false;
     /** 桌面人物垂直微调：lift 上移，shiftY 正数下移 */
     var DESKTOP_HERO_LIFT = 0;
     var DESKTOP_HERO_SHIFT_Y = 10;
+    var desktopDetailTypoBase = null;
 
     function isMobileLayout() {
       return window.matchMedia("(max-width: 768px)").matches;
@@ -377,17 +422,11 @@
     }
 
     function applyTitleBandCenter(w, safeLeft, safeRight, mobile, heroHalf, heroClearHalf) {
-      var bandLeft = mobile ? Math.max(24, 16 + safeLeft) : Math.max(28, 12 + safeLeft);
-      var clearHalf = heroClearHalf != null ? heroClearHalf : heroHalf;
-      var bandRight = mobile
-        ? w - Math.max(168, 152 + safeRight)
-        : w * 0.5 - clearHalf - 8;
+      if (!mobile) return;
+      var bandLeft = Math.max(24, 16 + safeLeft);
+      var bandRight = w - Math.max(168, 152 + safeRight);
       if (bandRight <= bandLeft) bandRight = bandLeft + 120;
-      var bandWidth = bandRight - bandLeft;
-      var biasRaw = root.style.getPropertyValue("--layout-title-center-bias");
-      var centerBias = mobile ? 0.5 : biasRaw ? parseFloat(biasRaw) : 0.62;
-      if (!mobile && !isFinite(centerBias)) centerBias = 0.62;
-      var centerX = bandLeft + bandWidth * centerBias;
+      var centerX = bandLeft + (bandRight - bandLeft) * 0.5;
       root.style.setProperty("--layout-title-center-x", centerX + "px");
     }
 
@@ -396,11 +435,16 @@
       return clamp(en, layoutScale(24), zhSize * 0.36);
     }
 
+    function desktopTitleEnReferenceZh(w) {
+      return layoutScale(clamp(w * 0.052, 68, 96)) * TITLE_EN_REF_ZH_EXTRA_SCALE;
+    }
+
     function desktopTitleBaseSizes(w) {
-      var zh = layoutScale(clamp(w * 0.058, 76, 108)) * TITLE_EXTRA_SCALE;
+      var zh = layoutScale(clamp(w * 0.038, 52, 72)) * TITLE_ZH_EXTRA_SCALE;
+      var en = pairedEnTitleSize(desktopTitleEnReferenceZh(w));
       return {
         zh: zh,
-        en: pairedEnTitleSize(zh),
+        en: en,
       };
     }
 
@@ -424,8 +468,16 @@
     /** 全角色共用同一套标题字号（按最长标题收紧，切换角色不再忽大忽小） */
     function getCatalogUnifiedTitleSizes(w) {
       var widthKey = Math.round(w);
-      if (unifiedTitleSizesCache && unifiedTitleWidthKey === widthKey) {
+      if (
+        unifiedTitleSizesCache &&
+        unifiedTitleWidthKey === widthKey &&
+        unifiedTitleSizesRevision === TITLE_SIZES_REVISION
+      ) {
         return unifiedTitleSizesCache;
+      }
+      if (unifiedTitleSizesRevision !== TITLE_SIZES_REVISION) {
+        unifiedTitleSizesCache = null;
+        unifiedTitleWidthKey = 0;
       }
       var bases = desktopTitleBaseSizes(w);
       var catalogScale = 1;
@@ -438,17 +490,15 @@
       var zh = bases.zh * catalogScale;
       return {
         zh: zh,
-        en: pairedEnTitleSize(zh),
+        en: bases.en * catalogScale,
       };
     }
 
     function invalidateUnifiedTitleSizes() {
       unifiedTitleSizesCache = null;
       unifiedTitleWidthKey = 0;
+      unifiedTitleSizesRevision = 0;
       titleMeasureSeq += 1;
-      if (!isMobileLayout()) {
-        clearDesktopTitleFitVars();
-      }
     }
 
     function clearDesktopTitleFitVars() {
@@ -494,8 +544,318 @@
     }
 
     /** 桌面：中心锚点 + translate(-50%)，保证标题块不超出 safe-area / 标题带 */
+    function getLayoutSceneEl() {
+      return root.querySelector(".role-select__scene") || root;
+    }
+
+    var lastStableDesktopHeroEdge = null;
+    var lastStableDesktopHeroLeftEdge = null;
+    /** 桌面详情区水平布局：仅在 resize / applyViewportLayout 时重算，切换角色复用 */
+    var desktopDetailsLayoutLatch = null;
+    /** 桌面左侧标题水平锚点：同上 */
+    var desktopTitleLayoutLatch = null;
+
+    function getDesktopHeroMeasureEl() {
+      if (!heroStage) return null;
+      return (
+        heroStage.querySelector(".role-select__hero.is-enter") ||
+        heroStage.querySelector(".role-select__hero.is-active") ||
+        heroStage.querySelector(".role-select__hero.is-leave")
+      );
+    }
+
+    /** 用缓存宽高估算立绘在 stage 内的半宽（object-fit: contain） */
+    function estimateDesktopHeroHalfWidth(role) {
+      if (!role || !heroStage) return null;
+      var cached = heroDimCache[role.id];
+      if (!cached || !cached.w || !cached.h) return null;
+      var stageRect = heroStage.getBoundingClientRect();
+      if (!stageRect.width || !stageRect.height) return null;
+      var heroScale = 1;
+      var scaleStr = getComputedStyle(heroStage).getPropertyValue("--hero-scale");
+      var parsed = parseFloat(scaleStr);
+      if (!isNaN(parsed) && parsed > 0) {
+        heroScale = parsed;
+      } else {
+        heroScale = cached.scale || 1;
+      }
+      var aspect = cached.w / cached.h;
+      var renderH = Math.min(stageRect.height, stageRect.width / aspect) * heroScale;
+      var renderW = Math.min(stageRect.width, renderH * aspect);
+      return renderW * 0.5;
+    }
+
+    /** 立绘在 scene 坐标系下的右缘（禁止用 stage 宽盒，切换间隙无 is-active 时用 is-enter / 估算） */
+    function measureDesktopHeroRightInScene(sceneW) {
+      if (!heroStage) return null;
+      var sceneEl = getLayoutSceneEl();
+      var sceneLeft = sceneEl.getBoundingClientRect().left;
+      var el = getDesktopHeroMeasureEl();
+      if (el && el.getAttribute("src")) {
+        var imgRect = el.getBoundingClientRect();
+        if (imgRect.width > 0) {
+          var edge = imgRect.right - sceneLeft;
+          if (edge > sceneW * 0.32 && edge < sceneW * 0.88) {
+            lastStableDesktopHeroEdge = edge;
+          }
+          return edge;
+        }
+      }
+      var stageRect = heroStage.getBoundingClientRect();
+      var centerX = stageRect.left - sceneLeft + stageRect.width * 0.5;
+      var role = roles[selectedIndex];
+      var halfW = estimateDesktopHeroHalfWidth(role);
+      if (halfW != null) {
+        var estimated = centerX + halfW;
+        if (estimated > sceneW * 0.32 && estimated < sceneW * 0.88) {
+          return estimated;
+        }
+      }
+      if (
+        lastStableDesktopHeroEdge != null &&
+        lastStableDesktopHeroEdge > sceneW * 0.32 &&
+        lastStableDesktopHeroEdge < sceneW * 0.88
+      ) {
+        return lastStableDesktopHeroEdge;
+      }
+      return null;
+    }
+
+    /** 立绘在 scene 坐标系下的左缘 */
+    function measureDesktopHeroLeftInScene(sceneW) {
+      if (!heroStage) return null;
+      var sceneEl = getLayoutSceneEl();
+      var sceneLeft = sceneEl.getBoundingClientRect().left;
+      var el = getDesktopHeroMeasureEl();
+      if (el && el.getAttribute("src")) {
+        var imgRect = el.getBoundingClientRect();
+        if (imgRect.width > 0) {
+          var edge = imgRect.left - sceneLeft;
+          if (edge > sceneW * 0.1 && edge < sceneW * 0.62) {
+            lastStableDesktopHeroLeftEdge = edge;
+          }
+          return edge;
+        }
+      }
+      var stageRect = heroStage.getBoundingClientRect();
+      var centerInScene = stageRect.left - sceneLeft + stageRect.width * 0.5;
+      var role = roles[selectedIndex];
+      var halfW = estimateDesktopHeroHalfWidth(role);
+      if (halfW != null) {
+        var estimated = centerInScene - halfW;
+        if (estimated > sceneW * 0.1 && estimated < sceneW * 0.62) {
+          return estimated;
+        }
+      }
+      if (
+        lastStableDesktopHeroLeftEdge != null &&
+        lastStableDesktopHeroLeftEdge > sceneW * 0.1 &&
+        lastStableDesktopHeroLeftEdge < sceneW * 0.62
+      ) {
+        return lastStableDesktopHeroLeftEdge;
+      }
+      return null;
+    }
+
+    function resolveDesktopHeroLeftEdge(sceneEl, sceneW, heroHalfPx) {
+      var measured = measureDesktopHeroLeftInScene(sceneW);
+      var role = roles[selectedIndex];
+      var estHalf = estimateDesktopHeroHalfWidth(role);
+      var heroVisualHalf = estHalf || heroHalfPx * 0.52;
+      var heroLeftFallback = sceneW * 0.5 - heroVisualHalf;
+      var heroLeft = measured != null ? measured : heroLeftFallback;
+
+      if (heroStage && estHalf != null && measured == null) {
+        var sceneLeft = sceneEl.getBoundingClientRect().left;
+        var stageRect = heroStage.getBoundingClientRect();
+        var centerInScene = stageRect.left - sceneLeft + stageRect.width * 0.5;
+        heroLeft = centerInScene - estHalf;
+      }
+      return heroLeft;
+    }
+
+    function applyDesktopTitleLayoutLatch(latch) {
+      if (!latch) return;
+      root.style.setProperty("--layout-title-center-x", latch.centerX);
+      root.style.removeProperty("--layout-title-center-bias");
+      root.style.removeProperty("--layout-title-shift-x");
+    }
+
+    /** 桌面：标题中心 = 屏幕左缘与立绘左缘的几何中点；recompute 时写入 latch */
+    function applyDesktopTitleHorizontalLayout(w, safeLeft, heroHalfPx, recompute) {
+      if (isMobileLayout()) {
+        desktopTitleLayoutLatch = null;
+        return;
+      }
+      if (!recompute && desktopTitleLayoutLatch) {
+        applyDesktopTitleLayoutLatch(desktopTitleLayoutLatch);
+        return;
+      }
+      var sceneEl = getLayoutSceneEl();
+      var sceneW = sceneEl.clientWidth || w;
+      var bandGap = layoutScale(DESKTOP_TITLE_BAND_GAP);
+      var bandLeft = Math.max(layoutScale(28), layoutScale(12) + safeLeft);
+      var heroLeft = resolveDesktopHeroLeftEdge(sceneEl, sceneW, heroHalfPx);
+      var bandRight = heroLeft - bandGap;
+      if (bandRight <= bandLeft + layoutScale(72)) {
+        bandRight = bandLeft + layoutScale(220);
+      }
+      var centerX = (bandLeft + bandRight) * 0.5;
+      desktopTitleLayoutLatch = {
+        centerX: centerX.toFixed(1) + "px",
+      };
+      applyDesktopTitleLayoutLatch(desktopTitleLayoutLatch);
+    }
+
+    /** 桌面详情右界（scene 坐标）：仅 safe-area / 边距（QR 在底部，不参与水平居中区间） */
+    function measureDesktopDetailsBandRightEdge(sceneW, safeRight, edgeInset) {
+      var minPad = Math.max(edgeInset, layoutScale(24) + safeRight);
+      return sceneW - minPad;
+    }
+
+    function resolveDesktopHeroEdge(sceneEl, sceneW, heroHalfPx) {
+      var sceneLeft = sceneEl.getBoundingClientRect().left;
+      var measured = measureDesktopHeroRightInScene(sceneW);
+      var role = roles[selectedIndex];
+      var estHalf = estimateDesktopHeroHalfWidth(role);
+      var heroVisualHalf = estHalf || heroHalfPx * 0.52;
+      var heroRightFallback = sceneW * 0.5 + heroVisualHalf;
+      var heroEdge = measured != null ? measured : heroRightFallback;
+
+      if (heroStage && estHalf != null && measured == null) {
+        var stageRect = heroStage.getBoundingClientRect();
+        var centerInScene = stageRect.left - sceneLeft + stageRect.width * 0.5;
+        heroEdge = centerInScene + estHalf;
+      }
+      return heroEdge;
+    }
+
+    function applyDesktopDetailsLayoutLatch(latch) {
+      if (!latch) return;
+      root.style.setProperty("--layout-details-band-left", latch.bandLeft);
+      root.style.setProperty("--layout-details-band-right", latch.bandRight);
+      root.style.setProperty("--layout-details-max-width", latch.maxW);
+      root.style.setProperty("--layout-details-content-width", latch.contentW);
+      root.style.removeProperty("--layout-details-center-x");
+      root.style.removeProperty("--layout-details-left");
+    }
+
+    /** 桌面：详情带位置；recompute=true 时测量并写入 latch（resize/首屏） */
+    function applyDesktopDetailsPanelLayout(w, safeRight, heroHalfPx, recompute) {
+      if (isMobileLayout()) {
+        desktopDetailsLayoutLatch = null;
+        root.style.removeProperty("--layout-details-left");
+        root.style.removeProperty("--layout-details-center-x");
+        root.style.removeProperty("--layout-details-band-left");
+        root.style.removeProperty("--layout-details-band-right");
+        root.style.removeProperty("--layout-details-max-width");
+        root.style.removeProperty("--layout-details-content-width");
+        return;
+      }
+      if (!recompute && desktopDetailsLayoutLatch) {
+        applyDesktopDetailsLayoutLatch(desktopDetailsLayoutLatch);
+        return;
+      }
+      var sceneEl = getLayoutSceneEl();
+      var sceneW = sceneEl.clientWidth || w;
+      var bandGap = layoutScale(DESKTOP_DETAILS_BAND_GAP);
+      var edgeInset =
+        parsePx(root.style.getPropertyValue("--layout-edge-inset")) || layoutScale(36);
+      var heroEdge = resolveDesktopHeroEdge(sceneEl, sceneW, heroHalfPx);
+      var bandRightEdge = measureDesktopDetailsBandRightEdge(
+        sceneW,
+        safeRight,
+        edgeInset
+      );
+      if (bandRightEdge <= heroEdge + 80) {
+        bandRightEdge = Math.min(sceneW - layoutScale(12), heroEdge + 280);
+      }
+      var bandLeft = heroEdge + layoutScale(DESKTOP_DETAILS_SHIFT_RIGHT);
+      if (bandLeft >= bandRightEdge - 100) {
+        bandLeft = heroEdge + layoutScale(12);
+      }
+      var span = Math.max(120, bandRightEdge - bandLeft);
+      var maxW = Math.max(160, span - bandGap * 2);
+      var contentW = Math.min(
+        maxW,
+        layoutScale(DESKTOP_DETAILS_CONTENT_MAX),
+        Math.max(
+          layoutScale(DESKTOP_DETAILS_CONTENT_MIN),
+          span * DESKTOP_DETAILS_CONTENT_WIDTH_RATIO
+        )
+      );
+
+      desktopDetailsLayoutLatch = {
+        bandLeft: bandLeft.toFixed(1) + "px",
+        bandRight: Math.max(0, sceneW - bandRightEdge).toFixed(1) + "px",
+        maxW: maxW.toFixed(1) + "px",
+        contentW: contentW.toFixed(1) + "px",
+      };
+      applyDesktopDetailsLayoutLatch(desktopDetailsLayoutLatch);
+    }
+
+    /** 桌面：缩小详情字号/间距直至整块落在切换区上方（含反馈与邮箱），不出现滚动条 */
+    function fitDesktopDetailsTypography() {
+      if (isMobileLayout() || root.hidden) return;
+      var wrap = root.querySelector(".role-select__details-wrap--desktop");
+      if (!wrap || !desktopDetailTypoBase) return;
+
+      var styles = getComputedStyle(root);
+      var detailsTop = parsePx(styles.getPropertyValue("--layout-details-top"));
+      var footerClear = parsePx(styles.getPropertyValue("--layout-details-footer-clear"));
+      if (!detailsTop || !footerClear) return;
+
+      var availH = Math.max(100, window.innerHeight - detailsTop - footerClear);
+      var label = desktopDetailTypoBase.label;
+      var value = desktopDetailTypoBase.value;
+      var gap = desktopDetailTypoBase.gap;
+      var foot = desktopDetailTypoBase.foot;
+
+      var minLabel = layoutScale(15.5);
+      var minValue = layoutScale(14.5);
+      var minFoot = layoutScale(14);
+
+      function applySizes(l, v, g, f) {
+        root.style.setProperty("--layout-detail-label", l.toFixed(2) + "px");
+        root.style.setProperty("--layout-detail-value", v.toFixed(2) + "px");
+        root.style.setProperty("--layout-detail-item-gap", g.toFixed(1) + "px");
+        root.style.setProperty("--layout-detail-foot", f.toFixed(2) + "px");
+      }
+
+      applySizes(label, value, gap, foot);
+      var guard = 0;
+      while (wrap.getBoundingClientRect().height > availH + 2 && label > minLabel && guard < 40) {
+        guard += 1;
+        label = Math.max(minLabel, label - 0.35);
+        value = Math.max(minValue, value - 0.3);
+        gap = Math.max(5, gap - 0.3);
+        applySizes(label, value, gap, foot);
+      }
+    }
+
+    function getLongestDetailsRole() {
+      return roles.reduce(function (acc, role) {
+        var d = (role && role.details) || {};
+        var len =
+          String(d.focus || "").length +
+          String(d.skills || "").length +
+          String(d.mission || "").length;
+        var accD = (acc && acc.details) || {};
+        var accLen =
+          String(accD.focus || "").length +
+          String(accD.skills || "").length +
+          String(accD.mission || "").length;
+        return len > accLen ? role : acc;
+      }, roles[0]);
+    }
+
     function clampDesktopTitleToViewport() {
       if (isMobileLayout() || root.hidden || !titleZhEl || !titleEnEl) return;
+
+      if (desktopTitleLayoutLatch) {
+        applyDesktopTitleLayoutLatch(desktopTitleLayoutLatch);
+        return;
+      }
 
       var w = window.innerWidth;
       var styles = getComputedStyle(root);
@@ -602,21 +962,22 @@
         titleEnEl.textContent = longestEn.titleEn || "";
 
         var zhSize = unified.zh;
-        var enSize = pairedEnTitleSize(zhSize);
+        var enSize = unified.en;
+        var minEn = layoutScale(15);
 
         function applyTitlePair() {
-          enSize = pairedEnTitleSize(zhSize);
           root.style.setProperty("--role-title-zh", zhSize.toFixed(1) + "px");
           root.style.setProperty("--role-title-en", enSize.toFixed(1) + "px");
         }
 
         applyTitlePair();
 
-        while (
-          (titleZhEl.scrollWidth > maxW + 1 || titleEnEl.scrollWidth > maxW + 1) &&
-          zhSize > 48
-        ) {
+        while (titleZhEl.scrollWidth > maxW + 1 && zhSize > layoutScale(36)) {
           zhSize -= 1;
+          applyTitlePair();
+        }
+        while (titleEnEl.scrollWidth > maxW + 1 && enSize > minEn) {
+          enSize -= 1;
           applyTitlePair();
         }
 
@@ -624,6 +985,7 @@
 
         unifiedTitleSizesCache = { zh: zhSize, en: enSize };
         unifiedTitleWidthKey = Math.round(window.innerWidth);
+        unifiedTitleSizesRevision = TITLE_SIZES_REVISION;
 
         restoreTitleTextForSelectedRole();
         clampDesktopTitleToViewport();
@@ -637,6 +999,12 @@
       return true;
     }
 
+    function applyDesktopTitleSizesToRoot(sizes) {
+      if (!sizes) return;
+      root.style.setProperty("--role-title-zh", sizes.zh.toFixed(1) + "px");
+      root.style.setProperty("--role-title-en", sizes.en.toFixed(1) + "px");
+    }
+
     function applyDesktopTitleFit(role) {
       if (isMobileLayout() || !role) {
         clearDesktopTitleFitVars();
@@ -646,37 +1014,27 @@
 
       var w = window.innerWidth;
       var widthKey = Math.round(w);
-      root.style.setProperty("--layout-title-center-bias", "0.58");
-      root.style.removeProperty("--layout-title-shift-x");
-      reflowTitleBandCenter();
 
-      if (unifiedTitleSizesCache && unifiedTitleWidthKey === widthKey) {
-        root.style.setProperty(
-          "--role-title-zh",
-          unifiedTitleSizesCache.zh.toFixed(1) + "px"
-        );
-        root.style.setProperty(
-          "--role-title-en",
-          unifiedTitleSizesCache.en.toFixed(1) + "px"
-        );
+      if (
+        unifiedTitleSizesCache &&
+        unifiedTitleWidthKey === widthKey &&
+        unifiedTitleSizesRevision === TITLE_SIZES_REVISION
+      ) {
+        applyDesktopTitleSizesToRoot(unifiedTitleSizesCache);
         clampDesktopTitleToViewport();
         return;
       }
 
       var sizes = getCatalogUnifiedTitleSizes(w);
+      applyDesktopTitleSizesToRoot(sizes);
+
       if (!measureCatalogTitleFit(sizes, { sync: true })) {
         measureCatalogTitleFit(sizes, { sync: false });
+        clampDesktopTitleToViewport();
         return;
       }
       if (unifiedTitleSizesCache) {
-        root.style.setProperty(
-          "--role-title-zh",
-          unifiedTitleSizesCache.zh.toFixed(1) + "px"
-        );
-        root.style.setProperty(
-          "--role-title-en",
-          unifiedTitleSizesCache.en.toFixed(1) + "px"
-        );
+        applyDesktopTitleSizesToRoot(unifiedTitleSizesCache);
       }
       clampDesktopTitleToViewport();
     }
@@ -685,6 +1043,8 @@
       root.classList.remove("role-select--layout-auto");
       layoutHeroLift = 0;
       layoutAvatarMetrics = null;
+      desktopDetailsLayoutLatch = null;
+      desktopTitleLayoutLatch = null;
       [
         "--layout-hero-w",
         "--layout-hero-max-h",
@@ -694,6 +1054,12 @@
         "--layout-hero-half",
         "--layout-details-top",
         "--layout-details-offset",
+        "--layout-details-center-x",
+        "--layout-details-band-left",
+        "--layout-details-band-right",
+        "--layout-details-max-width",
+        "--layout-details-content-width",
+        "--layout-details-footer-clear",
         "--layout-edge-inset",
         "--layout-logo-top",
         "--layout-logo-w",
@@ -734,6 +1100,10 @@
 
       root.classList.add("role-select--layout-auto");
 
+      if (!mobile) {
+        applyDesktopTitleSizesToRoot(getCatalogUnifiedTitleSizes(w));
+      }
+
       if (mobile) {
         var headerClear = layoutScale(clamp(108 + w * 0.08, 112, 156));
         var stageAvail = Math.max(220, usableH - headerClear);
@@ -757,7 +1127,11 @@
         layoutHeroLift = DESKTOP_HERO_LIFT;
         var heroClearHalf = clamp(heroW * 0.43, layoutScale(190), layoutScale(300));
         var anchorY = safeTop + usableH * 0.44;
-        var detailsAnchorY = safeTop + usableH * 0.39;
+        /* 与左侧标题垂直对齐：详情顶与标题块上沿同带 */
+        var detailsAnchorY = Math.max(
+          safeTop + layoutScale(72),
+          anchorY - layoutScale(46)
+        );
         var edgeInset = layoutScale(clamp(w * 0.026, 32, 56));
         var detailsOffset = clamp(
           heroW * 0.5 + layoutScale(36),
@@ -766,8 +1140,10 @@
         );
         var logoW = layoutScale(clamp(148 + w * 0.038, 168, 220));
         var logoTop = layoutScale(clamp(18 + w * 0.006, 22, 34));
-        var detailLabel = layoutScale(clamp(13 + wideT * 3.5, 13, 17));
-        var detailValue = layoutScale(clamp(12 + wideT * 2.5, 12, 15));
+        var detailLabel = layoutScale(clamp(17 + wideT * 3, 17, 21));
+        var detailValue = layoutScale(clamp(15 + wideT * 2.6, 15, 18.5));
+        var detailItemGap = layoutScale(clamp(10 + wideT * 2.5, 10, 14));
+        var detailFoot = layoutScale(clamp(14 + wideT * 2, 14, 16.5));
 
         root.style.setProperty("--hero-overlap", heroOverlap + "px");
         root.style.setProperty("--hero-clear-half", heroClearHalf + "px");
@@ -781,8 +1157,16 @@
         root.style.setProperty("--layout-edge-inset", edgeInset + "px");
         root.style.setProperty("--layout-logo-top", logoTop + "px");
         root.style.setProperty("--layout-logo-w", logoW + "px");
+        desktopDetailTypoBase = {
+          label: detailLabel,
+          value: detailValue,
+          gap: detailItemGap,
+          foot: detailFoot,
+        };
         root.style.setProperty("--layout-detail-label", detailLabel + "px");
         root.style.setProperty("--layout-detail-value", detailValue + "px");
+        root.style.setProperty("--layout-detail-foot", detailFoot + "px");
+        root.style.setProperty("--layout-detail-item-gap", detailItemGap + "px");
       }
 
       var heroHalfPx =
@@ -791,12 +1175,37 @@
       var heroClearHalfPx =
         parsePx(root.style.getPropertyValue("--hero-clear-half")) || heroHalfPx * 0.86;
       applyTitleBandCenter(w, safeLeft, safeRight, mobile, heroHalfPx, heroClearHalfPx);
+      if (!mobile) {
+        var detailsFooterClear =
+          bottom.footerClusterH +
+          bottom.footerPad +
+          bottom.footerEdge +
+          bottom.footerLift +
+          layoutScale(40) +
+          layoutScale(92);
+        root.style.setProperty(
+          "--layout-details-footer-clear",
+          detailsFooterClear.toFixed(1) + "px"
+        );
+      } else {
+        root.style.removeProperty("--layout-details-footer-clear");
+      }
 
       var role = roles[selectedIndex];
       if (role) applyDesktopTitleFit(role);
       if (mobile) clampMobileTitleToViewport();
       if (role) applyHeroLayout(role);
       layoutAvatars(false);
+      if (!mobile) {
+        applyDesktopTitleHorizontalLayout(w, safeLeft, heroHalfPx, true);
+        applyDesktopDetailsPanelLayout(w, safeRight, heroHalfPx, true);
+        var currentRole = roles[selectedIndex];
+        var longestRole = getLongestDetailsRole();
+        if (longestRole) applyRoleDetails(longestRole);
+        fitDesktopDetailsTypography();
+        if (currentRole) applyRoleDetails(currentRole);
+        applyDesktopDetailsPanelLayout(w, safeRight, heroHalfPx, true);
+      }
     }
 
     function applyHeroScale(role) {
@@ -973,10 +1382,30 @@
       renderTrainingBody();
     }
 
+    function setContactOpen(open) {
+      contactOpen = !!open;
+      if (!contactModal || !contactBackdrop) return;
+      if (contactOpen) {
+        setTrainingOpen(false);
+        contactModal.hidden = false;
+        contactBackdrop.hidden = false;
+        requestAnimationFrame(function () {
+          contactModal.classList.add("is-open");
+          contactBackdrop.classList.add("is-open");
+        });
+      } else {
+        contactModal.classList.remove("is-open");
+        contactBackdrop.classList.remove("is-open");
+        contactModal.hidden = true;
+        contactBackdrop.hidden = true;
+      }
+    }
+
     function setTrainingOpen(open) {
       trainingOpen = !!open;
       if (!trainingModal || !trainingBackdrop) return;
       if (trainingOpen) {
+        setContactOpen(false);
         trainingActiveTab = "live";
         fillTrainingModal();
         trainingModal.hidden = false;
@@ -1106,20 +1535,47 @@
       return "—";
     }
 
+    /** 按 · 拆成词组，整组换行（组内不断开） */
+    function buildDetailDotChunksHtml(text) {
+      if (!text || String(text).indexOf("·") === -1) return null;
+      var parts = String(text)
+        .split(/\s*·\s*/)
+        .map(function (p) {
+          return p.trim();
+        })
+        .filter(Boolean);
+      if (parts.length < 2) return null;
+      var out = "";
+      for (var i = 0; i < parts.length; i++) {
+        out +=
+          '<span class="role-select__detail-dot-chunk">' +
+          escapeHtml(parts[i]) +
+          "</span>";
+        if (i < parts.length - 1) {
+          out += '<span class="role-select__detail-dot-sep" aria-hidden="true"> · </span>';
+        }
+      }
+      return out;
+    }
+
+    function fillDetailValueNodes(nodes, raw) {
+      var html = buildDetailDotChunksHtml(raw);
+      for (var i = 0; i < nodes.length; i++) {
+        if (html) {
+          nodes[i].innerHTML = html;
+          nodes[i].classList.add("role-select__detail-value--dot-chunks");
+        } else {
+          nodes[i].textContent = raw || "";
+          nodes[i].classList.remove("role-select__detail-value--dot-chunks");
+        }
+      }
+    }
+
     function applyRoleDetails(role) {
       var details = (role && role.details) || {};
-      var values = {
-        focus: details.focus || "",
-        skills: details.skills || "",
-        mission: details.mission || "",
-      };
-      Object.keys(detailEls).forEach(function (key) {
-        var nodes = detailEls[key];
-        if (!nodes) return;
-        for (var i = 0; i < nodes.length; i++) {
-          nodes[i].textContent = values[key] || "";
-        }
-      });
+      fillDetailValueNodes(detailEls.focus, details.focus || "");
+      fillDetailValueNodes(detailEls.skills, details.skills || "");
+      fillDetailValueNodes(detailEls.mission, details.mission || "");
     }
 
     function applyRoleMeta(role, animateTitle) {
@@ -1293,7 +1749,7 @@
 
     function onSwipePointerDown(event) {
       if (!isMobileSwipeViewport()) return;
-      if (sheetOpen || trainingOpen || animating) return;
+      if (sheetOpen || trainingOpen || contactOpen || animating) return;
       if (event.pointerType === "mouse" && event.button !== 0) return;
       swipeTracking = true;
       swipePointerId = event.pointerId;
@@ -1312,7 +1768,7 @@
       if (!swipeTracking) return;
       if (swipePointerId != null && event.pointerId !== swipePointerId) return;
       resetSwipeTracking();
-      if (sheetOpen || trainingOpen || animating) return;
+      if (sheetOpen || trainingOpen || contactOpen || animating) return;
       var dx = event.clientX - swipeStartX;
       var dy = event.clientY - swipeStartY;
       if (Math.abs(dx) < SWIPE_MIN_DX || Math.abs(dx) < Math.abs(dy) * 0.75) return;
@@ -1377,6 +1833,26 @@
         setTrainingOpen(false);
       });
     }
+    Array.prototype.forEach.call(contactOpenBtns, function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (window.VBahnAnalytics && window.VBahnAnalytics.track) {
+          window.VBahnAnalytics.track("open_contact_modal", {});
+        }
+        setContactOpen(true);
+      });
+    });
+    if (contactCloseBtn) {
+      contactCloseBtn.addEventListener("click", function () {
+        setContactOpen(false);
+      });
+    }
+    if (contactBackdrop) {
+      contactBackdrop.addEventListener("click", function () {
+        setContactOpen(false);
+      });
+    }
     if (trainingTabsEl) {
       trainingTabsEl.addEventListener("click", function (event) {
         var tabBtn = event.target.closest("[data-training-tab]");
@@ -1388,6 +1864,11 @@
 
     function onKeyDown(event) {
       if (root.hidden) return;
+      if (event.key === "Escape" && contactOpen) {
+        event.preventDefault();
+        setContactOpen(false);
+        return;
+      }
       if (event.key === "Escape" && trainingOpen) {
         event.preventDefault();
         setTrainingOpen(false);
@@ -1398,7 +1879,7 @@
         setSheetOpen(false);
         return;
       }
-      if (sheetOpen || trainingOpen) return;
+      if (sheetOpen || trainingOpen || contactOpen) return;
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         step(-1);
@@ -1431,6 +1912,7 @@
       if (root.hidden) return;
       applyViewportLayout();
       layoutAvatars(false);
+      root.classList.add("role-select--layout-ready");
       if (isMobileLayout()) {
         clampMobileTitleToViewport();
       } else {
@@ -1456,11 +1938,13 @@
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
     preloadHeroDimensions(roles);
+    invalidateUnifiedTitleSizes();
     setHeroImmediate(roles[selectedIndex]);
     applyViewportLayout();
     requestAnimationFrame(function () {
       applyViewportLayout();
       layoutAvatars(false);
+      root.classList.add("role-select--layout-ready");
     });
 
     if (document.fonts && document.fonts.ready) {
@@ -1476,6 +1960,7 @@
         mountDestroyed = true;
         titleMeasureSeq += 1;
         setTrainingOpen(false);
+        setContactOpen(false);
         setSheetOpen(false);
         if (mainEl) {
           mainEl.removeEventListener("pointerdown", onSwipePointerDown);
