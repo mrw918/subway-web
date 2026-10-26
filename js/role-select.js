@@ -97,13 +97,6 @@
       '<span class="role-select__details-aside-foot-prefix">联系我们</span>' +
       '<a class="role-select__details-aside-foot-mail" href="mailto:training@cn.vector.com">training@cn.vector.com</a>' +
       "</div>";
-    var siteLinksMobileStrip =
-      '<p class="role-select__site-links" aria-label="反馈与联系">' +
-      '<a class="role-select__site-links-feedback" href="https://forms.cloud.microsoft/e/bFcgGbxAuk?origin=lprLink" target="_blank" rel="noopener noreferrer">反馈与建议</a>' +
-      '<span class="role-select__site-links-sep" aria-hidden="true">·</span>' +
-      '<a class="role-select__site-links-mail" href="mailto:training@cn.vector.com">training@cn.vector.com</a>' +
-      "</p>";
-
     root.innerHTML =
       '<div class="role-select__scene">' +
       '  <div class="role-select__logo" aria-label="VECTOR">' +
@@ -152,7 +145,6 @@
       '    <div class="role-select__hero-stage"></div>' +
       "  </div>" +
       '  <footer class="role-select__footer">' +
-      siteLinksMobileStrip +
       '    <div class="role-select__avatar-track">' +
       '      <svg class="role-select__orbit" viewBox="0 0 820 80" aria-hidden="true">' +
       '        <ellipse cx="410" cy="62" rx="390" ry="28" fill="none" stroke="rgba(210, 214, 222, 0.42)" stroke-width="1.2"/>' +
