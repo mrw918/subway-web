@@ -332,8 +332,7 @@
 	<text transform="matrix(1 0 0 1 583.5349 85.6467)"><tspan x="0" y="0" class="st57 st75">DaVinci </tspan><tspan x="35.1" y="0" class="st74 st75">进阶</tspan></text>
 	<rect x="337" y="169.7" class="st59" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 355.2706 177.6618)"><tspan x="0" y="0" class="st57 st75">UDS</tspan><tspan x="19" y="0" class="st74 st75">协议</tspan></text>
-	<rect x="291.4" y="145" class="st59" width="73.6" height="22"/>
-	<text transform="matrix(1 0 0 1 291.4 153.8)"><tspan x="8.5" y="0" class="st57 st75">AUTOSAR</tspan><tspan x="27.8" y="9" class="st73 st75">通信</tspan></text>
+	<text transform="matrix(0.7032 0.711 -0.711 0.7032 296 122)"><tspan x="0" y="0" class="st57 st75">AUTOSAR</tspan><tspan x="2.5" y="10.8" class="st74 st75">通信</tspan></text>
 	<rect x="393.1" y="169.7" class="st59" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 407.3623 177.6618)" class="st74 st75">诊断数据库</text>
 	<rect x="453.2" y="169.7" class="st59" width="73.6" height="10.7"/>
