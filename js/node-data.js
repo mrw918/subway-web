@@ -77,9 +77,9 @@ window.NODE_HOVER_DATA = {
     ],
   },
   "CAN/CAN FD": {
-    nodeName: "CAN/CAN FD",
+    nodeName: "CAN / CAN FD",
     type: ["视频课", "直播课", "自学课", "内训课"],
-    match: ["CAN&CANFD", "CAN&CAN FD", "CAN/CAN FD", "CAN/CANFD"],
+    match: ["CAN / CAN FD", "CAN&CANFD", "CAN&CAN FD", "CAN/CAN FD", "CAN/CANFD"],
     description: "学习车载网络最核心的 CAN/CAN FD 通信技术，掌握报文传输、仲裁机制、错误处理等关键知识。",
   
     courses: [

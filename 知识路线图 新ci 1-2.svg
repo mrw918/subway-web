@@ -220,7 +220,7 @@
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 832.0665 307.25)" class="st74 st76">数据刷写</text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 783.9613 293.8848)" class="st74 st76">刷写文件</text>
 	<rect x="545.7" y="212.3" class="st59" width="73.6" height="10.7"/>
-	<text transform="matrix(1 0 0 1 558.9681 220.086)" class="st57 st76">vMeassure</text>
+	<text transform="matrix(1 0 0 1 558.9681 220.086)" class="st57 st76">vMeasure</text>
 	<rect x="545.7" y="171.2" class="st59" width="73.6" height="10.4"/>
 	<text transform="matrix(1 0 0 1 560.1942 178.9606)" class="st57 st76">GL Logger</text>
 </g>

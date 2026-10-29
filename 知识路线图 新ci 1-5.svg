@@ -283,10 +283,10 @@
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 458.0244 166.0012)" class="st66 st73">CANoe.ETH</text>
 	<rect x="88.4" y="297.3" class="st68" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 89.1393 307.8707)" class="st74 st76">汽车通信概论</text>
-	<rect x="163" y="297.3" class="st68" width="60.2" height="24.6"/>
-	<text transform="matrix(1 0 0 1 164 307.8707)"><tspan x="0" y="0" class="st66 st76">AUTOSAR</tspan><tspan x="16.33" y="11" class="st74 st76">通信</tspan></text>
+	<rect x="163" y="258" class="st68" width="62" height="24.6"/>
+	<text transform="matrix(1 0 0 1 164 267.5)"><tspan x="0" y="0" class="st66 st76">AUTOSAR</tspan><tspan x="16.33" y="11" class="st74 st76">通信</tspan></text>
 	<rect x="223.2" y="297.3" class="st68" width="121.6" height="10.7"/>
-	<text transform="matrix(1 0 0 1 244.5055 307.6763)" class="st66 st76">CAN&amp;CAN FD</text>
+	<text transform="matrix(1 0 0 1 244.5055 307.6763)" class="st66 st76">CAN / CAN FD</text>
 	<rect x="304" y="267.6" class="st68" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 309.7177 278.1416)"><tspan x="0" y="0" class="st66 st76">CAN</tspan><tspan x="26.1" y="0" class="st74 st76">数据库</tspan></text>
 	<rect x="360.6" y="297.3" class="st68" width="73.6" height="10.7"/>

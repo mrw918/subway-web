@@ -280,10 +280,10 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
     ],
   },
-  "Task Mapping": {
-    nodeName: "Task Mapping",
+  "任务映射": {
+    nodeName: "任务映射",
     type: ["自学课", "公开课", "内训课"],
-    match: ["Task Mapping", "TaskMapping"],
+    match: ["任务映射", "Task Mapping", "TaskMapping"],
     description:
       "掌握应用软件集成时的任务映射方法及注意事项。本站点包含以下内容：\n\nTask Mapping方法与批量操作\nRunnable在Task中的调度实现",
   
@@ -305,10 +305,10 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
     ],
   },
-  "Data Mapping": {
-    nodeName: "Data Mapping",
+  "数据映射": {
+    nodeName: "数据映射",
     type: ["自学课", "公开课", "内训课"],
-    match: ["Data Mapping", "DataMapping"],
+    match: ["数据映射", "Data Mapping", "DataMapping"],
     description:
       "掌握应用软件集成时的数据映射方法及注意事项。本站点包含以下内容：\n\n信号及信号组的Data Mapping方法\n信号及信号组的Data Mapping自动映射\n从信号/信号组生成Ports并自动映射",
   
@@ -330,10 +330,10 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
     ],
   },
-  "Service Mapping": {
-    nodeName: "Service Mapping",
+  "服务映射": {
+    nodeName: "服务映射",
     type: ["自学课", "公开课", "内训课"],
-    match: ["Service Mapping", "ServiceMapping"],
+    match: ["服务映射", "Service Mapping", "ServiceMapping"],
     description:
       "掌握应用软件集成时的服务映射方法及注意事项。本站点包含以下内容：\n\nService Components与Service Ports\nSWC常用的标准化服务\nService Mapping方法与批量操作\nService Mapping自动映射\nService Needs",
   

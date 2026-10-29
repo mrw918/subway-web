@@ -123,7 +123,7 @@ window.NODE_HOVER_DATA_CALIBRATION = {
     match: ["SmartLogger", "Smart Logger"],
     description: "学习如何使用Smart Logger",
   },
-  "vMeassure": {
+  "vMeasure": {
     nodeName: "vMeasure",
     type: [],
     match: ["vMeassure", "vMeasure"],

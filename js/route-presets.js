@@ -112,7 +112,7 @@ window.ROUTE_PRESETS = {
     E3: {
       title: "应用软件集成",
       description:
-        "围绕 Task Mapping、Data Mapping、Service Mapping 以及 DaVinci 高级配置开展学习。",
+        "围绕任务映射、数据映射、服务映射以及 DaVinci 高级配置开展学习。",
     },
     E4: {
       title: "通信功能开发",
