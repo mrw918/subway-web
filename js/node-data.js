@@ -56,10 +56,10 @@ window.NODE_HOVER_DATA = {
       },
     ],
   },
-  "ASR 通信": {
-    nodeName: "ASR通信",
+  "AUTOSAR 通信": {
+    nodeName: "AUTOSAR通信",
     type: ["视频课", "直播课"],
-    match: ["ASR通信", "ASR 通信", "AUTOSAR通信", "AUTOSAR Communication"],
+    match: ["AUTOSAR通信", "AUTOSAR 通信", "AUTOSAR Communication", "ASR通信", "ASR 通信"],
     description: "介绍在AUTOSAR CP架构下使用AUTOSAR组件进行不同应用层通信的机制。",
   
     courses: [

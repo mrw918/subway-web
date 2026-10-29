@@ -27,7 +27,6 @@ ROUTE_MAP = {
 SITE_ALIASES = {
     "标定协议_XCP": "标定协议XCP",
     "CANoe.Diva": "CANoe.DiVa",
-    "AUTOSAR概论": "ASR概论",
 }
 
 PDF_Q_URL = "https://www.kdocs.cn/l/cl847wxgMSJQ"

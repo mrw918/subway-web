@@ -24,10 +24,10 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
     ],
   },
-  "ASR CP": {
-    nodeName: "ASR CP",
+  "AUTOSAR CP": {
+    nodeName: "AUTOSAR CP",
     type: ["自学课", "公开课", "内训课", "直播课"],
-    match: ["ASR CP", "ASRCP", "AUTOSAR CP", "AUTOSAR CPAUTOSAR"],
+    match: ["AUTOSAR CP", "AUTOSARCP", "ASR CP", "ASRCP"],
     description:
       "理解AUTOSAR CP的技术概念与方法论。本站点包含以下内容：\n\nAUTOSAR架构\nAUTOSAR Applications\nAUTOSAR RTE\nAUTOSAR BSW\nAUTOSAR方法论",
     svgIndex: 7,
@@ -55,10 +55,10 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
     ],
   },
-  "ASR工具链": {
-    nodeName: "ASR工具链",
+  "AUTOSAR工具链": {
+    nodeName: "AUTOSAR工具链",
     type: ["自学课", "直播课"],
-    match: ["ASR工具链", "AUTOSAR工具链", "ASR 工具链"],
+    match: ["AUTOSAR工具链", "AUTOSAR 工具链", "ASR工具链", "ASR 工具链"],
     description:
       "了解AUTOSAR工具链在系统设计、软件开发、通信配置、仿真测试及变更管理等维度的整体协同。本站点包含以下内容：\n\nARXML\nVector工具链\nPREEvision：架构设计\nDaVinci：ECU配置\nCANoe：网络测试与验证\nCANoe+vVIRTUALtarget：SIL测试",
     svgIndex: 8,
@@ -426,9 +426,9 @@ window.NODE_HOVER_DATA_EMBEDDED = {
     ],
   },
   "AUTOSAR通信": {
-    nodeName: "ASR通信",
+    nodeName: "AUTOSAR通信",
     type: ["自学课", "公开课", "内训课"],
-    match: ["ASR通信", "AUTOSAR通信"],
+    match: ["AUTOSAR通信", "ASR通信"],
     description:
       "掌握AUTOSAR应用报文通信的核心链路，理解“数据→信号→PDU→报文”的转换过程。本站点包含以下内容：\n\n通信问题与AUTOSAR定位\n应用层通信模型\nBSW通信栈\nPDU数据结构\nAUTOSAR通信路径解析\n系统协同",
   
@@ -574,7 +574,7 @@ window.NODE_HOVER_DATA_EMBEDDED = {
   "PDU & Socket": {
     nodeName: "PDU & Socket",
     type: ["内训课"],
-    match: ["PDU & Socket", "PDU&Socket", "ASR.PDU & Socket"],
+    match: ["PDU & Socket", "PDU&Socket", "AUTOSAR.PDU & Socket", "ASR.PDU & Socket"],
     description:
       "掌握AUTOSAR CP对以太网的兼容方式。本站点包含以下内容：\n\n理解Socket\nPDU与Socket的对接\nAUTOSAR CP下的以太网使用模式",
   

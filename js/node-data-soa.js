@@ -23,10 +23,10 @@ window.NODE_HOVER_DATA_SOA = {
     match: ["DDS协议", "DDS"],
     description: "掌握 DDS 协议相关知识，理解 DDS 与 SOME/IP 的异同",
   },
-  "ASR": {
+  "AUTOSAR": {
     nodeName: "AUTOSAR",
     type: ["公开课", "内训课", "直播课"],
-    match: ["ASR", "AUTOSAR"],
+    match: ["AUTOSAR", "ASR"],
     description:
       "理解 AUTOSAR CP/AP 的技术概念与方法论。本站点包含以下内容：\n\nAUTOSAR 架构\nAUTOSAR Applications\nAUTOSAR RTE\nAUTOSAR BSW\nAUTOSAR 方法论\nAUTOSAR Adaptive SWC\nAUTOSAR AP 中间件\nPDU 与 Socket 的对接\nAUTOSAR CP 下的以太网使用模式",
   
@@ -167,7 +167,7 @@ window.NODE_HOVER_DATA_SOA = {
   "PDU & Socket": {
     nodeName: "PDU & Socket",
     type: ["内训课"],
-    match: ["PDU & Socket", "PDU&Socket", "ASR.PDU & Socket", "ASR.PDU&Socket"],
+    match: ["PDU & Socket", "PDU&Socket", "AUTOSAR.PDU & Socket", "AUTOSAR.PDU&Socket", "ASR.PDU & Socket", "ASR.PDU&Socket"],
     description:
       "掌握 AUTOSAR CP 对以太网的兼容方式。本站点包含以下内容：\n\n理解 Socket\nPDU 与 Socket 的对接\nAUTOSAR CP 下的以太网使用模式",
   },

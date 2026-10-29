@@ -490,7 +490,7 @@
     return out;
   }
 
-  // 换乘站取样：沿柱身加密，避免只取圆心漏掉中间交汇横线（如 ASR 通信）
+  // 换乘站取样：沿柱身加密，避免只取圆心漏掉中间交汇横线（如 AUTOSAR 通信）
   function junctionBindingPoints(station) {
     var bb = station.bbox;
     var cap = stationRoundCap(station) || station.center;
@@ -519,7 +519,7 @@
     var tol = tall ? 12 : 8;
     var fromPoints = routesNearPoints(routes, svg, points, tol);
 
-    // 矮柱也要做柱身矩形检测：ASR 通信柱身会穿过中间数条横线
+    // 矮柱也要做柱身矩形检测：AUTOSAR 通信柱身会穿过中间数条横线
     var padX = tall ? 14 : 5;
     var padY = tall ? 6 : 1;
     var fromRect = routesTouchingRect(routes, svg, {
@@ -694,7 +694,7 @@
             var h = (station.bbox && station.bbox.height) || 0;
             score += h > 72 ? 110 : 28;
           }
-          // 「诊断/测试工具链」才对齐高立柱；ASR工具链是左侧支线站，不能抢枢纽
+          // 「诊断/测试工具链」才对齐高立柱；AUTOSAR工具链是左侧支线站，不能抢枢纽
           if (
             /^(诊断工具链|测试工具链|Vector诊断工具链)$/.test(id) &&
             station.isJunction &&

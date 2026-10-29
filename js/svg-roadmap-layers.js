@@ -173,7 +173,7 @@
       } catch (eCap) {}
     });
 
-    // 高立柱只在圆点上命中，避免「ASR通信」等支线站名落到整根脊柱上
+    // 高立柱只在圆点上命中，避免「AUTOSAR通信」等支线站名落到整根脊柱上
     var hitBb = tallHub && capBb ? capBb : bb;
     var geo = {
       x: (tallHub && capBb ? capBb.x + capBb.width / 2 : bb.x + bb.width / 2),

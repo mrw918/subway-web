@@ -281,10 +281,10 @@ window.NODE_HOVER_DATA_NETWORK_TEST = {
       },
     ],
   },
-  "ASR概论": {
-    nodeName: "ASR概论",
+  "AUTOSAR概论": {
+    nodeName: "AUTOSAR概论",
     type: ["视频课"],
-    match: ["ASR概论", "AUTOSAR概论"],
+    match: ["AUTOSAR概论", "ASR概论"],
     description: "了解AUTOSAR相关知识是学习vVIRTUALtarget的前提。在此站点，您将学习到有关 AUTOSAR Classic Platform 的方法论、技术概念以及 RTE 和基础软件组件的相关知识。",
   
     courses: [

@@ -296,7 +296,7 @@
 	<rect x="630.6" y="243.6" class="st68" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 637.4279 254.1937)" class="st74 st76">交互层仿真 </text>
 	<rect x="150.4" y="297.3" class="st68" width="81.8" height="10.7"/>
-	<text transform="matrix(1 0 0 1 167.4986 307.8707)"><tspan x="0" y="0" class="st66 st76">ASR</tspan><tspan x="23.7" y="0" class="st74 st76">通信</tspan></text>
+	<text transform="matrix(1 0 0 1 167.4986 307.8707)"><tspan x="0" y="0" class="st66 st76">AUTOSAR</tspan><tspan x="55.3" y="0" class="st74 st76">通信</tspan></text>
 	<rect x="295.9" y="337.7" class="st68" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 295.8572 345.5908)"><tspan x="0" y="0" class="st66 st73">J1939</tspan><tspan x="25.5" y="0" class="st74 st73">协议</tspan></text>
 	<rect x="305.3" y="354" class="st68" width="73.6" height="10.7"/>

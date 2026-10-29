@@ -298,8 +298,8 @@
 </g>
 <g id="站点文字">
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 25.6598 303.9618)"><tspan x="0" y="0" class="st57 st72">ECU</tspan><tspan x="24.9" y="0" class="st73 st72">软件概论</tspan></text>
-	<text transform="matrix(0.711 -0.7032 0.7032 0.711 81.139 283.1483)" class="st57 st72">ASR CP</text>
-	<text transform="matrix(0.711 -0.7032 0.7032 0.711 106.9955 296.1083)"><tspan x="0" y="0" class="st57 st72">ASR</tspan><tspan x="23.7" y="0" class="st73 st72">工具链</tspan></text>
+	<text transform="matrix(0.711 -0.7032 0.7032 0.711 81.139 283.1483)" class="st57 st72">AUTOSAR CP</text>
+	<text transform="matrix(0.711 -0.7032 0.7032 0.711 106.9955 296.1083)"><tspan x="0" y="0" class="st57 st72">AUTOSAR</tspan><tspan x="55.3" y="0" class="st73 st72">工具链</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 138.9122 299.326)"><tspan x="0" y="0" class="st57 st72">CANoe</tspan><tspan x="40.3" y="0" class="st73 st72">分析</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 174.1642 299.2479)"><tspan x="0" y="0" class="st57 st72">CANoe</tspan><tspan x="40.3" y="0" class="st73 st72">仿真</tspan></text>
 	<text transform="matrix(0.711 -0.7032 0.7032 0.711 194.6415 313.5262)" class="st57 st72">MICROSAR SIP</text>
@@ -333,7 +333,7 @@
 	<rect x="337" y="169.7" class="st59" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 355.2706 177.6618)"><tspan x="0" y="0" class="st57 st75">UDS</tspan><tspan x="19" y="0" class="st74 st75">协议</tspan></text>
 	<rect x="291.4" y="154.3" class="st59" width="73.6" height="10.7"/>
-	<text transform="matrix(1 0 0 1 291.4469 162.2032)"><tspan x="0" y="0" class="st57 st75">ASR</tspan><tspan x="17.8" y="0" class="st73 st75">通信</tspan></text>
+	<text transform="matrix(1 0 0 1 291.4469 162.2032)"><tspan x="0" y="0" class="st57 st75">AUTOSAR</tspan><tspan x="41.5" y="0" class="st73 st75">通信</tspan></text>
 	<rect x="393.1" y="169.7" class="st59" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 407.3623 177.6618)" class="st74 st75">诊断数据库</text>
 	<rect x="453.2" y="169.7" class="st59" width="73.6" height="10.7"/>

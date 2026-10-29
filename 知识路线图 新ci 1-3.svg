@@ -258,10 +258,10 @@
 	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 517.2583 213.1555)"><tspan x="0" y="0" class="st40 st77">RFLP.</tspan><tspan x="24.5" y="0" class="st74 st77">软件需求</tspan></text>
 	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 567.4937 213.1555)"><tspan x="0" y="0" class="st40 st77">RFLP.</tspan><tspan x="24.5" y="0" class="st74 st77">软件设计</tspan></text>
 	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 617.0513 213.1555)"><tspan x="0" y="0" class="st40 st77">E/E</tspan><tspan x="14.1" y="0" class="st74 st77">服务化</tspan></text>
-	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 705.3049 197.4401)" class="st40 st77">ASR  CP</text>
+	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 705.3049 197.4401)" class="st40 st77">AUTOSAR  CP</text>
 	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 740.9314 198.5832)"><tspan x="0" y="0" class="st40 st77">SOA CP</tspan><tspan x="33.7" y="0" class="st74 st77">设计</tspan></text>
 	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 664.6362 213.8947)"><tspan x="0" y="0" class="st40 st77">SOME/IP</tspan><tspan x="37.6" y="0" class="st74 st77">协议</tspan></text>
-	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 687.6604 269.1857)" class="st40 st77">ASR AP</text>
+	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 687.6604 269.1857)" class="st40 st77">AUTOSAR AP</text>
 	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 708.4939 282.7287)"><tspan x="0" y="0" class="st40 st77">SOA AP</tspan><tspan x="33.4" y="0" class="st74 st77">设计</tspan></text>
 	<text transform="matrix(0.7162 -0.6979 0.6979 0.7162 384.5209 255.4846)" class="st74 st77">测试管理</text>
 </g>
