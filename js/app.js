@@ -20,7 +20,7 @@
     return hash || null;
   }
 
-  var SVG_ASSET_VERSION = "32";
+  var SVG_ASSET_VERSION = "33";
 
   function hideSvgCornerLogo(svg) {
     if (!svg) return;
