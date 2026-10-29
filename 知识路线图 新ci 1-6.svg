@@ -101,6 +101,7 @@
 	.st76{font-family:'NotoSansCJKsc-Bold-GBpc-EUC-H';}
 	.st77{font-size:20px;}
 	.st78{fill:#E72427;}
+	.st79{font-size:7px;}
 </style>
 <g id="背景">
 	<rect x="-8.5" y="-8.5" class="st0" width="924.1" height="527.2"/>
@@ -333,7 +334,7 @@
 	<rect x="337" y="169.7" class="st59" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 355.2706 177.6618)"><tspan x="0" y="0" class="st57 st75">UDS</tspan><tspan x="19" y="0" class="st74 st75">协议</tspan></text>
 	<rect x="289.4" y="154.3" class="st59" width="73.6" height="10.7"/>
-	<text transform="matrix(1 0 0 1 291.45 161.5)"><tspan x="0" y="0" class="st57 st58">AUTOSAR</tspan><tspan x="37.8" y="0" class="st74 st58">通信</tspan></text>
+	<text transform="matrix(1 0 0 1 291.45 161.2)"><tspan x="0" y="0" class="st57 st79">AUTOSAR</tspan><tspan x="33.04" y="0" class="st74 st79">通信</tspan></text>
 	<rect x="393.1" y="169.7" class="st59" width="73.6" height="10.7"/>
 	<text transform="matrix(1 0 0 1 407.3623 177.6618)" class="st74 st75">诊断数据库</text>
 	<rect x="453.2" y="169.7" class="st59" width="73.6" height="10.7"/>
