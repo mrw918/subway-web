@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "V-Bahn: 启动本地 HTTP 服务",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/dev-server.sh",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PORT": "8080"
+        }
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "vbahn-dev",
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "(已在端口|Serving HTTP on|Serving HTTP)"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": false
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "V-Bahn: 打开预览页",
+      "type": "shell",
+      "command": "open",
+      "args": ["http://localhost:8080/index.html"],
+      "dependsOn": ["V-Bahn: 启动本地 HTTP 服务"],
+      "problemMatcher": []
+    }
+  ]
+}
