@@ -440,8 +440,8 @@ window.NODE_HOVER_DATA_EMBEDDED = {
       },
       {
         name: "AUTOSAR通信培训",
-        type: "直播课",
-        url: "https://forms.cloud.microsoft/e/7zWp3C4yBA?origin=lprLink"
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1pp4F6rEKD/"
       },
       {
         name: "AUTOSAR CP 培训",

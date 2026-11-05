@@ -49,11 +49,11 @@ window.TRAINING_EVENTS = {
     label: "公开课",
     items: [
       {
-        date: "2026/11/3-11/5",
+        date: "2026/11/24-11/25",
         place: "上海",
-        title: "AUTOSAR CP培训",
+        title: "TÜV认证汽车网络安全ISO/SAE 21434及安全工程培训：二级",
         paid: true,
-        url: "https://academy.vector.com/cn/zh/courses/detail/9180/",
+        url: "https://academy.vector.com/cn/zh/courses/detail/3231/tuev%E8%AE%A4%E8%AF%81%E6%B1%BD%E8%BD%A6%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8iso-sae-21434%E5%8F%8A%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%9F%B9%E8%AE%AD%E4%BA%8C%E7%BA%A7%E5%85%AC%E5%BC%80%E8%AF%BE",
       },
       {
         date: "2026/11/26",
