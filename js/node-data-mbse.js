@@ -59,6 +59,14 @@ window.NODE_HOVER_DATA_MBSE = {
     match: ["RFLP方法", "RFLP"],
     description:
       "RFLP（Requirements、Functions、Logical、Physical）是一种基于模型的系统工程方法，通过建立需求、功能、逻辑架构和物理架构之间的关联，实现复杂系统的分层设计与追踪。",
+
+    courses: [
+      {
+        name: "PREEvision系统工程",
+        type: "视频课",
+        url: "https://space.bilibili.com/455178810/lists/6786969?type=season"
+      },
+    ],
   },
   "PREEvision基础": {
     nodeName: "PREEvision",

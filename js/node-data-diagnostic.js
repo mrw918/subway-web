@@ -18,8 +18,8 @@ window.NODE_HOVER_DATA_DIAGNOSTIC = {
     courses: [
       {
         name: "汽车通信概论",
-        type: "直播课",
-        url: "https://forms.cloud.microsoft/e/rwVFZEpBnz?origin=lprLink",
+        type: "视频课",
+        url: "https://www.bilibili.com/video/BV1ewsd61EyR/",
       },
     ],
   },
