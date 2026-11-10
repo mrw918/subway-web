@@ -43,6 +43,30 @@ window.TRAINING_EVENTS = {
         title: "CANoe.Ethernet培训",
         url: "https://forms.cloud.microsoft/e/nK1t6kauww?origin=lprLink",
       },
+      {
+        date: "2026/12/1",
+        place: "线上",
+        title: "CANoe.CAN培训（中）",
+        url: "https://forms.cloud.microsoft/e/QMa3u0BpN3?origin=lprLink",
+      },
+      {
+        date: "2026/12/8",
+        place: "线上",
+        title: "以太网CAPL编程培训",
+        url: "https://forms.cloud.microsoft/e/AqnYvcNCuy?origin=lprLink",
+      },
+      {
+        date: "2026/12/14",
+        place: "线上",
+        title: "CANoe.CAN培训（下）",
+        url: "https://forms.cloud.microsoft/e/myVEqGemGD?origin=lprLink",
+      },
+      {
+        date: "2026/12/1",
+        place: "线上",
+        title: "CANoe SOME/IP仿真培训",
+        url: "https://forms.cloud.microsoft/e/jKpnkjpg4q?origin=lprLink",
+      },
     ],
   },
   open: {
