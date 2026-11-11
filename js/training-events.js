@@ -62,7 +62,7 @@ window.TRAINING_EVENTS = {
         url: "https://forms.cloud.microsoft/e/myVEqGemGD?origin=lprLink",
       },
       {
-        date: "2026/12/1",
+        date: "2026/12/15",
         place: "线上",
         title: "CANoe SOME/IP仿真培训",
         url: "https://forms.cloud.microsoft/e/jKpnkjpg4q?origin=lprLink",
